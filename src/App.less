@@ -70,13 +70,28 @@ a {
     width: 36px;
     height: 36px;
     border-radius: 8px;
-    color: @muted;
-    transition: color 0.2s ease, background 0.2s ease, filter 0.2s ease;
+    color: #dfdfdf;
+    background: #2b232bd4;
+    border: 1px solid transparent;
+    outline: none;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+
+    &:focus {
+      color: #dfdfdf;
+      border-color: transparent;
+      background: transparent;
+    }
 
     &:hover {
       color: @pink;
-      background: rgba(224, 64, 251, 0.1);
-      filter: drop-shadow(0 0 6px @pink);
+      border-color: @pink;
+      background: #2b232bd4;
+    }
+
+    &:active {
+      color: #000;
+      background: @pink;
+      border-color: @pink;
     }
   }
 }
@@ -247,13 +262,12 @@ a {
 
   &__ampersand {
     position: absolute;
-    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
-    font-style: italic;
+    font-family: 'Tilt Neon', sans-serif;
+    font-style: normal;
     font-size: 22px;
     font-weight: 400;
     letter-spacing: 0.05em;
     color: @pink;
-    text-shadow: 0 0 8px @pink, 0 0 20px @pink, 0 0 40px fade(@pink, 60%);
     white-space: nowrap;
     line-height: 1;
     user-select: none;

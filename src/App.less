@@ -1,0 +1,449 @@
+@pink: #e040fb;
+@purple: #7c4dff;
+@blue: #40c4ff;
+@bg: #0a0a12;
+@text: #c9c9d8;
+@muted: #7a7a9a;
+@font-display: 'Codystar', sans-serif;
+@font-body: 'Open Sans', sans-serif;
+
+.codystar() {
+  font-family: @font-display;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: @bg;
+  color: @text;
+  font-family: @font-body;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: @pink;
+  color: #fff;
+}
+
+a {
+  color: @blue;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: @pink;
+  }
+}
+
+// ── Nav ──────────────────────────────────────────────────────────────────────
+
+.nav {
+  position: fixed;
+  top: 16px;
+  left: auto;
+  right: 24px;
+  bottom: auto;
+  z-index: 100;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+
+  &__icon-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    color: @muted;
+    transition: color 0.2s ease, background 0.2s ease, filter 0.2s ease;
+
+    &:hover {
+      color: @pink;
+      background: rgba(224, 64, 251, 0.1);
+      filter: drop-shadow(0 0 6px @pink);
+    }
+  }
+}
+
+// ── Hero ─────────────────────────────────────────────────────────────────────
+
+@keyframes neonFlicker {
+  0%   { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  18%  { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  22%  { opacity: 1;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  26%  { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  48%  { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  52%  { opacity: 1;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  55%  { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  58%  { opacity: 1;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  61%  { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  64%  { opacity: 1;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  67%  { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  73%  { opacity: 1;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  100% { opacity: 1;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+}
+
+@keyframes colorCycle {
+  0%   { color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  33%  { color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  66%  { color: #2686E5; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #2686E5, 0 0 60px #2686E5; }
+  100% { color: #D5BCE9; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #D5BCE9, 0 0 60px #D5BCE9; }
+}
+
+// ── Full-page wrapper ─────────────────────────────────────────────────────────
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  background-image: url('/images/hero.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.32);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// ── Hero ─────────────────────────────────────────────────────────────────────
+
+.hero {
+  padding-top: 8vh;
+  text-align: center;
+  padding-bottom: 3vh;
+
+  &__content {
+    padding: 0 24px;
+  }
+
+  h1 {
+    .codystar();
+    font-size: clamp(48px, 7vw, 80px);
+    letter-spacing: normal;
+    line-height: 1;
+    text-transform: uppercase;
+    opacity: 0;
+    animation:
+      neonFlicker 1.6s ease-out 1 forwards,
+      colorCycle 12s ease-in-out 1.6s 1 forwards;
+    margin-bottom: 12px;
+  }
+
+  &__tagline {
+    .codystar();
+    font-size: clamp(16px, 2vw, 28px);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #D5BCE9;
+  }
+}
+
+// ── Section base ─────────────────────────────────────────────────────────────
+
+.section {
+  padding: 32px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+
+  &__title {
+    .codystar();
+    font-size: clamp(36px, 5vw, 56px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    color: @text;
+    margin-bottom: 64px;
+  }
+}
+
+// ── Split (Who) ───────────────────────────────────────────────────────────────
+
+.split {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+
+  &__col {
+    flex: 1;
+    padding: 20px 80px;
+
+    h3 {
+      font-family: @font-body;
+      font-weight: 300;
+      font-size: clamp(20px, 2.5vw, 28px);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: @pink;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: @text;
+      font-weight: 300;
+    }
+
+    &:first-child {
+      border-right: none;
+    }
+  }
+
+  &__divider {
+    position: relative;
+    width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    z-index: 2;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      width: 1px;
+      background: rgba(224, 64, 251, 0.3);
+    }
+
+    &::before {
+      top: 0;
+      bottom: calc(50% + 28px);
+    }
+
+    &::after {
+      top: calc(50% + 28px);
+      bottom: 0;
+    }
+  }
+
+  &__ampersand {
+    position: absolute;
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+    font-style: italic;
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: @pink;
+    text-shadow: 0 0 8px @pink, 0 0 20px @pink, 0 0 40px fade(@pink, 60%);
+    white-space: nowrap;
+    line-height: 1;
+    user-select: none;
+  }
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+
+    &__col {
+      padding: 32px 0;
+
+      &:first-child {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+    }
+  }
+}
+
+// ── Aether Card ───────────────────────────────────────────────────────────────
+
+.aether-card {
+  max-width: 500px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+
+  &__placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #1a1a2e;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: @muted;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  &__body {
+    padding: 16px 20px 20px;
+  }
+
+  &__title {
+    .codystar();
+    font-size: 36px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: @purple;
+    margin-bottom: 16px;
+  }
+
+  &__desc {
+    font-size: 15px;
+    line-height: 1.75;
+    color: @text;
+    font-weight: 300;
+    margin-bottom: 28px;
+  }
+
+  &__link {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: @blue;
+    border: 1px solid rgba(64, 196, 255, 0.4);
+    padding: 10px 24px;
+    border-radius: 6px;
+    transition: background 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background: rgba(64, 196, 255, 0.12);
+      color: @blue;
+    }
+  }
+}
+
+// ── Resume ────────────────────────────────────────────────────────────────────
+
+.resume-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  a {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 14px 36px;
+    border-radius: 8px;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+    &.primary {
+      color: @pink;
+      border: 2px solid @pink;
+      background: #0000008c;
+
+      &:hover {
+        background: rgba(224, 64, 251, 0.12);
+        color: @pink;
+      }
+    }
+
+    &.secondary {
+      color: @muted;
+      border: 2px solid rgba(122, 122, 154, 0.3);
+      background: #0000008c;
+
+      &:hover {
+        color: @text;
+        border-color: @muted;
+      }
+    }
+  }
+}
+
+// ── Contact ───────────────────────────────────────────────────────────────────
+
+.contact {
+  text-align: center;
+  max-width: 480px;
+  margin: 0 auto;
+
+  &__name {
+    .codystar();
+    font-size: 28px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: @text;
+    margin-bottom: 32px;
+  }
+
+  &__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    li {
+      font-size: 15px;
+
+      a {
+        color: @text;
+        opacity: 0.8;
+        transition: opacity 0.2s ease, color 0.2s ease;
+
+        &:hover {
+          opacity: 1;
+          color: @pink;
+        }
+      }
+    }
+  }
+}
+
+// ── Footer ────────────────────────────────────────────────────────────────────
+
+.footer {
+  text-align: center;
+  padding: 40px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: @muted;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+// ── Section wrappers ──────────────────────────────────────────────────────────
+
+.section-who {
+  background: linear-gradient(180deg, rgba(124, 77, 255, 0.05) 0%, transparent 100%);
+}
+
+.section-aether {
+  background: transparent;
+}
+
+.section-resume {
+  background: linear-gradient(180deg, transparent 0%, rgba(64, 196, 255, 0.04) 100%);
+}
+
+.section-contact {
+  background: #7b007938;
+}

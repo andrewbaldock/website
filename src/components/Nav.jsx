@@ -7,7 +7,8 @@ import 'tippy.js/dist/tippy.css'
 import 'tippy.js/animations/shift-away.css'
 
 const links = [
-  { icon: Rocket,       label: 'Live Project',  href: 'https://andrewbaldock.com/aether',                  external: true   },
+  { glyph: '\u{1104D}',  label: 'Aether',        to: '/aether',                                             internal: true   },
+  { icon: Rocket,       label: 'Live Project',  href: 'https://aether.andrewbaldock.com',                  external: true   },
   { icon: FileText,     label: 'Resume',        to: '/resume',                                             internal: true   },
   { icon: LinkedInIcon, label: 'LinkedIn',      href: 'https://www.linkedin.com/in/andrewbaldock/',         external: true   },
   { icon: GitHubIcon,   label: 'GitHub',        href: 'https://github.com/andrewbaldock',                  external: true   },
@@ -49,10 +50,12 @@ export default function Nav() {
       )}
 
       <div className="nav__icons">
-        {links.map(({ icon: Icon, label, href, to, external, internal }) => {
+        {links.map(({ icon: Icon, glyph, label, href, to, external, internal }) => {
           const isActive = internal && pathname === to
           const className = `nav__icon-link${isActive ? ' is-active' : ''}`
-          const inner = <Icon size={18} strokeWidth={1.5} />
+          const inner = glyph
+            ? <span className="nav__glyph" aria-hidden="true">{glyph}</span>
+            : <Icon size={18} strokeWidth={1.5} />
 
           // Resume icon acts as a toggle: when already on /resume, clicking it
           // again navigates back home.

@@ -6,6 +6,7 @@ import AetherCard from './components/AetherCard.jsx'
 import Resume from './components/Resume.jsx'
 import Contact from './components/Contact.jsx'
 import ResumePage from './components/ResumePage.jsx'
+import AetherCaseStudy from './components/AetherCaseStudy.jsx'
 
 function Home() {
   return (
@@ -29,6 +30,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/resume" element={<ResumePage />} />
+        <Route path="/aether" element={<AetherCaseStudy />} />
       </Routes>
     </>
   )

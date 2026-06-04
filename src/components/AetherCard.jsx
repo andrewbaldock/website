@@ -1,10 +1,12 @@
+import { Link } from 'react-router-dom'
+
 export default function AetherCard() {
   return (
     <section className="section-aether">
       <div className="section">
         <div className="aether-card__wrap">
           <span className="aether-card__spark" aria-hidden="true" />
-        <a className="aether-card" href="https://andrewbaldock.com/aether" target="_blank" rel="noreferrer">
+        <Link className="aether-card" to="/aether">
           <div className="aether-card__placeholder">Screenshot coming soon</div>
           <div className="aether-card__body">
             <p className="aether-card__label">Project:</p>
@@ -44,10 +46,9 @@ export default function AetherCard() {
             <p className="aether-card__desc">
               TLDR: Talk to AI, use tools.
             </p>
-            {/* TODO: Aether URL once hosted */}
-            <span className="aether-card__link">View Project →</span>
+            <span className="aether-card__link">View Case Study →</span>
           </div>
-        </a>
+        </Link>
         </div>
       </div>
     </section>

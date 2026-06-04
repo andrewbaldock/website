@@ -111,6 +111,11 @@ a {
     }
   }
 
+  &__glyph {
+    font-size: 18px;
+    line-height: 1;
+  }
+
   &__icon-link {
     display: flex;
     align-items: center;
@@ -516,6 +521,8 @@ a {
   flex-wrap: wrap;
 
   a {
+    position: relative;
+    overflow: visible;
     display: inline-block;
     font-size: 13px;
     font-weight: 700;
@@ -524,6 +531,28 @@ a {
     padding: 14px 36px;
     border-radius: 8px;
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+    // Orbiting spark — appears + circles the button on hover. The matching
+    // <span className="cta-spark" /> lives inside the anchor in markup.
+    .cta-spark {
+      position: absolute;
+      inset: 0;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 3px 2px @pink, 0 0 6px 3px @pink;
+      offset-path: rect(0px auto auto 0px round 8px);
+      offset-rotate: 0deg;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    &:hover .cta-spark {
+      opacity: 1;
+      animation: sparkOrbit 3s linear infinite;
+    }
 
     &.primary {
       color: @pink;
@@ -534,6 +563,7 @@ a {
       &:hover {
         background: rgba(224, 64, 251, 0.18);
         color: @pink;
+        animation: borderCycle 2s linear infinite;
       }
     }
 
@@ -544,6 +574,7 @@ a {
 
       &:hover {
         color: @text;
+        animation: borderCycle 2s linear infinite;
         border-color: @muted;
       }
     }
@@ -870,5 +901,344 @@ a {
   &:hover &__spark {
     opacity: 1;
     animation: sparkOrbit 3s linear infinite;
+  }
+}
+
+// ── Aether Case Study (/aether) ────────────────────────────────────────────────
+
+.aether-cs {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at top, rgba(224, 64, 251, 0.13) 0%, transparent 55%),
+    @bg;
+
+  &__inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 28px 80px;
+  }
+
+  &__topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 48px;
+  }
+
+  &__back {
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: @muted;
+
+    &:hover { color: @blue; }
+  }
+
+  // ── Hero ──
+  &__hero {
+    text-align: center;
+    padding: 8px 0 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 48px;
+  }
+
+  &__eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: @pink;
+    margin-bottom: 20px;
+  }
+
+  &__wordmark {
+    display: block;
+    width: 100%;
+    max-width: 460px;
+    height: auto;
+    margin: 0 auto 24px;
+  }
+
+  &__tagline {
+    font-weight: 300;
+    font-size: clamp(15px, 2.2vw, 20px);
+    line-height: 1.6;
+    color: @text;
+    max-width: 620px;
+    margin: 0 auto 32px;
+  }
+
+  &__cta {
+    margin-top: 4px;
+  }
+
+  // ── Screenshot slot ──
+  &__shot {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    background: #1a1a2e;
+    border: 1px dashed rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: @muted;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 56px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  // ── Content blocks ──
+  &__block {
+    margin-bottom: 56px;
+  }
+
+  &__h2 {
+    .codystar();
+    font-size: clamp(26px, 4vw, 38px);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: @text;
+    margin-bottom: 24px;
+  }
+
+  &__lede {
+    font-size: clamp(16px, 2vw, 19px);
+    line-height: 1.7;
+    color: @text;
+    font-weight: 300;
+    margin-bottom: 18px;
+  }
+
+  &__body {
+    font-size: 15.5px;
+    line-height: 1.8;
+    color: @text;
+    font-weight: 300;
+    margin-bottom: 16px;
+
+    &:last-child { margin-bottom: 0; }
+  }
+
+  // ── Feature grid ──
+  &__features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  &__feature {
+    padding: 24px 22px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background: rgba(10, 10, 18, 0.55);
+    backdrop-filter: blur(12px);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      border-color: rgba(224, 64, 251, 0.45);
+      transform: translateY(-2px);
+    }
+  }
+
+  &__feature-icon {
+    color: @pink;
+    margin-bottom: 14px;
+  }
+
+  &__feature-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: @text;
+    margin-bottom: 8px;
+  }
+
+  &__feature-body {
+    font-size: 14px;
+    line-height: 1.7;
+    color: @muted;
+    font-weight: 300;
+  }
+
+  // ── Architecture diagram ──
+  &__arch {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 28px 0;
+  }
+
+  &__arch-node {
+    flex: 1;
+    min-width: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 20px 16px;
+    border: 1px solid rgba(124, 77, 255, 0.4);
+    border-radius: 12px;
+    background: rgba(10, 10, 18, 0.6);
+    text-align: center;
+  }
+
+  &__arch-label {
+    .codystar();
+    font-size: 18px;
+    letter-spacing: 0.04em;
+    color: @text;
+  }
+
+  &__arch-sub {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: @muted;
+  }
+
+  &__arch-link {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-width: 96px;
+    padding: 0 4px;
+    color: @blue;
+  }
+
+  &__arch-link-top,
+  &__arch-link-bot {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: @muted;
+    white-space: nowrap;
+  }
+
+  &__arch-arrow {
+    font-size: 20px;
+    color: @blue;
+    line-height: 1;
+  }
+
+  &__points {
+    list-style: none;
+    margin-top: 8px;
+
+    li {
+      position: relative;
+      padding-left: 18px;
+      margin-bottom: 10px;
+      font-size: 14.5px;
+      line-height: 1.7;
+      color: @text;
+      font-weight: 300;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 2px;
+        top: 0.65em;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: @purple;
+      }
+
+      code {
+        font-family: 'Ubuntu Mono', monospace;
+        font-size: 13px;
+        color: @blue;
+        background: rgba(64, 196, 255, 0.1);
+        padding: 1px 6px;
+        border-radius: 4px;
+      }
+    }
+  }
+
+  // ── Tech chips ──
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  &__chip {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: @text;
+    padding: 7px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    background: rgba(10, 10, 18, 0.5);
+    transition: border-color 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      border-color: @pink;
+      color: @pink;
+    }
+  }
+
+  // ── Final CTA band ──
+  &__cta-band {
+    text-align: center;
+    padding: 48px 24px;
+    border: 1px solid rgba(224, 64, 251, 0.22);
+    border-radius: 16px;
+    background:
+      radial-gradient(ellipse at center, rgba(224, 64, 251, 0.1) 0%, transparent 70%),
+      rgba(10, 10, 18, 0.4);
+    margin-bottom: 40px;
+  }
+
+  &__cta-line {
+    .codystar();
+    font-size: clamp(22px, 3.5vw, 32px);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: @text;
+    margin-bottom: 24px;
+  }
+
+  &__footer {
+    text-align: center;
+    padding-top: 8px;
+  }
+
+  @media (max-width: 700px) {
+    &__features {
+      grid-template-columns: 1fr;
+    }
+
+    &__arch {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__arch-link {
+      flex-direction: row;
+      min-width: 0;
+      padding: 6px 0;
+      gap: 8px;
+    }
+
+    &__arch-arrow {
+      transform: rotate(90deg);
+    }
   }
 }

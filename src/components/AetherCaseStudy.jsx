@@ -8,9 +8,9 @@ import {
   Activity,
   Moon,
 } from 'lucide-react'
+import { AETHER_URL as LIVE_URL } from '../config.js'
 
-const LIVE_URL = 'https://aether.andrewbaldock.com'
-const REPO_URL = 'https://github.com/andrewbaldock'
+const REPO_URL = 'https://github.com/andrewbaldock/aether'
 
 // The AETHER neon wordmark — lifted from AetherCard so the case study leads with
 // the same brand mark (glow filter + duo gradient + CRT scanline mask).

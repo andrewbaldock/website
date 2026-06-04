@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react'
 import Tippy from '@tippyjs/react'
 import { FileText, Rocket } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { GitHubIcon, LinkedInIcon, YouTubeIcon } from './BrandIcons.jsx'
+import { AETHER_URL } from '../config.js'
 import 'tippy.js/dist/tippy.css'
 import 'tippy.js/animations/shift-away.css'
 
 const links = [
   { glyph: '\u{1104D}',  label: 'Aether',        to: '/aether',                                             internal: true   },
-  { icon: Rocket,       label: 'Live Project',  href: 'https://aether.andrewbaldock.com',                  external: true   },
+  { icon: Rocket,       label: 'Live Project',  href: AETHER_URL,                                          external: true   },
   { icon: FileText,     label: 'Resume',        to: '/resume',                                             internal: true   },
   { icon: LinkedInIcon, label: 'LinkedIn',      href: 'https://www.linkedin.com/in/andrewbaldock/',         external: true   },
   { icon: GitHubIcon,   label: 'GitHub',        href: 'https://github.com/andrewbaldock',                  external: true   },
@@ -18,37 +18,9 @@ const links = [
 export default function Nav() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const isHome = pathname === '/'
-  const [showTitle, setShowTitle] = useState(false)
-
-  // On the home page, reveal the small color-cycling title in the nav once the
-  // hero name has scrolled off-screen. Simple scrollY threshold — matches the
-  // codebase's no-IntersectionObserver style.
-  useEffect(() => {
-    if (!isHome) {
-      setShowTitle(false)
-      return
-    }
-    const onScroll = () => setShowTitle(window.scrollY > window.innerHeight * 0.4)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [isHome])
 
   return (
-    <nav className={`nav${isHome ? ' nav--home' : ''}`}>
-      {isHome && (
-        <button
-          type="button"
-          className={`nav__title${showTitle ? ' is-visible' : ''}`}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          aria-label="Back to top"
-          tabIndex={showTitle ? 0 : -1}
-        >
-          Andrew Baldock
-        </button>
-      )}
-
+    <nav className="nav">
       <div className="nav__icons">
         {links.map(({ icon: Icon, glyph, label, href, to, external, internal }) => {
           const isActive = internal && pathname === to

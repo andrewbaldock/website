@@ -58,7 +58,7 @@ const FEATURES = [
   {
     icon: Wrench,
     title: 'Agent loop with tools',
-    body: 'Claude can call tools mid-conversation; the backend runs them and feeds results back, looping until the answer is complete.',
+    body: 'The model can call tools mid-conversation; the backend runs them and feeds results back, looping until the answer is complete.',
   },
   {
     icon: Boxes,
@@ -73,7 +73,7 @@ const FEATURES = [
   {
     icon: Activity,
     title: 'Behind-the-scenes view',
-    body: 'A live diagram of the agent loop — request to Claude to tokens to tools and back — so the machinery is visible, not hidden.',
+    body: 'A live diagram of the agent loop — request to the model to tokens to tools and back — so the machinery is visible, not hidden.',
   },
   {
     icon: Moon,
@@ -94,6 +94,13 @@ const STACK = [
   'Vercel',
   'Fly.io',
   'Biome',
+]
+
+const LLMS = [
+  'Claude (Anthropic)',
+  'GPT (OpenAI)',
+  'Gemini (Google)',
+  'Llama / local',
 ]
 
 export default function AetherCaseStudy() {
@@ -140,7 +147,7 @@ export default function AetherCaseStudy() {
           <h2 className="aether-cs__h2">What it is</h2>
           <p className="aether-cs__lede">
             Aether treats chat as the primary surface for exploring information. You
-            ask; Claude answers — and the answer renders in whatever form fits best:
+            ask; the model answers — and the answer renders in whatever form fits best:
             prose, a chart, a graph, a 3D scene.
           </p>
           <p className="aether-cs__body">
@@ -169,10 +176,24 @@ export default function AetherCaseStudy() {
         </section>
 
         <section className="aether-cs__block">
+          <h2 className="aether-cs__h2">You choose your LLM</h2>
+          <p className="aether-cs__body">
+            Aether isn’t tied to one provider. The agent loop talks to a thin model
+            adapter, so you pick the LLM that fits the task — swap providers without
+            touching the conversation, the tools, or the UI.
+          </p>
+          <div className="aether-cs__chips">
+            {LLMS.map((llm) => (
+              <span className="aether-cs__chip" key={llm}>{llm}</span>
+            ))}
+          </div>
+        </section>
+
+        <section className="aether-cs__block">
           <h2 className="aether-cs__h2">Architecture</h2>
           <p className="aether-cs__body">
             Two runtimes. The browser runs the compiled React SPA; a Bun + Hono API
-            holds every secret. The frontend never touches the Anthropic key — it
+            holds every secret. The frontend never touches the provider key — it
             posts a message and reads back a stream.
           </p>
 
@@ -196,8 +217,8 @@ export default function AetherCaseStudy() {
               <span className="aether-cs__arch-link-bot">tool results</span>
             </div>
             <div className="aether-cs__arch-node">
-              <span className="aether-cs__arch-label">Claude</span>
-              <span className="aether-cs__arch-sub">Anthropic SDK</span>
+              <span className="aether-cs__arch-label">LLM</span>
+              <span className="aether-cs__arch-sub">Claude · default</span>
             </div>
           </div>
 

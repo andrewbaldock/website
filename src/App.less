@@ -104,6 +104,18 @@ a {
 
 // ── Hero ─────────────────────────────────────────────────────────────────────
 
+@keyframes borderCycle {
+  0%   { border-color: @pink; }
+  33%  { border-color: @purple; }
+  66%  { border-color: @blue; }
+  100% { border-color: @pink; }
+}
+
+@keyframes sparkOrbit {
+  from { offset-distance: 0%; }
+  to   { offset-distance: 100%; }
+}
+
 @keyframes neonFlicker {
   0%   { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
   18%  { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
@@ -325,6 +337,32 @@ a {
 
 // ── Aether Card ───────────────────────────────────────────────────────────────
 
+.aether-card__wrap {
+  position: relative;
+  max-width: 860px;
+  margin: 0 auto;
+
+  &:hover .aether-card__spark {
+    opacity: 1;
+    animation: sparkOrbit 3s linear infinite;
+  }
+}
+
+.aether-card__spark {
+  position: absolute;
+  inset: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 3px 2px @pink, 0 0 6px 3px @pink;
+  offset-path: rect(0px auto auto 0px round 12px);
+  offset-rotate: 0deg;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
 .aether-card {
   max-width: 860px;
   margin: 0 auto;
@@ -334,6 +372,12 @@ a {
   display: flex;
   align-items: stretch;
   isolation: isolate;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    animation: borderCycle 2s linear infinite;
+  }
 
   &__placeholder {
     flex: 0 0 45%;

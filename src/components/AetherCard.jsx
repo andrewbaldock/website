@@ -2,7 +2,9 @@ export default function AetherCard() {
   return (
     <section className="section-aether">
       <div className="section">
-        <div className="aether-card">
+        <div className="aether-card__wrap">
+          <span className="aether-card__spark" aria-hidden="true" />
+        <a className="aether-card" href="https://andrewbaldock.com/aether" target="_blank" rel="noreferrer">
           <div className="aether-card__placeholder">Screenshot coming soon</div>
           <div className="aether-card__body">
             <p className="aether-card__label">Project:</p>
@@ -43,8 +45,10 @@ export default function AetherCard() {
               TLDR: Talk to AI, use tools.
             </p>
             {/* TODO: Aether URL once hosted */}
-            <a className="aether-card__link" href="#">View Project →</a>
+            <a className="aether-card__link" href="https://andrewbaldock.com/aether" target="_blank" rel="noreferrer"
+              onClick={e => e.stopPropagation()}>View Project →</a>
           </div>
+        </a>
         </div>
       </div>
     </section>

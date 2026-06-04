@@ -6,7 +6,7 @@ import 'tippy.js/dist/tippy.css'
 import 'tippy.js/animations/shift-away.css'
 
 const links = [
-  { icon: Rocket,       label: 'Live Project',  href: '#', /* TODO: Aether URL once hosted */              external: true   },
+  { icon: Rocket,       label: 'Live Project',  href: 'https://andrewbaldock.com/aether',                  external: true   },
   { icon: GitHubIcon,   label: 'GitHub',        href: 'https://github.com/andrewbaldock',                  external: true   },
   { icon: FileText,     label: 'Resume',        to: '/resume',                                             internal: true   },
   { icon: LinkedInIcon, label: 'LinkedIn',      href: 'https://www.linkedin.com/in/andrewbaldock/',         external: true   },

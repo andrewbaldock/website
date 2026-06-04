@@ -1,0 +1,10 @@
+# SPA deep-link fallback for Apache (A Small Orange).
+# Real files (resume.pdf, assets, images) serve directly; any other path
+# falls back to index.html so client-side routes like /resume survive a refresh.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  RewriteRule ^ index.html [L]
+</IfModule>

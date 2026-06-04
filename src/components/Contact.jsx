@@ -6,7 +6,7 @@ export default function Contact() {
           <p className="contact__name">Andrew Baldock</p>
           <ul className="contact__list">
             <li><a href="mailto:andrewbaldock3@gmail.com">andrewbaldock3@gmail.com</a></li>
-            <li><a href="http://www.linkedin.com/in/andrewbaldock/" target="_blank" rel="noopener noreferrer">linkedin.com/in/andrewbaldock</a></li>
+            <li><a href="https://www.linkedin.com/in/andrewbaldock/" target="_blank" rel="noopener noreferrer">linkedin.com/in/andrewbaldock</a></li>
           </ul>
         </div>
       </div>

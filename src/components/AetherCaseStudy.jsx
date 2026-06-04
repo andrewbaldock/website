@@ -136,11 +136,8 @@ export default function AetherCaseStudy() {
           </div>
         </header>
 
-        {/* SCREENSHOT SLOT: hero — drop a 16:9 image into public/images/ and
-            swap the placeholder for the <img> below once captured. */}
         <div className="aether-cs__shot">
-          {/* <img src="/images/aether-hero.png" alt="Aether conversational explorer" /> */}
-          Screenshot coming soon
+          <img src="/images/screenshot.jpg" alt="Aether conversational explorer" />
         </div>
 
         <section className="aether-cs__block">

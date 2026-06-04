@@ -7,7 +7,7 @@ export default function AetherCard() {
         <div className="aether-card__wrap">
           <span className="aether-card__spark" aria-hidden="true" />
         <Link className="aether-card" to="/aether">
-          <div className="aether-card__placeholder">Screenshot coming soon</div>
+          <img className="aether-card__screenshot" src="/images/aether-card-screenshot.jpg" alt="Aether conversational explorer" />
           <div className="aether-card__body">
             <p className="aether-card__label">Project:</p>
             <svg className="aether-card__wordmark" viewBox="0 0 640 100" aria-label="Aether">

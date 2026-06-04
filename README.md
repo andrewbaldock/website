@@ -26,3 +26,21 @@ bun run preview    # serve dist/ to sanity-check a prod build
 Content lives in `src/resumeData.js` — single source of truth for both the web resume page (`ResumePage.jsx`) and the PDF. The PDF is rendered by Playwright/Chromium from `scripts/resumeTemplate.mjs`. Run `bun run resume:pdf` after any data change and commit the updated `public/resume.pdf`.
 
 Web pages intentionally omit email and phone (privacy). The PDF keeps both.
+
+## Deploy — A Small Orange (manual SFTP via ForkLift)
+
+The site runs on Apache shared hosting at A Small Orange. There is no auto-deploy — build locally, then upload manually.
+
+```bash
+bun run resume:pdf   # only if resumeData.js changed — commit the updated public/resume.pdf
+bun run build        # → dist/
+bun run preview      # optional: sanity-check at http://localhost:4173
+```
+
+Then in **ForkLift**: SFTP into the ASO host and copy the contents of `dist/` into the web root (`public_html/`), overwriting existing files. Typically that's:
+
+- `assets/` folder
+- `index.html`
+- `resume.pdf` (if it changed)
+
+The `.htaccess` in the web root is the SPA deep-link fallback — without it `/resume` 404s on hard refresh. It is **not** in `dist/` so don't delete it. Edit it directly on the server via ForkLift (show hidden files).

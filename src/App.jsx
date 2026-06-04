@@ -16,7 +16,7 @@ function Home() {
         <Resume />
         <AetherCard />
         <Contact />
-        <footer className="footer">Andrew Baldock &copy; {new Date().getFullYear()}</footer>
+        <footer className="footer">&copy; {new Date().getFullYear()}</footer>
       </div>
     </>
   )

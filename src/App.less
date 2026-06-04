@@ -53,7 +53,7 @@ a {
 
 .nav {
   position: fixed;
-  top: 16px;
+  top: 8px;
   left: auto;
   right: 24px;
   bottom: auto;
@@ -62,6 +62,54 @@ a {
   flex-direction: row;
   align-items: center;
   gap: 4px;
+
+  // On the home page the nav spans the full width so the scroll-title can sit
+  // at the left while the icons stay top-right. Gradient goes fully opaque at
+  // the top so content can't bleed through as it scrolls underneath.
+  &--home {
+    top: 0;
+    left: 0;
+    right: 0;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 8px 24px;
+    // background: linear-gradient(to bottom, rgba(10, 10, 18, 1) 0%, rgba(10, 10, 18, 0.85) 55%, transparent 100%);
+    pointer-events: none;
+  }
+
+  &__icons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    pointer-events: auto;
+  }
+
+  &__title {
+    .codystar();
+    align-self: center;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    animation: colorCycle 12s ease-in-out infinite alternate;
+
+    &:not(.is-visible) {
+      pointer-events: none;
+    }
+
+    &.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+  }
 
   &__icon-link {
     display: flex;
@@ -511,18 +559,18 @@ a {
 
   &__name {
     .codystar();
-    font-size: 28px;
+    font-size: 26px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: @text;
-    margin-bottom: 32px;
+    margin-bottom: 12px;
   }
 
   &__list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 2px;
 
     li {
       font-size: 15px;
@@ -547,9 +595,10 @@ a {
   text-align: center;
   padding: 40px 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-  color: @muted;
-  font-size: 13px;
+  color: #d02e9d;
+  font-size: 20px;
   letter-spacing: 0.08em;
+  font-family: 'Tilt Neon', sans-serif;
 }
 
 // ── Section wrappers ──────────────────────────────────────────────────────────
@@ -575,7 +624,7 @@ a {
 }
 
 .section-contact {
-  background: #7b007938;
+  background: #2703269e;
 }
 
 // ── Resume Page (/resume) ──────────────────────────────────────────────────────
@@ -583,7 +632,7 @@ a {
 .resume-page {
   min-height: 100vh;
   background:
-    radial-gradient(ellipse at top, rgba(124, 77, 255, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at top, rgba(224, 64, 251, 0.13) 0%, transparent 55%),
     @bg;
 
   &__inner {
@@ -606,24 +655,6 @@ a {
     color: @muted;
 
     &:hover { color: @blue; }
-  }
-
-  &__download {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: @blue;
-    border: 1px solid rgba(64, 196, 255, 0.4);
-    padding: 9px 22px;
-    border-radius: 6px;
-    transition: background 0.2s ease, color 0.2s ease;
-
-    &:hover {
-      background: rgba(64, 196, 255, 0.12);
-      color: @blue;
-    }
   }
 
   &__head {
@@ -677,7 +708,6 @@ a {
     font-size: 16px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: @pink;
     margin-bottom: 18px;
     padding-bottom: 10px;
     border-bottom: 1px solid rgba(224, 64, 251, 0.18);
@@ -796,5 +826,49 @@ a {
 
   @media (max-width: 600px) {
     &__job-meta { white-space: normal; }
+  }
+}
+
+// ── Download PDF button (reusable) ─────────────────────────────────────────────
+// Pink, with the cycling border + orbiting spark borrowed from .aether-card.
+
+.download-pdf {
+  position: relative;
+  overflow: visible;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: @pink;
+  border: 1px solid @pink;
+  padding: 9px 22px;
+  border-radius: 6px;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    color: @pink;
+    background: rgba(224, 64, 251, 0.12);
+    animation: borderCycle 2s linear infinite;
+  }
+
+  &__spark {
+    position: absolute;
+    inset: 0;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 3px 2px @pink, 0 0 6px 3px @pink;
+    offset-path: rect(0px auto auto 0px round 6px);
+    offset-rotate: 0deg;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  &:hover &__spark {
+    opacity: 1;
+    animation: sparkOrbit 3s linear infinite;
   }
 }

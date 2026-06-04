@@ -11,7 +11,7 @@ export const resume = {
   title: "Senior Frontend Engineer · Engineering Manager",
   location: "El Cerrito, CA",
   email: "andrewbaldock3@gmail.com",
-  phone: "510-545-3739",
+  phone: "510-682-3924",
   links: {
     website: "andrewbaldock.com",
     linkedin: "linkedin.com/in/andrewbaldock",

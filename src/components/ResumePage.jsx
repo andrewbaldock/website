@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { resume } from '../resumeData.js'
 import Lotus from './Lotus.jsx'
+import DownloadPdfButton from './DownloadPdfButton.jsx'
 
 // Wrap **…** as <strong> and *…* as <em>. Split on bold first, then parse
 // italics within the non-bold runs.
@@ -29,26 +30,20 @@ function SectionHeader({ children }) {
 
 export default function ResumePage() {
   useEffect(() => { window.scrollTo(0, 0) }, [])
-  const { name, title, location, email, phone, links } = resume
+  const { name, title, links } = resume
   return (
     <div className="resume-page">
       <div className="resume-page__inner">
         <div className="resume-page__topbar">
           <Link to="/" className="resume-page__back">← Back</Link>
-          <a className="resume-page__download" href="/resume.pdf" download>
-            Download PDF
-          </a>
+          <DownloadPdfButton />
         </div>
 
         <header className="resume-page__head">
           <h1 className="resume-page__name">{name}</h1>
           <p className="resume-page__title">{title}</p>
           <p className="resume-page__contact">
-            {location}
-            <span className="resume-page__sep">·</span>
-            <a href={`mailto:${email}`}>{email}</a>
-            <span className="resume-page__sep">·</span>
-            {phone}
+            San Francisco Bay Area
           </p>
           <p className="resume-page__contact">
             <a href={`https://${links.website}`} target="_blank" rel="noopener noreferrer">{links.website}</a>
@@ -131,9 +126,7 @@ export default function ResumePage() {
         </section>
 
         <div className="resume-page__footer">
-          <a className="resume-page__download" href="/resume.pdf" download>
-            Download PDF
-          </a>
+          <DownloadPdfButton />
           <Link to="/" className="resume-page__back">← Back to home</Link>
         </div>
       </div>

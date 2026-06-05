@@ -12,39 +12,21 @@ import { AETHER_URL as LIVE_URL } from '../config.js'
 
 const REPO_URL = 'https://github.com/andrewbaldock/aether'
 
-// The AETHER neon wordmark — lifted from AetherCard so the case study leads with
-// the same brand mark (glow filter + duo gradient + CRT scanline mask).
+// The Aether wordmark — lifted from AetherCard so the case study leads with the
+// same brand mark: solid Grenze Gotisch (blackletter) in the pink→cyan gradient,
+// no glow, matching the live app.
 function AetherWordmark() {
   return (
-    <svg className="aether-cs__wordmark" viewBox="0 0 640 100" aria-label="Aether">
+    <svg className="aether-cs__wordmark" viewBox="0 0 480 100" aria-label="Aether">
       <defs>
-        <filter id="aether-cs-glow" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b1" />
-          <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b2" />
-          <feMerge>
-            <feMergeNode in="b2" />
-            <feMergeNode in="b1" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-        <linearGradient id="aether-cs-duo" x1="0" y1="0" x2="1" y2="0.4">
+        <linearGradient id="aether-cs-duo" x1="0" y1="0.65" x2="1" y2="0.35">
           <stop offset="0%" stopColor="#ff2e9a" />
-          <stop offset="55%" stopColor="#ff2e9a" />
-          <stop offset="78%" stopColor="#b54bd0" />
+          <stop offset="50%" stopColor="#b54bd0" />
           <stop offset="100%" stopColor="#16c2ff" />
         </linearGradient>
-        <pattern id="aether-cs-scan" width="10" height="5" patternUnits="userSpaceOnUse">
-          <rect width="10" height="3.2" fill="#fff" />
-          <rect y="3.2" width="10" height="1.8" fill="#000" />
-        </pattern>
-        <mask id="aether-cs-mask">
-          <rect width="640" height="100" fill="url(#aether-cs-scan)" />
-        </mask>
       </defs>
-      <g filter="url(#aether-cs-glow)" mask="url(#aether-cs-mask)">
-        <text x="320" y="78" textAnchor="middle" fontFamily="Ubuntu" fontWeight="700"
-          fontSize="82" letterSpacing="4" fill="url(#aether-cs-duo)">AETHER</text>
-      </g>
+      <text x="240" y="80" textAnchor="middle" fontFamily="'Grenze Gotisch', serif" fontWeight="600"
+        fontSize="90" letterSpacing="1" fill="url(#aether-cs-duo)">Aether</text>
     </svg>
   )
 }

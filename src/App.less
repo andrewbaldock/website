@@ -197,7 +197,7 @@ a {
     opacity: 0;
     animation:
       neonFlicker 1.6s ease-out 1 forwards,
-      colorCycle 12s ease-in-out 1.6s 1 forwards;
+      colorCycle 60s ease-in-out 1.6s 1 forwards;
     margin-bottom: 12px;
   }
 
@@ -245,7 +245,7 @@ a {
       font-size: clamp(20px, 2.5vw, 28px);
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: @pink;
+      color: #fff;
       margin-bottom: 20px;
       text-align: center;
     }
@@ -301,7 +301,7 @@ a {
     font-size: 22px;
     font-weight: 400;
     letter-spacing: 0.05em;
-    color: @pink;
+    color: #fff;
     white-space: nowrap;
     line-height: 1;
     user-select: none;
@@ -507,14 +507,14 @@ a {
     }
 
     &.primary {
-      color: @pink;
-      border: 2px solid @pink;
+      color: #fff;
+      border: 2px solid #fff;
       background: rgba(0, 0, 0, 0.55);
       backdrop-filter: blur(6px);
 
       &:hover {
-        background: rgba(224, 64, 251, 0.18);
-        color: @pink;
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
         animation: borderCycle 2s linear infinite;
       }
     }
@@ -664,6 +664,7 @@ a {
     color: @purple;
     margin-bottom: 16px;
   }
+
 
   &__contact {
     font-size: 13.5px;

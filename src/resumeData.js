@@ -8,7 +8,7 @@
 
 export const resume = {
   name: "Andrew Baldock",
-  title: "Senior Frontend Engineer · Engineering Manager",
+  title: "Senior Frontend Engineer ◆ Engineering Manager",
   location: "El Cerrito, CA",
   email: "andrewbaldock3@gmail.com",
   phone: "510-682-3924",

@@ -9,6 +9,7 @@ import {
   Moon,
 } from 'lucide-react'
 import { AETHER_URL as LIVE_URL } from '../config.js'
+import ThemeToggle, { usePageTheme } from './ThemeToggle.jsx'
 
 const REPO_URL = 'https://github.com/andrewbaldock/aether'
 
@@ -364,9 +365,11 @@ const LLMS = [
 
 export default function AetherCaseStudy() {
   useEffect(() => { window.scrollTo(0, 0) }, [])
+  const { theme, toggle } = usePageTheme()
 
   return (
     <div className="aether-cs">
+      <ThemeToggle theme={theme} onToggle={toggle} />
       <div className="aether-cs__inner">
         <div className="aether-cs__topbar">
           <Link to="/" className="aether-cs__back">← Back</Link>

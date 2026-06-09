@@ -159,27 +159,30 @@ a {
   to   { offset-distance: 100%; }
 }
 
-@keyframes neonFlicker {
-  0%   { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
-  18%  { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
-  22%  { opacity: 1;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
-  26%  { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
-  48%  { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
-  52%  { opacity: 1;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
-  55%  { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
-  58%  { opacity: 1;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
-  61%  { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
-  64%  { opacity: 1;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
-  67%  { opacity: 0;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
-  73%  { opacity: 1;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
-  100% { opacity: 1;   color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
-}
-
-@keyframes colorCycle {
-  0%   { color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
-  33%  { color: #CF2CC7; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
-  66%  { color: #2686E5; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #2686E5, 0 0 60px #2686E5; }
-  100% { color: #D5BCE9; text-shadow: 0 0 40px rgb(225, 0, 255), 0 0 30px #D5BCE9, 0 0 60px #D5BCE9; }
+@keyframes titleLoop {
+  /* flicker in: 0–1.6s (0–1.17%) */
+  0%    { opacity: 0; color: #CF2CC7; text-shadow: 0 0 40px #e100ff, 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  0.15% { opacity: 0; color: #CF2CC7; text-shadow: 0 0 40px #e100ff, 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  0.20% { opacity: 1; color: #CF2CC7; text-shadow: 0 0 40px #e100ff, 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  0.25% { opacity: 0; color: #CF2CC7; text-shadow: 0 0 40px #e100ff, 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  0.46% { opacity: 0; color: #CF2CC7; text-shadow: 0 0 40px #e100ff, 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  0.51% { opacity: 1; color: #CF2CC7; text-shadow: 0 0 40px #e100ff, 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  0.56% { opacity: 0; color: #CF2CC7; text-shadow: 0 0 40px #e100ff, 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  0.61% { opacity: 1; color: #CF2CC7; text-shadow: 0 0 40px #e100ff, 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  0.66% { opacity: 0; color: #CF2CC7; text-shadow: 0 0 40px #e100ff, 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  0.71% { opacity: 1; color: #CF2CC7; text-shadow: 0 0 40px #e100ff, 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  0.76% { opacity: 0; color: #CF2CC7; text-shadow: 0 0 40px #e100ff, 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  0.81% { opacity: 1; color: #CF2CC7; text-shadow: 0 0 40px #e100ff, 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
+  /* hot pink → purple: 1.6s–6.6s (0.81%–3.35%) */
+  3.35% { opacity: 1; color: #7B2FBE; text-shadow: 0 0 40px #7B2FBE, 0 0 30px #7B2FBE, 0 0 60px #7B2FBE; }
+  /* purple → blue: 6.6s–11.6s (3.35%–5.89%) */
+  5.89% { opacity: 1; color: #2686E5; text-shadow: 0 0 40px #2686E5, 0 0 30px #2686E5, 0 0 60px #2686E5; }
+  /* blue → white-pink: 11.6s–16.6s (5.89%–8.43%) */
+  8.43% { opacity: 1; color: #D5BCE9; text-shadow: 0 0 40px #D5BCE9, 0 0 30px #D5BCE9, 0 0 60px #D5BCE9; }
+  /* hold white-pink for 180s: 16.6s–196.6s (8.63%–99.7%) */
+  99.7%  { opacity: 1; color: #D5BCE9; text-shadow: 0 0 40px #D5BCE9, 0 0 30px #D5BCE9, 0 0 60px #D5BCE9; }
+  /* snap invisible for loop reset */
+  100%   { opacity: 0; color: #CF2CC7; text-shadow: 0 0 40px #e100ff, 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
 }
 
 // ── Full-page wrapper ─────────────────────────────────────────────────────────
@@ -225,9 +228,7 @@ a {
     line-height: 1;
     text-transform: uppercase;
     opacity: 0;
-    animation:
-      neonFlicker 1.6s ease-out 1 forwards,
-      colorCycle 60s ease-in-out 1.6s 1 forwards;
+    animation: titleLoop 197s linear infinite;
     margin-bottom: 12px;
   }
 

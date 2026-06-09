@@ -1,5 +1,6 @@
 import Tippy from '@tippyjs/react'
 import { FileText } from 'lucide-react'
+import { useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { GitHubIcon, LinkedInIcon, YouTubeIcon } from './BrandIcons.jsx'
 import { AetherLogo } from './AetherLogo.jsx'
@@ -17,6 +18,12 @@ const links = [
 export default function Nav() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (pathname === '/') {
+      document.documentElement.setAttribute('data-page-theme', 'dark')
+    }
+  }, [pathname])
 
   return (
     <nav className="nav">

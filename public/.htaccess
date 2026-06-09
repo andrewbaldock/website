@@ -12,11 +12,13 @@
   RewriteCond %{HTTPS} off
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
-  # SPA deep-link fallback
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
-  RewriteCond %{REQUEST_FILENAME} -d
-  RewriteRule ^ - [L]
-  RewriteRule ^ index.html [L]
+  # SPA deep-link fallback: rewrite to index.html ONLY when the request isn't a
+  # real file or directory. A missing asset (e.g. a stale hashed bundle after a
+  # deploy) must 404 — serving it index.html returns HTML with a 200 and triggers
+  # the "Unexpected token '<'" white-screen.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ /index.html [L]
 </IfModule>
 
 # No-cache for index.html

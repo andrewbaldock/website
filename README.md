@@ -43,4 +43,4 @@ Then in **ForkLift**: SFTP into the ASO host and copy the contents of `dist/` in
 - `index.html`
 - `resume.pdf` (if it changed)
 
-The `.htaccess` in the web root is the SPA deep-link fallback — without it `/resume` 404s on hard refresh. It is **not** in `dist/` so don't delete it. Edit it directly on the server via ForkLift (show hidden files).
+The `.htaccess` in the web root is the SPA deep-link fallback — without it `/resume` 404s on hard refresh. It rewrites a request to `index.html` **only when the path isn't a real file or directory** (negated `-f`/`-d` conditions), so a genuinely missing asset still returns a real 404 instead of HTML-with-a-200 (which would surface as the "Unexpected token '<'" white-screen after a deploy). The source of truth is `public/.htaccess` (copied into `dist/` on build); the live copy must be kept in sync — edit it directly on the server via ForkLift (show hidden files).

@@ -8,7 +8,9 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "resume:pdf": "bun scripts/render-resume.mjs"
+    "resume:pdf": "bun scripts/render-resume.mjs",
+    "deploy": "./deploy.sh",
+    "shipit": "./deploy.sh"
   },
   "dependencies": {
     "@tippyjs/react": "^4.2.6",

@@ -381,6 +381,9 @@ export default function AetherCaseStudy() {
           <p className="aether-cs__tagline">
             A conversational explorer — every view is a question answered in its best form.
           </p>
+          <p className="aether-cs__byline">
+            Designed &amp; built by <span className="aether-cs__byline-name">Andrew Baldock</span>
+          </p>
           <div className="aether-cs__cta resume-buttons">
             <a className="primary" href={LIVE_URL} target="_blank" rel="noreferrer">
               <span className="cta-spark" aria-hidden="true" />

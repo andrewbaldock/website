@@ -65,7 +65,7 @@ export function renderResumeHTML(data) {
 <html>
 <head>
 <meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
 <style>
 @page { size: letter; margin: 0.55in 0.6in; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -96,7 +96,16 @@ li i, .job-blurb i { font-style: italic; font-weight: 400; color: #70707c; }
 .tech { margin-top: 4px; font-size: 8.3pt; font-style: italic; color: #70707c; }
 .edu-line { color: #33333c; margin-bottom: 2px; }
 .edu-line b { font-weight: 700; color: #1c1c22; }
-.job, .sec { page-break-inside: avoid; }
+/* Pagination. We deliberately do NOT use page-break-inside: avoid on .job —
+   Chromium's print engine, when it shifts an "avoid" block to the next page,
+   still writes that block's text to the PDF content stream at its ORIGINAL
+   position, scrambling the selectable-text / ATS reading order (bullets detach
+   from their job). Since this résumé must stay ATS-clean (real, in-order text),
+   we let jobs flow naturally and only prevent an *orphaned heading* — a job/
+   section title stranded at the foot of a page — which Chromium handles via
+   break-after:avoid without reordering text. */
+.sec h2, .job-head { break-after: avoid; }
+.sec { break-after: avoid; }
 </style>
 </head>
 <body>

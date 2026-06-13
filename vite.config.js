@@ -19,5 +19,5 @@ function buildTimestamp() {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), buildTimestamp()],
-  server: { port: 5173 },
+  server: { port: 5173, allowedHosts: ['website-dev'] },
 })

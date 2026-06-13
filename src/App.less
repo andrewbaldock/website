@@ -705,7 +705,10 @@ a {
 
   &__sep {
     color: rgba(122, 122, 154, 0.5);
-    padding: 0 8px;
+    // Spacing comes from real whitespace in the markup (not padding) so a
+    // copy/paste of the contact line keeps the separators readable.
+    margin: 0 8px;
+    user-select: none;
   }
 
   &__block {
@@ -804,6 +807,7 @@ a {
         height: 5px;
         border-radius: 50%;
         background: @purple;
+        user-select: none;
       }
 
       strong { font-weight: 600; color: #fff; }
@@ -944,7 +948,19 @@ a {
     line-height: 1.6;
     color: @text;
     max-width: 620px;
+    margin: 0 auto 24px;
+  }
+
+  &__byline {
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: @muted;
     margin: 0 auto 32px;
+  }
+
+  &__byline-name {
+    color: @text;
+    font-weight: 600;
   }
 
   &__cta {
@@ -1664,6 +1680,8 @@ a {
   &__eyebrow { color: var(--pt-pink); }
 
   &__tagline { color: var(--pt-text); }
+  &__byline { color: var(--pt-muted); }
+  &__byline-name { color: var(--pt-text); }
 
   &__h2 { color: var(--pt-text); }
   &__lede { color: var(--pt-text); }

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# The résumé downloads carry contact info and are marked noindex via an
+# X-Robots-Tag response header (see .htaccess) rather than being listed here,
+# since a Disallow line would only advertise the paths.

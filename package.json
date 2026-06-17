@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "resume:pdf": "bun scripts/render-resume.mjs",
+    "resume:md": "bun scripts/render-resume-md.mjs",
     "deploy": "./deploy.sh",
     "shipit": "./deploy.sh"
   },
@@ -16,6 +17,7 @@
     "@tippyjs/react": "^4.2.6",
     "less": "^4.6.4",
     "lucide-react": "^1.17.0",
+    "playwright": "^1.61.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.16.0",

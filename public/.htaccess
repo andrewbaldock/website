@@ -27,3 +27,13 @@
   Header set Pragma "no-cache"
   Header set Expires 0
 </Files>
+
+# Serve .md as readable UTF-8 text in the browser rather than downloading it.
+<IfModule mod_mime.c>
+  AddType text/markdown;charset=UTF-8 .md
+</IfModule>
+
+# Keep résumé downloads (with contact info) out of search/AI indexes.
+<FilesMatch "^resume\.(md|pdf)$">
+  Header set X-Robots-Tag "noindex, noarchive, nofollow"
+</FilesMatch>

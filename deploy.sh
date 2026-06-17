@@ -101,6 +101,9 @@ cd "$ROOT"
 echo "==> Rendering resume PDF"
 bun run resume:pdf
 
+echo "==> Rendering resume markdown"
+bun run resume:md
+
 echo "==> Building site"
 bun run build
 
@@ -109,6 +112,8 @@ bun run build
 echo "==> Uploading root files"
 ftp_upload "$DIST/index.html"  "index.html"
 ftp_upload "$DIST/resume.pdf"  "resume.pdf"
+ftp_upload "$DIST/resume.md"   "resume.md"
+ftp_upload "$DIST/robots.txt"  "robots.txt"
 ftp_upload "$DIST/icons.svg"   "icons.svg"
 ftp_upload "$DIST/favicon.ico" "favicon.ico"
 ftp_upload "$DIST/.htaccess"   ".htaccess"

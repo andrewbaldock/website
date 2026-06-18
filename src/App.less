@@ -1280,14 +1280,14 @@ a {
     margin: 28px 0 8px;
     padding: 18px;
     border-radius: 12px;
-    border: 1px solid fade(@blue, 22%);
+    border: 1px solid rgb(var(--pt-blue-rgb) / calc(22% * var(--pt-bp-k)));
     background:
       // faint engineering grid
-      linear-gradient(fade(@blue, 5%) 1px, transparent 1px) 0 0 / 100% 28px,
-      linear-gradient(90deg, fade(@blue, 5%) 1px, transparent 1px) 0 0 / 28px 100%,
-      radial-gradient(ellipse at 30% 0%, fade(@blue, 8%) 0%, transparent 60%),
-      #07070e;
-    box-shadow: inset 0 0 0 1px fade(@blue, 8%);
+      linear-gradient(rgb(var(--pt-blue-rgb) / calc(5% * var(--pt-bp-k))) 1px, transparent 1px) 0 0 / 100% 28px,
+      linear-gradient(90deg, rgb(var(--pt-blue-rgb) / calc(5% * var(--pt-bp-k))) 1px, transparent 1px) 0 0 / 28px 100%,
+      radial-gradient(ellipse at 30% 0%, rgb(var(--pt-blue-rgb) / calc(8% * var(--pt-bp-k))) 0%, transparent 60%),
+      var(--pt-bp-paper);
+    box-shadow: inset 0 0 0 1px rgb(var(--pt-blue-rgb) / calc(8% * var(--pt-bp-k)));
     overflow: hidden;
   }
 
@@ -1295,59 +1295,59 @@ a {
     display: block;
     width: 100%;
     height: auto;
-    color: @blue; // arrowhead fill via currentColor
+    color: rgb(var(--pt-blue-rgb)); // arrowhead fill via currentColor
     font-family: 'JetBrains Mono', ui-monospace, 'Menlo', monospace;
   }
 
   // sheet + frame
-  &__bp-sheet { fill: none; stroke: fade(@blue, 28%); stroke-width: 1; }
-  &__bp-frame { fill: none; stroke: fade(@blue, 16%); stroke-width: 1; }
+  &__bp-sheet { fill: none; stroke: rgb(var(--pt-blue-rgb) / calc(28% * var(--pt-bp-k))); stroke-width: 1; }
+  &__bp-frame { fill: none; stroke: rgb(var(--pt-blue-rgb) / calc(16% * var(--pt-bp-k))); stroke-width: 1; }
 
   // device + columns
-  &__bp-device { fill: none; stroke: fade(@blue, 40%); stroke-width: 1.4; }
+  &__bp-device { fill: none; stroke: rgb(var(--pt-blue-rgb) / calc(40% * var(--pt-bp-k))); stroke-width: 1.4; }
   &__bp-col {
-    fill: fade(@blue, 4%);
-    stroke: fade(@blue, 55%);
+    fill: rgb(var(--pt-blue-rgb) / calc(4% * var(--pt-bp-k)));
+    stroke: rgb(var(--pt-blue-rgb) / calc(55% * var(--pt-bp-k)));
     stroke-width: 1;
-    &--chat { fill: fade(@blue, 7%); }
+    &--chat { fill: rgb(var(--pt-blue-rgb) / calc(7% * var(--pt-bp-k))); }
   }
   &__bp-handle {
-    fill: @pink;
+    fill: rgb(var(--pt-pink-rgb));
     opacity: 0.75;
     &--accent { opacity: 1; }
   }
 
   // hidden lines (dashed) — conversation rows
   &__bp-hidden {
-    stroke: fade(@blue, 35%);
+    stroke: rgb(var(--pt-blue-rgb) / calc(35% * var(--pt-bp-k)));
     stroke-width: 1;
     stroke-dasharray: 3 3;
   }
 
   // labels inside columns
   &__bp-l {
-    fill: fade(@text, 88%);
+    fill: rgb(var(--pt-text-rgb) / calc(88% * var(--pt-bp-k)));
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-anchor: middle;
   }
   &__bp-s {
-    fill: fade(@blue, 70%);
+    fill: rgb(var(--pt-blue-rgb) / calc(70% * var(--pt-bp-k)));
     font-size: 9px;
     letter-spacing: 0.04em;
     text-anchor: middle;
   }
   &__bp-note {
-    fill: fade(@text, 50%);
+    fill: rgb(var(--pt-text-rgb) / calc(50% * var(--pt-bp-k)));
     font-size: 8.5px;
     letter-spacing: 0.03em;
-    &--accent { fill: fade(@pink, 85%); }
+    &--accent { fill: rgb(var(--pt-pink-rgb) / calc(85% * var(--pt-bp-k))); }
   }
 
   // view titles (e.g. PLAN VIEW)
   &__bp-view {
-    fill: @pink;
+    fill: rgb(var(--pt-pink-rgb));
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.12em;
@@ -1355,9 +1355,9 @@ a {
 
   // balloons (part numbers)
   &__bp-balloon {
-    circle { fill: @bg; stroke: @pink; stroke-width: 1; }
+    circle { fill: var(--pt-bp-paper); stroke: rgb(var(--pt-pink-rgb)); stroke-width: 1; }
     text {
-      fill: @pink;
+      fill: rgb(var(--pt-pink-rgb));
       font-size: 10px;
       font-weight: 700;
       text-anchor: middle;
@@ -1365,59 +1365,59 @@ a {
   }
 
   // dimension lines
-  &__bp-wit { stroke: fade(@blue, 45%); stroke-width: 0.8; }
-  &__bp-dimline { stroke: @blue; stroke-width: 1; }
+  &__bp-wit { stroke: rgb(var(--pt-blue-rgb) / calc(45% * var(--pt-bp-k))); stroke-width: 0.8; }
+  &__bp-dimline { stroke: rgb(var(--pt-blue-rgb)); stroke-width: 1; }
   &__bp-lead {
-    stroke: fade(@blue, 55%);
+    stroke: rgb(var(--pt-blue-rgb) / calc(55% * var(--pt-bp-k)));
     stroke-width: 0.8;
     stroke-dasharray: 2 2;
     fill: none;
   }
   &__bp-dimtxt {
-    fill: fade(@blue, 90%);
+    fill: rgb(var(--pt-blue-rgb) / calc(90% * var(--pt-bp-k)));
     font-size: 9px;
     letter-spacing: 0.02em;
     text-anchor: middle;
-    &--accent { fill: @pink; }
+    &--accent { fill: rgb(var(--pt-pink-rgb)); }
   }
-  &__bp-dim--accent .aether-cs__bp-lead { stroke: fade(@pink, 70%); }
+  &__bp-dim--accent .aether-cs__bp-lead { stroke: rgb(var(--pt-pink-rgb) / calc(70% * var(--pt-bp-k))); }
 
   // ── Conversation column interior (faint UI inside col 2) ──
   // Dialog history — assistant text as faint rule lines, user turns as bubbles.
   &__bp-dialog line {
-    stroke: fade(@blue, 30%);
+    stroke: rgb(var(--pt-blue-rgb) / calc(30% * var(--pt-bp-k)));
     stroke-width: 2;
     stroke-linecap: round;
   }
   &__bp-bubble {
-    fill: fade(@blue, 14%);
-    stroke: fade(@blue, 30%);
+    fill: rgb(var(--pt-blue-rgb) / calc(14% * var(--pt-bp-k)));
+    stroke: rgb(var(--pt-blue-rgb) / calc(30% * var(--pt-bp-k)));
     stroke-width: 0.8;
   }
   // Compose box, model switcher pill, send button, tool chips.
   &__bp-compose {
-    fill: fade(@blue, 6%);
-    stroke: fade(@blue, 55%);
+    fill: rgb(var(--pt-blue-rgb) / calc(6% * var(--pt-bp-k)));
+    stroke: rgb(var(--pt-blue-rgb) / calc(55% * var(--pt-bp-k)));
     stroke-width: 1;
   }
   &__bp-switcher {
-    fill: fade(@blue, 16%);
-    stroke: fade(@blue, 45%);
+    fill: rgb(var(--pt-blue-rgb) / calc(16% * var(--pt-bp-k)));
+    stroke: rgb(var(--pt-blue-rgb) / calc(45% * var(--pt-bp-k)));
     stroke-width: 0.7;
   }
-  &__bp-send { fill: @pink; }
+  &__bp-send { fill: rgb(var(--pt-pink-rgb)); }
   &__bp-tool {
-    fill: fade(@pink, 16%);
-    stroke: @pink;
+    fill: rgb(var(--pt-pink-rgb) / calc(16% * var(--pt-bp-k)));
+    stroke: rgb(var(--pt-pink-rgb));
     stroke-width: 0.8;
   }
   &__bp-tool-dot {
     fill: none;
-    stroke: fade(@blue, 50%);
+    stroke: rgb(var(--pt-blue-rgb) / calc(50% * var(--pt-bp-k)));
     stroke-width: 0.8;
   }
   &__bp-tiny {
-    fill: fade(@text, 70%);
+    fill: rgb(var(--pt-text-rgb) / calc(70% * var(--pt-bp-k)));
     font-size: 6.5px;
     letter-spacing: 0.02em;
     text-anchor: middle;
@@ -1425,93 +1425,93 @@ a {
 
   // small filled rects (used by the mobile projection phones)
   &__bp-mini-fill {
-    fill: fade(@blue, 12%);
-    &--side { fill: fade(@pink, 16%); }
-    &--cap { fill: fade(@purple, 22%); }
+    fill: rgb(var(--pt-blue-rgb) / calc(12% * var(--pt-bp-k)));
+    &--side { fill: rgb(var(--pt-pink-rgb) / calc(16% * var(--pt-bp-k))); }
+    &--cap { fill: rgb(var(--pt-purple-rgb) / calc(22% * var(--pt-bp-k))); }
   }
 
   // detail B — oblique (cabinet) projection of the tabbed capability stack
   &__bp-ob-face {
-    stroke: fade(@blue, 55%);
+    stroke: rgb(var(--pt-blue-rgb) / calc(55% * var(--pt-bp-k)));
     stroke-width: 1;
     stroke-linejoin: round;
   }
-  &__bp-ob-back { fill: fade(@blue, 5%); }
-  &__bp-ob-front { fill: fade(@blue, 12%); stroke: @blue; }
+  &__bp-ob-back { fill: rgb(var(--pt-blue-rgb) / calc(5% * var(--pt-bp-k))); }
+  &__bp-ob-front { fill: rgb(var(--pt-blue-rgb) / calc(12% * var(--pt-bp-k))); stroke: rgb(var(--pt-blue-rgb)); }
 
   // flat tab bar inside the plan-view capability column
-  &__bp-slot-div { stroke: fade(@blue, 35%); stroke-width: 0.8; }
+  &__bp-slot-div { stroke: rgb(var(--pt-blue-rgb) / calc(35% * var(--pt-bp-k))); stroke-width: 0.8; }
   &__bp-tab {
-    fill: fade(@blue, 18%);
-    stroke: fade(@blue, 35%);
+    fill: rgb(var(--pt-blue-rgb) / calc(18% * var(--pt-bp-k)));
+    stroke: rgb(var(--pt-blue-rgb) / calc(35% * var(--pt-bp-k)));
     stroke-width: 0.6;
-    &--on { fill: fade(@pink, 35%); stroke: @pink; }
+    &--on { fill: rgb(var(--pt-pink-rgb) / calc(35% * var(--pt-bp-k))); stroke: rgb(var(--pt-pink-rgb)); }
   }
 
   &__bp-ob-tab {
-    fill: fade(@blue, 18%);
-    stroke: fade(@blue, 45%);
+    fill: rgb(var(--pt-blue-rgb) / calc(18% * var(--pt-bp-k)));
+    stroke: rgb(var(--pt-blue-rgb) / calc(45% * var(--pt-bp-k)));
     stroke-width: 0.8;
     stroke-linejoin: round;
-    &--on { fill: fade(@pink, 32%); stroke: @pink; }
+    &--on { fill: rgb(var(--pt-pink-rgb) / calc(32% * var(--pt-bp-k))); stroke: rgb(var(--pt-pink-rgb)); }
   }
   &__bp-ob-tablabel {
-    fill: @pink;
+    fill: rgb(var(--pt-pink-rgb));
     font-size: 6.5px;
     font-weight: 700;
     letter-spacing: 0.04em;
     text-anchor: middle;
-    &--table { fill: @blue; }
-    &--chart { fill: @purple; }
+    &--table { fill: rgb(var(--pt-blue-rgb)); }
+    &--chart { fill: rgb(var(--pt-purple-rgb)); }
   }
   &__bp-ob-graph {
-    line { stroke: fade(@pink, 55%); stroke-width: 1; }
-    circle { fill: @bg; stroke: @pink; stroke-width: 1; }
+    line { stroke: rgb(var(--pt-pink-rgb) / calc(55% * var(--pt-bp-k))); stroke-width: 1; }
+    circle { fill: var(--pt-bp-paper); stroke: rgb(var(--pt-pink-rgb)); stroke-width: 1; }
   }
   // faint widget-type hints peeking from the back panels (table, chart)
   &__bp-ob-hint {
-    line, rect { stroke: fade(@blue, 45%); stroke-width: 0.7; fill: none; }
+    line, rect { stroke: rgb(var(--pt-blue-rgb) / calc(45% * var(--pt-bp-k))); stroke-width: 0.7; fill: none; }
   }
 
   // Per-tab colour coding. Each modifier recolours its panel face, tab, and
   // widget hint so the three registered widget types read as distinct: the
   // active graph is pink, the table cyan, the chart purple.
   &__bp-ob--graph {
-    &.aether-cs__bp-ob-face { fill: fade(@pink, 12%); stroke: @pink; }
-    &.aether-cs__bp-ob-tab { fill: fade(@pink, 32%); stroke: @pink; }
+    &.aether-cs__bp-ob-face { fill: rgb(var(--pt-pink-rgb) / calc(12% * var(--pt-bp-k))); stroke: rgb(var(--pt-pink-rgb)); }
+    &.aether-cs__bp-ob-tab { fill: rgb(var(--pt-pink-rgb) / calc(32% * var(--pt-bp-k))); stroke: rgb(var(--pt-pink-rgb)); }
   }
   &__bp-ob--table {
-    &.aether-cs__bp-ob-face { fill: fade(@blue, 10%); stroke: fade(@blue, 70%); }
-    &.aether-cs__bp-ob-tab { fill: fade(@blue, 30%); stroke: @blue; }
-    line, rect { stroke: fade(@blue, 75%); }
+    &.aether-cs__bp-ob-face { fill: rgb(var(--pt-blue-rgb) / calc(10% * var(--pt-bp-k))); stroke: rgb(var(--pt-blue-rgb) / calc(70% * var(--pt-bp-k))); }
+    &.aether-cs__bp-ob-tab { fill: rgb(var(--pt-blue-rgb) / calc(30% * var(--pt-bp-k))); stroke: rgb(var(--pt-blue-rgb)); }
+    line, rect { stroke: rgb(var(--pt-blue-rgb) / calc(75% * var(--pt-bp-k))); }
   }
   &__bp-ob--chart {
-    &.aether-cs__bp-ob-face { fill: fade(@purple, 12%); stroke: fade(@purple, 75%); }
-    &.aether-cs__bp-ob-tab { fill: fade(@purple, 32%); stroke: @purple; }
-    line, rect { stroke: fade(@purple, 80%); }
+    &.aether-cs__bp-ob-face { fill: rgb(var(--pt-purple-rgb) / calc(12% * var(--pt-bp-k))); stroke: rgb(var(--pt-purple-rgb) / calc(75% * var(--pt-bp-k))); }
+    &.aether-cs__bp-ob-tab { fill: rgb(var(--pt-purple-rgb) / calc(32% * var(--pt-bp-k))); stroke: rgb(var(--pt-purple-rgb)); }
+    line, rect { stroke: rgb(var(--pt-purple-rgb) / calc(80% * var(--pt-bp-k))); }
   }
 
   &__bp-ob-cap {
-    fill: fade(@blue, 75%);
+    fill: rgb(var(--pt-blue-rgb) / calc(75% * var(--pt-bp-k)));
     font-size: 9px;
     letter-spacing: 0.04em;
     text-anchor: end;
   }
 
   // mobile projection
-  &__bp-phone { fill: fade(@blue, 4%); stroke: fade(@blue, 50%); stroke-width: 1.2; }
-  &__bp-scrim { fill: fade(@bg, 60%); }
+  &__bp-phone { fill: rgb(var(--pt-blue-rgb) / calc(4% * var(--pt-bp-k))); stroke: rgb(var(--pt-blue-rgb) / calc(50% * var(--pt-bp-k))); stroke-width: 1.2; }
+  &__bp-scrim { fill: rgb(0 0 0 / 25%); } // fixed dark scrim — reads on both dark + light paper
 
   // title block
   &__bp-title {
-    rect, line { stroke: fade(@blue, 45%); stroke-width: 1; fill: none; }
+    rect, line { stroke: rgb(var(--pt-blue-rgb) / calc(45% * var(--pt-bp-k))); stroke-width: 1; fill: none; }
     .aether-cs__bp-tk {
-      fill: fade(@blue, 60%);
+      fill: rgb(var(--pt-blue-rgb) / calc(60% * var(--pt-bp-k)));
       font-size: 7.5px;
       letter-spacing: 0.06em;
     }
     .aether-cs__bp-tv {
-      fill: fade(@text, 88%);
+      fill: rgb(var(--pt-text-rgb) / calc(88% * var(--pt-bp-k)));
       font-size: 9px;
       font-weight: 600;
       letter-spacing: 0.04em;
@@ -1589,6 +1589,14 @@ a {
   --pt-code-color:  #40c4ff;
   --pt-bullet:      #7c4dff;
   --pt-strong:      #ffffff;
+  // Blueprint (Aether case study) — RGB triplets for rgb()/opacity, a
+  // figure-panel bg, and a contrast multiplier. k=1 keeps the dark look as-is.
+  --pt-blue-rgb:    64 196 255;   // #40c4ff
+  --pt-pink-rgb:    224 64 251;   // #e040fb
+  --pt-purple-rgb:  124 77 255;   // #7c4dff
+  --pt-text-rgb:    201 201 216;  // #c9c9d8
+  --pt-bp-paper:    #07070e;      // dark figure panel (current look)
+  --pt-bp-k:        1;            // contrast multiplier — dark stays as-is
 }
 
 [data-page-theme="light"] {
@@ -1605,6 +1613,15 @@ a {
   --pt-code-color:  #0083b3;
   --pt-bullet:      #6930c3;
   --pt-strong:      #000000;
+  // Blueprint — DEEP, saturated accents for ink-grade contrast on light paper,
+  // deliberately darker than the link-tuned --pt-* colors above. k bumps every
+  // faint stroke/fill ~2.2× so the drawing reads crisply, not washed out.
+  --pt-blue-rgb:    3 105 161;    // deep cyan-blue
+  --pt-pink-rgb:    197 24 110;   // deep magenta
+  --pt-purple-rgb:  91 33 182;    // deep violet
+  --pt-text-rgb:    17 24 39;     // near-black ink
+  --pt-bp-paper:    #eef3f8;      // cool blueprint paper, distinct from #fff page
+  --pt-bp-k:        2.2;          // contrast multiplier
 }
 
 // ── Theme-toggle button ───────────────────────────────────────────────────────

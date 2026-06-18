@@ -992,6 +992,18 @@ a {
     }
   }
 
+  // ── Architecture diagram (the real draw.io export) ──
+  &__diagram {
+    margin: 28px 0 8px;
+    padding: 18px;
+    border-radius: 12px;
+    border: 1px solid fade(@blue, 22%);
+    background: rgba(10, 10, 18, 0.4); // dark backing — the SVG is light-on-dark line art
+    overflow-x: auto;
+
+    img { display: block; width: 100%; height: auto; min-width: 520px; margin: 0 auto; }
+  }
+
   // ── Content blocks ──
   &__block {
     margin-bottom: 56px;
@@ -1760,6 +1772,36 @@ a {
   }
 }
 
+// Magic Sticky CTAs are GREEN, not the site's pink — and calm (no neon borderCycle), to match the
+// pastel-officey palette. Scoped to .ms-cs so Aether's buttons are untouched. Works in both themes
+// via the --ms-accent token defined on .ms-cs.
+.ms-cs .resume-buttons a {
+  &.primary {
+    color: var(--ms-accent);
+    border-color: var(--ms-accent);
+    background: fade(@ms-green, 8%);
+    backdrop-filter: none;
+
+    &:hover {
+      background: fade(@ms-green, 16%);
+      color: var(--ms-accent);
+      animation: none;
+    }
+  }
+
+  &.secondary {
+    color: var(--ms-muted);
+    border-color: var(--ms-border);
+    background: transparent;
+
+    &:hover {
+      color: var(--ms-text);
+      border-color: var(--ms-accent);
+      animation: none;
+    }
+  }
+}
+
 // Reduced motion: honor the OS preference by killing the decorative animations
 // (hero color-cycle, neon flicker, orbiting/cycling sparks). Use a near-instant
 // duration rather than `none` so `forwards` fill still applies — the hero h1
@@ -1778,4 +1820,369 @@ a {
   .hero h1 {
     opacity: 1 !important;
   }
+}
+
+// ════════════════════════════════════════════════════════════════════════════════
+// Magic Sticky — promo card (home) + case study (/magicsticky).
+// Aesthetic: "pastel officey," NOT the neon/disco of the rest of the site — soft sage-green
+// surfaces, warm daisy-gold accent, calm borders, no glow. Mirrors the AetherCard / AetherCaseStudy
+// layout so the two projects read as siblings, just in a quieter palette. Light + dark via the
+// shared [data-page-theme] toggle; the case study owns its own --ms-* tokens so both modes look
+// deliberate (the home card is always on the dark home page, so it uses the dark values directly).
+// ════════════════════════════════════════════════════════════════════════════════
+
+// Pastel palette (matches the live app: a sage-green sticky with dark ink + a green accent).
+@ms-sage:       #cfe3cf; // sticky surface (light mode / on-card)
+@ms-sage-deep:  #b7d4b7; // edge / hover
+@ms-ink:        #2a3a2e; // text on sage
+@ms-ink-muted:  #5d6e60;
+@ms-green:      #2e7d52; // the "shared prompt" / connect accent
+@ms-gold:       #f4b942; // daisy center — the warm pop
+@ms-font:       'Julius Sans One', sans-serif;
+
+// ── Shared wordmark (daisy + "Magic Sticky" in Julius Sans One) ──
+.ms-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+
+  &__daisy { flex: 0 0 auto; display: block; }
+
+  &__text {
+    font-family: @ms-font;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    line-height: 1;
+  }
+}
+
+// ── Home promo card ──
+.section-magicsticky {
+  background: transparent;
+  padding-bottom: 60px;
+}
+
+.ms-card__wrap {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.ms-card {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  align-items: stretch;
+  border: 1.5px solid @ms-sage-deep;
+  border-radius: 14px;
+  overflow: hidden;
+  isolation: isolate;
+  cursor: pointer;
+  text-decoration: none;
+  min-height: 300px;
+  background: @ms-sage;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: @ms-green;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(46, 125, 82, 0.18);
+  }
+
+  &__screenshot {
+    flex-shrink: 0;
+    width: 45%;
+    display: block;
+    object-fit: cover;
+    object-position: top;
+    background: #e8f0e8;
+  }
+
+  &__body {
+    flex: 1;
+    padding: 28px 32px;
+    background: @ms-sage;
+    color: @ms-ink;
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    &__screenshot { flex: none; width: 100%; height: 200px; }
+  }
+
+  &__label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: @ms-green;
+    margin-bottom: 10px;
+  }
+
+  &__wordmark {
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid fade(@ms-ink, 14%);
+
+    .ms-wordmark__text {
+      font-size: 30px;
+      color: @ms-ink;
+    }
+  }
+
+  &__desc {
+    font-size: 15px;
+    line-height: 1.7;
+    color: @ms-ink;
+    margin-bottom: 18px;
+
+    &:last-of-type {
+      color: @ms-ink-muted;
+      font-style: italic;
+      margin-bottom: 24px;
+    }
+  }
+
+  &__link {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: @ms-green;
+    border: 1px solid fade(@ms-green, 45%);
+    padding: 10px 24px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+
+    &:hover { background: fade(@ms-green, 12%); }
+  }
+}
+
+// ── Case study (/magicsticky) ──
+// Own theme tokens so light + dark both look like a sticky note, not a recolor of the disco page.
+.ms-cs {
+  --ms-bg:      #f4f7f2;   // page ground (light)
+  --ms-text:    #2a3a2e;
+  --ms-muted:   #5d6e60;
+  --ms-surface: #ffffff;   // cards
+  --ms-sticky:  @ms-sage;  // sticky-note accent surface
+  --ms-border:  #d8e4d8;
+  --ms-accent:  @ms-green;
+  --ms-gold:    @ms-gold;
+
+  min-height: 100vh;
+  background: var(--ms-bg);
+  color: var(--ms-text);
+}
+[data-page-theme="dark"] .ms-cs,
+:root:not([data-page-theme="light"]) .ms-cs {
+  --ms-bg:      #14181a;   // deep, desk-like ground (dark)
+  --ms-text:    #e6efe6;
+  --ms-muted:   #9bb09e;
+  --ms-surface: #1d2421;
+  --ms-sticky:  #2b3a30;   // deep-pastel sticky (matches the app's dark mode)
+  --ms-border:  rgba(255, 255, 255, 0.1);
+  --ms-accent:  #5fc78e;
+  --ms-gold:    #f4b942;
+}
+
+.ms-cs {
+  &__inner { max-width: 960px; margin: 0 auto; padding: 48px 28px 80px; }
+
+  &__topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 48px; }
+
+  &__back {
+    font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ms-muted); text-decoration: none;
+    &:hover { color: var(--ms-accent); }
+  }
+
+  // ── Hero ──
+  &__hero {
+    text-align: center;
+    padding: 8px 0 40px;
+    border-bottom: 1px solid var(--ms-border);
+    margin-bottom: 48px;
+  }
+
+  &__eyebrow {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--ms-accent); margin-bottom: 20px;
+  }
+
+  &__wordmark {
+    justify-content: center;
+    margin: 0 auto 24px;
+    .ms-wordmark__text { font-size: clamp(34px, 6vw, 54px); color: var(--ms-text); }
+  }
+
+  &__tagline {
+    font-size: clamp(15px, 2.2vw, 20px); line-height: 1.6;
+    color: var(--ms-text); max-width: 620px; margin: 0 auto 24px;
+  }
+
+  &__byline { font-size: 13px; color: var(--ms-muted); margin: 0 auto 32px; }
+  &__byline-name { color: var(--ms-text); font-weight: 600; }
+  &__cta { margin-top: 4px; }
+
+  // ── Screenshot ──
+  &__shot {
+    width: 100%;
+    border: 1px solid var(--ms-border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 56px;
+    background: var(--ms-sticky);
+    img { width: 100%; height: auto; display: block; }
+  }
+
+  // ── Blocks ──
+  &__block { margin-bottom: 56px; }
+
+  &__h2 {
+    font-family: @ms-font;
+    font-weight: 400;
+    font-size: clamp(20px, 3vw, 27px);
+    letter-spacing: 0.05em;
+    color: var(--ms-text);
+    margin-bottom: 22px;
+  }
+
+  &__lede {
+    font-size: clamp(16px, 2vw, 19px); line-height: 1.7; color: var(--ms-text); margin-bottom: 16px;
+    strong { color: var(--ms-accent); font-weight: 700; }
+  }
+
+  &__body {
+    font-size: 15.5px; line-height: 1.8; color: var(--ms-text); margin-bottom: 14px;
+    &:last-child { margin-bottom: 0; }
+    em { color: var(--ms-muted); }
+    strong { color: var(--ms-accent); }
+    code {
+      font-family: 'Ubuntu Mono', monospace; font-size: 13px;
+      color: var(--ms-accent); background: fade(@ms-green, 12%);
+      padding: 1px 6px; border-radius: 4px;
+    }
+  }
+
+  // ── The four tools ──
+  &__tools { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+
+  &__tool {
+    padding: 18px 20px;
+    border: 1px solid var(--ms-border);
+    border-radius: 12px;
+    background: var(--ms-surface);
+  }
+
+  &__tool-name {
+    display: inline-block;
+    font-family: 'Ubuntu Mono', monospace;
+    font-size: 14px; font-weight: 700;
+    color: var(--ms-accent);
+    background: fade(@ms-green, 12%);
+    padding: 2px 10px; border-radius: 6px;
+    margin-bottom: 10px;
+  }
+
+  &__tool-body { font-size: 14px; line-height: 1.65; color: var(--ms-muted); }
+
+  // ── Feature grid ──
+  &__features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+  &__feature {
+    padding: 24px 22px;
+    border: 1px solid var(--ms-border);
+    border-radius: 12px;
+    background: var(--ms-surface);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+    &:hover { border-color: var(--ms-accent); transform: translateY(-2px); }
+  }
+
+  &__feature-icon { color: var(--ms-accent); margin-bottom: 14px; }
+  &__feature-title { font-size: 16px; font-weight: 700; color: var(--ms-text); margin-bottom: 8px; }
+  &__feature-body { font-size: 14px; line-height: 1.7; color: var(--ms-muted); }
+
+  // ── Architecture row ──
+  &__arch {
+    display: flex; align-items: stretch; justify-content: center;
+    gap: 8px; flex-wrap: wrap; margin: 28px 0;
+  }
+
+  &__arch-node {
+    flex: 1; min-width: 140px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 4px; padding: 20px 16px; text-align: center;
+    border: 1px solid var(--ms-border); border-radius: 12px;
+    background: var(--ms-surface);
+
+    &--hub { border-color: var(--ms-accent); background: var(--ms-sticky); }
+  }
+
+  &__arch-label { font-family: @ms-font; font-size: 17px; letter-spacing: 0.03em; color: var(--ms-text); }
+  &__arch-sub { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ms-muted); }
+
+  &__arch-link {
+    flex: 0 0 auto; min-width: 96px; padding: 0 4px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    color: var(--ms-accent);
+  }
+  &__arch-link-top, &__arch-link-bot { font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ms-muted); white-space: nowrap; }
+  &__arch-arrow { font-size: 20px; color: var(--ms-accent); line-height: 1; }
+
+  @media (max-width: 600px) {
+    &__features { grid-template-columns: 1fr; }
+    &__tools { grid-template-columns: 1fr; }
+    &__arch { flex-direction: column; }
+    &__arch-link { flex-direction: row; gap: 8px; min-width: 0; }
+  }
+
+  // ── Points list ──
+  &__points {
+    list-style: none; margin-top: 8px; padding: 0;
+    li {
+      position: relative; padding-left: 18px; margin-bottom: 10px;
+      font-size: 14.5px; line-height: 1.7; color: var(--ms-text);
+      &::before {
+        content: ''; position: absolute; left: 2px; top: 0.65em;
+        width: 5px; height: 5px; border-radius: 50%; background: var(--ms-accent);
+      }
+      code {
+        font-family: 'Ubuntu Mono', monospace; font-size: 13px;
+        color: var(--ms-accent); background: fade(@ms-green, 12%);
+        padding: 1px 6px; border-radius: 4px;
+      }
+    }
+  }
+
+  // ── Tech chips ──
+  &__chips { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  &__chip {
+    font-size: 13px; font-weight: 600; letter-spacing: 0.04em;
+    color: var(--ms-text);
+    padding: 7px 16px; border-radius: 999px;
+    border: 1px solid var(--ms-border); background: var(--ms-surface);
+    transition: border-color 0.2s ease, color 0.2s ease;
+    &:hover { border-color: var(--ms-accent); color: var(--ms-accent); }
+  }
+
+  // ── CTA band ──
+  &__cta-band {
+    text-align: center;
+    padding: 48px 28px;
+    border: 1px solid var(--ms-border);
+    border-radius: 16px;
+    background: var(--ms-sticky);
+    margin-top: 8px;
+  }
+  &__cta-line {
+    font-family: @ms-font;
+    font-size: clamp(20px, 3vw, 28px);
+    letter-spacing: 0.04em;
+    color: var(--ms-text);
+    margin-bottom: 24px;
+  }
+
+  &__footer { margin-top: 48px; text-align: center; }
 }

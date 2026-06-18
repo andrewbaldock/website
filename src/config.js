@@ -3,3 +3,6 @@
 export const AETHER_URL = import.meta.env.DEV
   ? 'http://localhost:5174'
   : 'https://aether.andrewbaldock.com'
+
+// Magic Sticky is deployed (one Fly app); no separate local dev URL needed for the case-study link.
+export const MAGICSTICKY_URL = 'https://magicsticky.andrewbaldock.com'

@@ -478,6 +478,10 @@ export default function AetherCaseStudy() {
             posts a message and reads back a stream.
           </p>
 
+          <figure className="aether-cs__diagram">
+            <img src="/images/aether-architecture.svg" alt="Aether architecture diagram" />
+          </figure>
+
           <div className="aether-cs__arch" aria-hidden="true">
             <div className="aether-cs__arch-node">
               <span className="aether-cs__arch-label">Browser</span>

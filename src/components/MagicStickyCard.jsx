@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import MagicStickyWordmark from './MagicStickyWordmark.jsx'
+import MagicStickyCardWordmark from './MagicStickyCardWordmark.jsx'
 
 // Home-page promo card for Magic Sticky — sits below the Aether card. Mirrors AetherCard's
 // shape (screenshot + body + "View Case Study"), but in the pastel-officey aesthetic: soft
@@ -17,11 +17,15 @@ export default function MagicStickyCard() {
             />
             <div className="ms-card__body">
               <p className="ms-card__label">Full-Stack Project:</p>
-              <MagicStickyWordmark className="ms-card__wordmark" daisySize={34} />
+              <span className="ms-card__wordmark"><MagicStickyCardWordmark /></span>
               <p className="ms-card__desc">
-                Bun / Hono / SQLite app + a Model-Context-Protocol connector with its own OAuth 2.1
-                server. A small stack of plain-text sticky notes where one is the shared prompt that
-                every Claude you talk to — desktop, phone, CLI — reads and writes over MCP.
+                A note-taking surface that's just <em>present</em> wherever you are — mobile browser,
+                desktop, and every Claude surface. And one of those notes is a <strong>shared prompt
+                every one of your Claudes reads and writes</strong>, so each AI you talk to already
+                knows your context.
+              </p>
+              <p className="ms-card__desc">
+                Bun / Hono / SQLite + a Model-Context-Protocol connector with its own OAuth 2.1 server.
               </p>
               <p className="ms-card__desc">
                 TLDR: One note. Every Claude. Same context.

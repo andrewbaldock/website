@@ -159,6 +159,14 @@ a {
   to   { offset-distance: 100%; }
 }
 
+// Each particle twinkles as it travels — scale + brightness flicker so the trail sparkles
+// rather than reading as a solid streak. Offset phases per-particle (via animation-delay)
+// so they don't all blink in unison.
+@keyframes sparkTwinkle {
+  0%, 100% { transform: scale(1);   filter: brightness(1); }
+  50%      { transform: scale(0.5); filter: brightness(1.8); }
+}
+
 @keyframes titleLoop {
   /* flicker in: 0–1.6s (0–1.17%) */
   0%    { opacity: 0; color: #CF2CC7; text-shadow: 0 0 40px #e100ff, 0 0 30px #CF2CC7, 0 0 60px #CF2CC7; }
@@ -386,26 +394,49 @@ a {
   max-width: 860px;
   margin: 0 auto;
 
+  // On hover, every particle starts orbiting + twinkling. Trail particles use a negative
+  // orbit delay so they sit a little behind the lead on the SAME path (a comet tail).
   &:hover .aether-card__spark {
-    opacity: 1;
-    animation: sparkOrbit 3s linear infinite;
+    animation:
+      sparkOrbit 3.4s linear infinite,
+      sparkTwinkle 0.9s ease-in-out infinite;
   }
+  // The LEAD is furthest along the loop, trails fall progressively behind it. On a
+  // 0%→100% orbit, "further along" = started earlier = MORE-negative orbit delay. So the
+  // lead gets the most-negative delay and each trail a little less, putting the big bright
+  // head in front and the shrinking fading particles in its wake. (2nd delay = twinkle phase.)
+  &:hover .aether-card__spark--lead { opacity: 1;    animation-delay: -0.60s, 0s; }
+  &:hover .aether-card__spark--t1   { opacity: 0.85; animation-delay: -0.50s, -0.10s; }
+  &:hover .aether-card__spark--t2   { opacity: 0.68; animation-delay: -0.40s, -0.32s; }
+  &:hover .aether-card__spark--t3   { opacity: 0.50; animation-delay: -0.30s, -0.05s; }
+  &:hover .aether-card__spark--t4   { opacity: 0.34; animation-delay: -0.20s, -0.46s; }
+  &:hover .aether-card__spark--t5   { opacity: 0.20; animation-delay: -0.10s, -0.22s; }
 }
 
 .aether-card__spark {
   position: absolute;
   inset: 0;
-  width: 4px;
-  height: 4px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 0 3px 2px @pink, 0 0 6px 3px @pink;
+  // All particles ride the same rounded-rect border path.
   offset-path: rect(0px auto auto 0px round 12px);
   offset-rotate: 0deg;
-  opacity: 0;
+  opacity: 0; // hidden until hover (the :hover rules raise it per-particle)
   pointer-events: none;
   z-index: 10;
 }
+// Bright, bigger lead spark — the head of the comet.
+.aether-card__spark--lead {
+  width: 8px;
+  height: 8px;
+  box-shadow: 0 0 6px 3px @pink, 0 0 12px 5px @pink;
+}
+// Trail particles shrink as they fall behind, fading into the wake.
+.aether-card__spark--t1 { width: 6px; height: 6px; box-shadow: 0 0 5px 2px @purple, 0 0 9px 3px @purple; }
+.aether-card__spark--t2 { width: 5px; height: 5px; box-shadow: 0 0 4px 2px @purple, 0 0 7px 2px @blue; }
+.aether-card__spark--t3 { width: 4px; height: 4px; box-shadow: 0 0 3px 1px @blue, 0 0 6px 2px @blue; }
+.aether-card__spark--t4 { width: 3px; height: 3px; box-shadow: 0 0 3px 1px @blue; }
+.aether-card__spark--t5 { width: 2px; height: 2px; box-shadow: 0 0 2px 1px @blue; }
 
 .aether-card {
   max-width: 860px;
@@ -431,6 +462,8 @@ a {
     object-fit: cover;
     position: relative;
     z-index: 1;
+    // Divider so the app screenshot reads as distinct from the text panel.
+    border-right: 1px solid rgba(124, 77, 255, 0.4);
   }
 
   &__body {
@@ -492,6 +525,24 @@ a {
       background: rgba(64, 196, 255, 0.12);
       color: @blue;
     }
+  }
+}
+
+// Light variant of the Aether card — a pale surface with dark ink, for comparing the
+// light/dark screenshot treatment (the home page is dark-locked, but we render both in
+// dev to eyeball the difference). Same layout; only the body surface + text invert.
+.aether-card--light {
+  border-color: rgba(124, 77, 255, 0.3);
+
+  .aether-card__body {
+    background: #f5f3fb;
+    backdrop-filter: none;
+  }
+  .aether-card__wordmark {
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+  }
+  .aether-card__desc {
+    color: #2a2a33;
   }
 }
 
@@ -1840,19 +1891,62 @@ a {
 @ms-gold:       #f4b942; // daisy center — the warm pop
 @ms-font:       'Julius Sans One', sans-serif;
 
-// ── Shared wordmark (daisy + "Magic Sticky" in Julius Sans One) ──
-.ms-wordmark {
+// ── Wordmarks (TWO of them, on purpose) ──────────────────────────────────────
+// "Magic 🌼 Sticky" — the daisy sits between the words. Each context gets its OWN
+// dead-simple wordmark so neither can wrap/stack: a small one for the card column, a
+// big one for the hero. Both are inline-flex, nowrap, single line, no surprises.
+
+// Card wordmark — fits the home card's ~45%-width text column.
+.ms-card-wm {
   display: inline-flex;
   align-items: center;
-  gap: 0.5em;
+  flex-wrap: nowrap;
+  gap: 3px; // words hug the daisy
+  white-space: nowrap;
 
-  &__daisy { flex: 0 0 auto; display: block; }
-
-  &__text {
+  &__word {
     font-family: @ms-font;
     font-weight: 400;
-    letter-spacing: 0.02em; // Julius Sans One is already wide — keep the wordmark tight
+    font-size: 26px;
+    // Julius Sans One is a CAPS-ONLY face — lowercase renders as small-caps, so mixed
+    // case makes the letters look different sizes. Force uppercase = every letter is a
+    // full-size cap, uniform.
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
     line-height: 1;
+    color: @ms-ink;
+  }
+  &__daisy {
+    flex: 0 0 auto;
+    display: block;
+    // The daisy SVG has transparent padding baked into its viewBox; pull the words in
+    // so they hug the flower instead of floating away from it.
+    margin: 0 -6px;
+  }
+}
+
+// Hero wordmark — large, centered, for the case-study header.
+.ms-hero-wm {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 5px; // words hug the daisy
+  white-space: nowrap;
+
+  &__word {
+    font-family: @ms-font;
+    font-weight: 400;
+    font-size: clamp(32px, 5vw, 50px);
+    text-transform: uppercase; // uniform full-size caps (see card note)
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: var(--ms-text);
+  }
+  &__daisy {
+    flex: 0 0 auto;
+    display: block;
+    margin: 0 -8px; // pull the words in to hug the flower (daisy SVG has baked-in padding)
   }
 }
 
@@ -1879,7 +1973,9 @@ a {
   cursor: pointer;
   text-decoration: none;
   min-height: 300px;
-  background: @ms-sage;
+  // Card surface is a warm paper-white so the sage-green app screenshot reads as a
+  // distinct screenshot, not part of the card (the "can't tell the app from the ad" fix).
+  background: #fbfaf6;
   transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
@@ -1894,13 +1990,15 @@ a {
     display: block;
     object-fit: cover;
     object-position: top;
-    background: #e8f0e8;
+    background: @ms-sage; // sage backing behind the sticky screenshot
+    // Divider so the app screenshot is clearly separated from the text panel.
+    border-right: 1px solid @ms-sage-deep;
   }
 
   &__body {
     flex: 1;
     padding: 28px 32px;
-    background: @ms-sage;
+    background: #fbfaf6; // paper-white text panel (distinct from the sage screenshot)
     color: @ms-ink;
   }
 
@@ -1918,15 +2016,12 @@ a {
     margin-bottom: 10px;
   }
 
+  // Wraps the card wordmark just for the divider + spacing; the wordmark sizes itself.
   &__wordmark {
+    display: block;
     margin-bottom: 18px;
     padding-bottom: 14px;
     border-bottom: 1px solid fade(@ms-ink, 14%);
-
-    .ms-wordmark__text {
-      font-size: 30px;
-      color: @ms-ink;
-    }
   }
 
   &__desc {
@@ -2011,9 +2106,9 @@ a {
   }
 
   &__wordmark {
+    display: flex;
     justify-content: center;
     margin: 0 auto 24px;
-    .ms-wordmark__text { font-size: clamp(34px, 6vw, 54px); color: var(--ms-text); }
   }
 
   &__tagline {

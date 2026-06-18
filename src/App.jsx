@@ -17,7 +17,7 @@ function Home() {
         <Hero />
         <Split />
         <Resume />
-        <AetherCard />
+        <AetherCard variant="light" />
         <MagicStickyCard />
         <Contact />
         <footer className="footer">&copy; {new Date().getFullYear()}</footer>

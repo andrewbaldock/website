@@ -26,9 +26,11 @@ function MoonIcon() {
   )
 }
 
-export function usePageTheme() {
+// `defaultTheme` is the fallback when the visitor has no stored preference yet — so a
+// page can open light or dark by default while still honoring a prior explicit toggle.
+export function usePageTheme(defaultTheme = 'dark') {
   const [theme, setTheme] = useState(() => {
-    try { return localStorage.getItem(STORAGE_KEY) || 'dark' } catch { return 'dark' }
+    try { return localStorage.getItem(STORAGE_KEY) || defaultTheme } catch { return defaultTheme }
   })
 
   const apply = useCallback((t) => {

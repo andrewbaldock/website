@@ -365,7 +365,7 @@ const LLMS = [
 
 export default function AetherCaseStudy() {
   useEffect(() => { window.scrollTo(0, 0) }, [])
-  const { theme, toggle } = usePageTheme()
+  const { theme, toggle } = usePageTheme('light') // the case study opens light by default
 
   return (
     <div className="aether-cs">
@@ -393,7 +393,12 @@ export default function AetherCaseStudy() {
         </header>
 
         <div className="aether-cs__shot">
-          <img src="/images/screenshot.jpg" alt="Aether conversational explorer" />
+          {/* Hero screenshot follows the page theme: the dark-mode app shot in dark, the
+              light-mode app shot in light, so the case study always matches what you'd see. */}
+          <img
+            src={theme === 'light' ? '/images/screenshot.jpg' : '/images/screenshot-dark.jpg'}
+            alt="Aether conversational explorer"
+          />
         </div>
 
         <section className="aether-cs__block">

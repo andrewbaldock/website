@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import { MAGICSTICKY_URL as LIVE_URL } from '../config.js'
 import ThemeToggle, { usePageTheme } from './ThemeToggle.jsx'
-import MagicStickyWordmark from './MagicStickyWordmark.jsx'
+import MagicStickyHeroWordmark from './MagicStickyHeroWordmark.jsx'
 
 const REPO_URL = 'https://github.com/andrewbaldock/magicsticky'
 
@@ -83,10 +83,10 @@ export default function MagicStickyCaseStudy() {
 
         <header className="ms-cs__hero">
           <p className="ms-cs__eyebrow">Case Study</p>
-          <MagicStickyWordmark className="ms-cs__wordmark" daisySize={52} />
+          <MagicStickyHeroWordmark />
           <p className="ms-cs__tagline">
-            One note, shared by every Claude you talk to — desktop, phone, and CLI all read and
-            write the same living context.
+            One note, shared by every Claude you talk to — mobile browser, desktop, and every Claude
+            surface all read and write the same living context.
           </p>
           <p className="ms-cs__byline">
             Designed &amp; built by <span className="ms-cs__byline-name">Andrew Baldock</span>

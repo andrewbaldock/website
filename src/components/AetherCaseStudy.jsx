@@ -393,12 +393,18 @@ export default function AetherCaseStudy() {
         </header>
 
         <div className="aether-cs__shot">
-          {/* Hero screenshot follows the page theme: the dark-mode app shot in dark, the
-              light-mode app shot in light, so the case study always matches what you'd see. */}
-          <img
-            src={theme === 'light' ? '/images/screenshot.jpg' : '/images/screenshot-dark.jpg'}
-            alt="Aether conversational explorer"
-          />
+          <video
+            src="/images/aether.mp4"
+            poster="/images/aether-poster.jpg"
+            autoPlay
+            loop
+            muted
+            playsInline
+            aria-label="Aether conversational explorer in action"
+          >
+            <source src="/images/aether.webm" type="video/webm" />
+            <source src="/images/aether.mp4" type="video/mp4" />
+          </video>
         </div>
 
         <section className="aether-cs__block">

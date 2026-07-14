@@ -3,6 +3,7 @@
 // accents, a Cormorant wordmark — her "temple of wealth" look, not a recolor of the disco page.
 // No case-study route yet, so the CTAs go straight to the live demo and the source.
 const DEMO_URL = 'https://juno-demo.andrewbaldock.com'
+const DESIGN_URL = 'https://juno.andrewbaldock.com/design'
 const REPO_URL = 'https://github.com/andrewbaldock/juno-moneta'
 
 export default function JunoCard() {
@@ -37,6 +38,9 @@ export default function JunoCard() {
               <div className="juno-card__links">
                 <a className="juno-card__link" href={DEMO_URL} target="_blank" rel="noreferrer">
                   Try the live demo →
+                </a>
+                <a className="juno-card__link juno-card__link--ghost" href={DESIGN_URL} target="_blank" rel="noreferrer">
+                  Design system →
                 </a>
                 <a className="juno-card__link juno-card__link--ghost" href={REPO_URL} target="_blank" rel="noreferrer">
                   View source →

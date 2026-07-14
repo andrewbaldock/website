@@ -2298,3 +2298,133 @@ a {
 
   &__footer { margin-top: 48px; text-align: center; }
 }
+
+// ── Juno project card ──
+// Juno's own palette (parchment + mint + gold), so the card reads as her "temple of wealth"
+// look rather than a recolor of the disco page — same move MagicSticky makes with sage.
+@juno-parch:    #faf6ec; // card + panel surface
+@juno-line:     #e7ddc8; // borders / dividers
+@juno-ink:      #241d13; // primary text
+@juno-ink-soft: #7a715e; // muted text
+@juno-mint:     #1fb6ad; // "today's path" accent
+@juno-mint-ink: #0c756e; // mint text on parchment
+@juno-gold:     #b98a2e; // "the hypothetical" accent
+
+.section-juno {
+  background: transparent;
+  padding-bottom: 60px;
+}
+
+.juno-card__wrap {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.juno-card {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  align-items: stretch;
+  border: 1.5px solid @juno-line;
+  border-radius: 14px;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 300px;
+  background: @juno-parch;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: @juno-mint;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(60, 44, 16, 0.16);
+  }
+
+  &__screenshot {
+    flex-shrink: 0;
+    width: 45%;
+    display: block;
+    object-fit: cover;
+    object-position: top left;
+    background: @juno-parch;
+    border-right: 1px solid @juno-line;
+  }
+
+  &__body {
+    flex: 1;
+    padding: 28px 32px;
+    background: @juno-parch;
+    color: @juno-ink;
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    &__screenshot { flex: none; width: 100%; height: 200px; }
+  }
+
+  &__label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: @juno-mint-ink;
+    margin-bottom: 10px;
+  }
+
+  &__wordmark {
+    display: block;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: @juno-ink;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid fade(@juno-ink, 12%);
+  }
+
+  &__desc {
+    font-size: 15px;
+    line-height: 1.7;
+    color: @juno-ink;
+    margin-bottom: 16px;
+
+    em { color: @juno-gold; font-style: italic; }
+
+    &:last-of-type {
+      color: @juno-ink-soft;
+      font-style: italic;
+      margin-bottom: 24px;
+
+      em { color: @juno-gold; }
+    }
+  }
+
+  &__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  &__link {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: @juno-mint-ink;
+    border: 1px solid fade(@juno-mint-ink, 45%);
+    padding: 10px 22px;
+    border-radius: 8px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+
+    &:hover { background: fade(@juno-mint, 12%); border-color: @juno-mint; }
+
+    &--ghost {
+      color: @juno-ink-soft;
+      border-color: fade(@juno-ink, 20%);
+      &:hover { background: fade(@juno-ink, 5%); border-color: fade(@juno-ink, 35%); }
+    }
+  }
+}

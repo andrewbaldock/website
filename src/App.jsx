@@ -3,6 +3,7 @@ import Nav from './components/Nav.jsx'
 import Hero from './components/Hero.jsx'
 import Split from './components/Split.jsx'
 import AetherCard from './components/AetherCard.jsx'
+import JunoCard from './components/JunoCard.jsx'
 import MagicStickyCard from './components/MagicStickyCard.jsx'
 import Resume from './components/Resume.jsx'
 import Contact from './components/Contact.jsx'
@@ -18,6 +19,7 @@ function Home() {
         <Split />
         <Resume />
         <AetherCard variant="light" />
+        <JunoCard />
         <MagicStickyCard />
         <Contact />
         <footer className="footer">&copy; {new Date().getFullYear()}</footer>

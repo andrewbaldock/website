@@ -1,0 +1,843 @@
+<!-- Mind Constellation — homepage mockup v15 for andrewbaldock.com -->
+<!-- Signature: an interactive constellation of craft + projects. Nodes drift gently;
+     hover/focus brightens a node and lights its connections mint. Reduced motion = still. -->
+<meta charset="utf-8">
+<title>Andrew Baldock — Senior React / TypeScript Engineer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ---------- tokens ---------- */
+  :root {
+    --platinum: #eef1f5;     /* ground */
+    --platinum-lo: #e6eaf1;  /* banding */
+    --silver: #c6cdda;       /* hairlines / edges */
+    --silver-soft: #d7dce6;
+    --ink: #1c2230;          /* primary text */
+    --ink-soft: #4b5468;     /* secondary */
+    --ink-faint: #7a839a;    /* captions */
+    --mint: #1fb6ad;         /* single accent */
+    --mint-deep: #158079;
+    --mint-wash: #e3f4f2;
+    --periwinkle: #8ea2e6;   /* celestial mid */
+    --card: #f7f9fc;
+    --white: #fdfeff;
+    --radius: 18px;
+    --maxw: 1160px;
+    --ease: cubic-bezier(.22,.61,.36,1);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--platinum);
+    color: var(--ink);
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  a { color: inherit; }
+
+  ::selection { background: var(--mint-wash); color: var(--ink); }
+
+  :focus-visible {
+    outline: 2px solid var(--mint-deep);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
+
+  .eyebrow {
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* ---------- top nav ---------- */
+  header.nav {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    backdrop-filter: saturate(1.4) blur(10px);
+    background: rgba(238,241,245,.72);
+    border-bottom: 1px solid rgba(198,205,218,.55);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 66px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    font-family: "Sora", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -.01em;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .brand .mark {
+    width: 26px; height: 26px;
+    display: grid; place-items: center;
+  }
+  .brand .mark svg { display: block; }
+  nav.links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  nav.links a {
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    font-weight: 500;
+    padding: 8px 13px;
+    border-radius: 9px;
+    transition: color .2s var(--ease), background .2s var(--ease);
+  }
+  nav.links a:hover { color: var(--ink); background: rgba(255,255,255,.6); }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+  }
+  /* celestial gradient wash, concentrated top-right behind the constellation */
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: -20% -10% auto auto;
+    width: 78%;
+    height: 150%;
+    background:
+      radial-gradient(58% 52% at 72% 34%, rgba(31,182,173,.16), transparent 62%),
+      radial-gradient(70% 66% at 84% 20%, rgba(142,162,230,.28), transparent 66%);
+    filter: blur(6px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.02fr 1fr;
+    gap: 40px;
+    align-items: center;
+    min-height: min(84vh, 720px);
+    padding: 56px 0 72px;
+  }
+
+  .hero-copy { max-width: 540px; }
+  .hero h1 {
+    font-family: "Sora", sans-serif;
+    font-weight: 600;
+    font-size: clamp(44px, 6.4vw, 76px);
+    line-height: .98;
+    letter-spacing: -.03em;
+    margin: 18px 0 0;
+    color: var(--ink);
+  }
+  .hero .tagline {
+    font-family: "Sora", sans-serif;
+    font-weight: 500;
+    font-size: clamp(19px, 2.4vw, 25px);
+    line-height: 1.28;
+    letter-spacing: -.01em;
+    margin: 20px 0 0;
+    color: var(--ink);
+  }
+  .hero .tagline .accent { color: var(--mint-deep); }
+  .hero .positioning {
+    font-size: 16.5px;
+    line-height: 1.62;
+    color: var(--ink-soft);
+    margin: 18px 0 0;
+    max-width: 480px;
+  }
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-top: 30px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 550;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 11px;
+    transition: transform .2s var(--ease), background .2s var(--ease), border-color .2s var(--ease), box-shadow .2s var(--ease);
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--white);
+    box-shadow: 0 8px 22px -12px rgba(28,34,48,.7);
+  }
+  .btn-primary:hover { transform: translateY(-2px); background: #10131c; }
+  .btn-ghost {
+    color: var(--ink);
+    border: 1px solid var(--silver);
+    background: rgba(255,255,255,.4);
+  }
+  .btn-ghost:hover { border-color: var(--mint); color: var(--mint-deep); transform: translateY(-2px); }
+  .btn svg { transition: transform .2s var(--ease); }
+  .btn-ghost:hover svg { transform: translateY(2px); }
+
+  /* ---------- constellation ---------- */
+  .constellation {
+    position: relative;
+    z-index: 1;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 34px;
+  }
+  .constellation svg {
+    width: 100%;
+    height: auto;
+    max-height: 560px;
+    overflow: visible;
+    display: block;
+  }
+  .const-hint {
+    position: absolute;
+    left: 50%;
+    bottom: 2px;
+    transform: translateX(-50%);
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    letter-spacing: .01em;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .const-hint b { color: var(--mint-deep); font-weight: 600; }
+
+  /* edges */
+  .edge {
+    stroke: var(--silver);
+    stroke-width: 1;
+    opacity: .55;
+    transition: stroke .28s var(--ease), opacity .28s var(--ease), stroke-width .28s var(--ease);
+  }
+  .edge.is-lit {
+    stroke: var(--mint);
+    stroke-width: 1.7;
+    opacity: 1;
+    filter: drop-shadow(0 0 4px rgba(31,182,173,.55));
+  }
+  svg.has-active .edge:not(.is-lit) { opacity: .18; }
+
+  /* nodes */
+  .node { cursor: default; }
+  .node.is-project { cursor: pointer; }
+  .node .halo {
+    fill: rgba(31,182,173,.0);
+    transition: fill .3s var(--ease);
+  }
+  .node .dot {
+    fill: var(--white);
+    stroke: var(--silver);
+    stroke-width: 1.5;
+    transition: fill .28s var(--ease), stroke .28s var(--ease), r .28s var(--ease);
+  }
+  .node.is-project .dot { stroke: var(--mint); stroke-width: 1.6; }
+  .node .label {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    fill: var(--ink-soft);
+    transition: fill .28s var(--ease), font-weight .01s;
+    paint-order: stroke;
+    stroke: var(--platinum);
+    stroke-width: 3px;
+    stroke-linejoin: round;
+  }
+  .node.is-project .label { fill: var(--ink); font-weight: 600; }
+  .node .sub {
+    font-family: "Inter", sans-serif;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .04em;
+    fill: var(--ink-faint);
+    paint-order: stroke;
+    stroke: var(--platinum);
+    stroke-width: 3px;
+  }
+
+  /* active / neighbor states */
+  .node.is-active .dot,
+  .node.is-active .halo ~ .dot { }
+  .node.is-active .dot {
+    fill: var(--mint);
+    stroke: var(--mint-deep);
+    filter: drop-shadow(0 0 7px rgba(31,182,173,.7));
+  }
+  .node.is-active .halo { fill: rgba(31,182,173,.12); }
+  .node.is-active .label { fill: var(--mint-deep); font-weight: 600; }
+  .node.is-neighbor .dot { stroke: var(--mint); fill: #ecfbf9; }
+  .node.is-neighbor .label { fill: var(--ink); }
+  svg.has-active .node:not(.is-active):not(.is-neighbor) { opacity: .48; transition: opacity .28s var(--ease); }
+
+  /* focus ring for keyboard */
+  .node .focus-ring {
+    fill: none;
+    stroke: var(--mint-deep);
+    stroke-width: 1.4;
+    stroke-dasharray: 3 3;
+    opacity: 0;
+    transition: opacity .18s var(--ease);
+  }
+  .node.is-focus .focus-ring { opacity: 1; }
+  .node a:focus-visible { outline: none; }
+  .node g[tabindex]:focus { outline: none; }
+  .node g[tabindex]:focus-visible { outline: none; }
+
+  .noscript {
+    padding: 40px;
+    text-align: center;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- work ---------- */
+  .work {
+    position: relative;
+    background:
+      linear-gradient(180deg, var(--platinum) 0%, var(--platinum-lo) 100%);
+    border-top: 1px solid rgba(198,205,218,.6);
+    padding: 84px 0 96px;
+  }
+  .work-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  .work-head h2 {
+    font-family: "Sora", sans-serif;
+    font-weight: 600;
+    font-size: clamp(28px, 3.6vw, 40px);
+    letter-spacing: -.02em;
+    line-height: 1.05;
+    margin: 10px 0 0;
+  }
+  .work-head p {
+    margin: 0;
+    max-width: 340px;
+    color: var(--ink-soft);
+    font-size: 15.5px;
+    text-align: right;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .card {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--silver-soft);
+    border-radius: var(--radius);
+    padding: 26px 24px 22px;
+    display: flex;
+    flex-direction: column;
+    min-height: 288px;
+    transition: transform .28s var(--ease), box-shadow .28s var(--ease), border-color .28s var(--ease);
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--mint);
+    box-shadow: 0 22px 44px -26px rgba(21,128,121,.5);
+  }
+  .card .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .card .kicker .star {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--mint);
+    box-shadow: 0 0 0 4px var(--mint-wash);
+  }
+  .card h3 {
+    font-family: "Sora", sans-serif;
+    font-weight: 600;
+    font-size: 23px;
+    letter-spacing: -.01em;
+    margin: 14px 0 0;
+  }
+  .card p.desc {
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.56;
+    margin: 10px 0 0;
+  }
+  .card .card-links {
+    margin-top: auto;
+    padding-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 8px;
+  }
+  .clink {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13.5px;
+    font-weight: 550;
+    text-decoration: none;
+    color: var(--mint-deep);
+    padding: 6px 11px;
+    border: 1px solid var(--silver-soft);
+    border-radius: 999px;
+    background: var(--white);
+    transition: border-color .2s var(--ease), background .2s var(--ease), color .2s var(--ease), transform .2s var(--ease);
+  }
+  .clink:hover {
+    border-color: var(--mint);
+    background: var(--mint-wash);
+    transform: translateY(-1px);
+  }
+  .clink svg { opacity: .8; }
+  .clink.secondary { color: var(--ink-soft); }
+  .clink.secondary:hover { color: var(--mint-deep); }
+
+  /* ---------- footer ---------- */
+  footer {
+    background: var(--platinum-lo);
+    border-top: 1px solid rgba(198,205,218,.6);
+    padding: 40px 0;
+  }
+  .foot-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .foot-name {
+    font-family: "Sora", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -.01em;
+  }
+  .foot-name span { color: var(--ink-faint); font-weight: 400; font-family: "Inter", sans-serif; font-size: 14px; }
+  .foot-links { display: flex; gap: 6px; flex-wrap: wrap; }
+  .foot-links a {
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 7px 12px;
+    border-radius: 9px;
+    transition: color .2s var(--ease), background .2s var(--ease);
+  }
+  .foot-links a:hover { color: var(--mint-deep); background: rgba(255,255,255,.6); }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 900px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      min-height: 0;
+      padding: 40px 0 52px;
+    }
+    .constellation { order: 2; padding: 14px 10px 26px; }
+    .constellation svg { max-height: 420px; }
+    .hero-copy { order: 1; max-width: none; }
+    .work-head { flex-direction: column; align-items: flex-start; }
+    .work-head p { text-align: left; }
+    .cards { grid-template-columns: 1fr; }
+    .card { min-height: 0; }
+  }
+  @media (max-width: 560px) {
+    nav.links a:not(.nav-resume) { display: none; }
+    .const-hint { font-size: 11.5px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition-duration: .001ms !important; }
+  }
+</style>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top" aria-label="Andrew Baldock — home">
+      <span class="mark" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+          <circle cx="13" cy="13" r="11.2" stroke="#c6cdda" stroke-width="1.2"/>
+          <circle cx="13" cy="6.4" r="2.1" fill="#1fb6ad"/>
+          <circle cx="6.6" cy="16" r="1.7" fill="#8ea2e6"/>
+          <circle cx="18.6" cy="15.2" r="1.7" fill="#1c2230"/>
+          <path d="M13 6.4 L6.6 16 M13 6.4 L18.6 15.2 M6.6 16 L18.6 15.2" stroke="#c6cdda" stroke-width="1"/>
+        </svg>
+      </span>
+      Andrew Baldock
+    </a>
+    <nav class="links" aria-label="Primary">
+      <a class="nav-resume" href="/resume.pdf">Résumé</a>
+      <a href="https://www.linkedin.com/in/andrewbaldock" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/andrewbaldock" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.youtube.com/@andrewbaldock" target="_blank" rel="noopener">YouTube</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">Boss-Level UI Engineer</p>
+        <h1>Andrew&nbsp;Baldock</h1>
+        <p class="tagline">
+          I build <span class="accent">polished product UI</span> and the
+          design systems that hold it together.
+        </p>
+        <p class="positioning">
+          Senior React / TypeScript engineer, ten years turning ambitious
+          product ideas into interfaces that feel considered down to the pixel.
+          Equally at home as an individual contributor or leading the front end.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#work">See the work</a>
+          <a class="btn btn-ghost" href="/resume.pdf">
+            Résumé
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M7 2v8M7 10 3.8 6.8M7 10l3.2-3.2M2.5 12h9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="constellation">
+        <svg id="constellation" viewBox="0 0 600 470" role="group"
+             aria-label="Interactive constellation of Andrew's craft and projects. Hover or focus a star to light its connections; the Juno, Aether, and Magic Sticky stars link to their work.">
+        </svg>
+        <p class="const-hint" aria-hidden="true">
+          Hover a star &middot; the <b>lit</b> stars are the projects
+        </p>
+        <noscript>
+          <div class="noscript">
+            <p><strong>Andrew's craft &amp; work:</strong> React, TypeScript, Design systems &mdash;
+            expressed through <a href="#work">Juno, Aether, and Magic Sticky</a>.</p>
+          </div>
+        </noscript>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WORK ============ -->
+  <section class="work" id="work">
+    <div class="wrap">
+      <div class="work-head">
+        <div>
+          <p class="eyebrow">Selected work</p>
+          <h2>Three things I&nbsp;made,<br>end to&nbsp;end.</h2>
+        </div>
+        <p>Product surfaces, the systems beneath them, and the tools that make them think.</p>
+      </div>
+
+      <div class="cards">
+        <!-- Juno -->
+        <article class="card" id="juno">
+          <span class="kicker"><span class="star"></span>Product &amp; design system</span>
+          <h3>Juno</h3>
+          <p class="desc">
+            A private household financial companion. See your whole money picture,
+            model the what-ifs, and read it all through a public design system built
+            for calm and clarity.
+          </p>
+          <div class="card-links">
+            <a class="clink" href="https://juno-demo.andrewbaldock.com" target="_blank" rel="noopener">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M3 3h7v7M4 9l5.5-5.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Live demo
+            </a>
+            <a class="clink" href="https://juno.andrewbaldock.com/design" target="_blank" rel="noopener">Design system</a>
+            <a class="clink secondary" href="https://github.com/andrewbaldock/juno-moneta" target="_blank" rel="noopener">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M4.6 10.5c-2.2.6-2.2-1.1-3.1-1.4M9.5 12v-1.9a1.6 1.6 0 0 0-.5-1.3c1.5-.2 3-.7 3-3.3a2.6 2.6 0 0 0-.7-1.8 2.4 2.4 0 0 0-.1-1.8s-.6-.2-1.9.7a6.4 6.4 0 0 0-3.4 0C4.6 1.4 4 1.6 4 1.6a2.4 2.4 0 0 0-.1 1.8 2.6 2.6 0 0 0-.7 1.8c0 2.6 1.5 3.1 3 3.3a1.6 1.6 0 0 0-.5 1.2V12" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Source
+            </a>
+          </div>
+        </article>
+
+        <!-- Aether -->
+        <article class="card" id="aether">
+          <span class="kicker"><span class="star"></span>Knowledge-graph UI</span>
+          <h3>Aether</h3>
+          <p class="desc">
+            A conversational explorer with a knowledge-graph interface &mdash; answers
+            you can see the shape of. Ask a question, watch the ideas connect.
+          </p>
+          <div class="card-links">
+            <a class="clink" href="/aether">Case study</a>
+            <a class="clink" href="https://aether.andrewbaldock.com" target="_blank" rel="noopener">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M3 3h7v7M4 9l5.5-5.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Live demo
+            </a>
+          </div>
+        </article>
+
+        <!-- Magic Sticky -->
+        <article class="card" id="magicsticky">
+          <span class="kicker"><span class="star"></span>Developer tooling</span>
+          <h3>Magic Sticky</h3>
+          <p class="desc">
+            An MCP sticky-note store &mdash; a small stack of living context that every
+            one of your AI agents can read from and write to. One shared source of truth.
+          </p>
+          <div class="card-links">
+            <a class="clink" href="/magicsticky">Case study</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap foot-inner">
+    <div class="foot-name">Andrew Baldock <span>&mdash; Senior React / TypeScript engineer</span></div>
+    <nav class="foot-links" aria-label="Footer">
+      <a href="https://www.linkedin.com/in/andrewbaldock" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/andrewbaldock" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.youtube.com/@andrewbaldock" target="_blank" rel="noopener">YouTube</a>
+      <a href="/resume.pdf">Résumé</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var svg = document.getElementById('constellation');
+  if (!svg) return;
+
+  var VBW = 600, VBH = 470;
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // fractional base positions (of the viewBox) keep layout responsive-agnostic
+  var nodes = [
+    { id:'react',      label:'React',          fx:.52, fy:.16, r:6, kind:'craft' },
+    { id:'typescript', label:'TypeScript',     fx:.15, fy:.40, r:6, kind:'craft',
+      la:'below', ldx:0, ldy:22 },
+    { id:'design',     label:'Design systems', fx:.86, fy:.33, r:6, kind:'craft',
+      la:'right', ldx:12, ldy:5 },
+    { id:'aether',     label:'Aether',         fx:.75, fy:.71, r:8, kind:'project',
+      sub:'Knowledge-graph UI', href:'#aether', la:'right', ldx:14, ldy:2 },
+    { id:'juno',       label:'Juno',           fx:.45, fy:.82, r:8, kind:'project',
+      sub:'Product & design system', href:'#juno', la:'below', ldx:0, ldy:24 },
+    { id:'sticky',     label:'Magic Sticky',   fx:.14, fy:.74, r:8, kind:'project',
+      sub:'Dev tooling', href:'#magicsticky', la:'below', ldx:0, ldy:24 }
+  ];
+
+  var edges = [
+    ['react','typescript'], ['react','design'], ['react','juno'],
+    ['design','juno'], ['design','aether'], ['typescript','aether'],
+    ['aether','juno'], ['typescript','sticky'], ['juno','sticky']
+  ];
+
+  var byId = {};
+  nodes.forEach(function (n, i) {
+    n.bx = n.fx * VBW;
+    n.by = n.fy * VBH;
+    n.cx = n.bx; n.cy = n.by;
+    // gentle drift params
+    n.ax = 4 + (i % 3) * 2.2;
+    n.ay = 4 + ((i + 1) % 3) * 2.4;
+    n.sx = 0.16 + (i % 4) * 0.045;
+    n.sy = 0.14 + ((i + 2) % 4) * 0.05;
+    n.px = i * 1.7;
+    n.py = i * 2.3 + 0.6;
+    n.neighbors = {};
+    byId[n.id] = n;
+  });
+
+  // resolve edges + neighbor sets
+  var edgeObjs = edges.map(function (e) {
+    var a = byId[e[0]], b = byId[e[1]];
+    a.neighbors[b.id] = true;
+    b.neighbors[a.id] = true;
+    return { a: a, b: b };
+  });
+
+  function el(tag, attrs) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  // ---- build edges ----
+  var edgeLayer = el('g', {});
+  edgeObjs.forEach(function (eo) {
+    eo.line = el('line', {
+      x1: eo.a.cx, y1: eo.a.cy, x2: eo.b.cx, y2: eo.b.cy, class: 'edge'
+    });
+    edgeLayer.appendChild(eo.line);
+  });
+  svg.appendChild(edgeLayer);
+
+  // ---- build nodes ----
+  var nodeLayer = el('g', {});
+  nodes.forEach(function (n) {
+    var anchor = n.la === 'right' ? 'start' : (n.la === 'left' ? 'end' : 'middle');
+
+    // container: <a> for projects (real link), focusable <g> for craft
+    var container;
+    if (n.kind === 'project') {
+      container = el('a', { class: 'node is-project' });
+      container.setAttributeNS('http://www.w3.org/1999/xlink', 'href', n.href);
+      container.setAttribute('href', n.href);
+      container.setAttribute('aria-label', n.label + ' — ' + n.sub + '. Jump to project.');
+      container.setAttribute('tabindex', '0');
+    } else {
+      container = el('g', { class: 'node' });
+      container.setAttribute('tabindex', '0');
+      container.setAttribute('role', 'img');
+      container.setAttribute('aria-label',
+        n.label + ' — connects to ' + Object.keys(n.neighbors).map(function (id) {
+          return byId[id].label;
+        }).join(', ') + '.');
+    }
+
+    n.halo = el('circle', { cx: n.cx, cy: n.cy, r: n.r + 12, class: 'halo' });
+    n.ring = el('circle', { cx: n.cx, cy: n.cy, r: n.r + 7, class: 'focus-ring' });
+    n.dot  = el('circle', { cx: n.cx, cy: n.cy, r: n.r, class: 'dot' });
+
+    // hit area (transparent, generous for touch)
+    n.hit = el('circle', { cx: n.cx, cy: n.cy, r: n.r + 16, fill: 'transparent' });
+
+    n.text = el('text', {
+      x: n.cx + (n.ldx || 0),
+      y: n.cy + (n.ldy || 0),
+      class: 'label',
+      'text-anchor': anchor,
+      'dominant-baseline': (n.la === 'below') ? 'hanging' : 'middle'
+    });
+    n.text.textContent = n.label;
+
+    container.appendChild(n.halo);
+    container.appendChild(n.ring);
+    container.appendChild(n.dot);
+    container.appendChild(n.text);
+
+    if (n.sub) {
+      n.subEl = el('text', {
+        x: n.cx + (n.ldx || 0),
+        y: n.cy + (n.ldy || 0) + 16,
+        class: 'sub',
+        'text-anchor': anchor,
+        'dominant-baseline': (n.la === 'below') ? 'hanging' : 'middle'
+      });
+      n.subEl.textContent = n.sub;
+      container.appendChild(n.subEl);
+    }
+    container.appendChild(n.hit);
+
+    n.container = container;
+
+    // interaction
+    container.addEventListener('mouseenter', function () { setActive(n, false); });
+    container.addEventListener('mouseleave', function () { clearActive(n); });
+    container.addEventListener('focus', function () { setActive(n, true); });
+    container.addEventListener('blur', function () { clearActive(n); });
+    // touch: reveal connections on tap without instantly following link
+    container.addEventListener('touchstart', function () { setActive(n, false); }, { passive: true });
+
+    nodeLayer.appendChild(container);
+  });
+  svg.appendChild(nodeLayer);
+
+  // ---- active state ----
+  var current = null;
+  function setActive(n, isKeyboard) {
+    if (current && current !== n) clearActive(current);
+    current = n;
+    svg.classList.add('has-active');
+    n.container.classList.add('is-active');
+    if (isKeyboard) n.container.classList.add('is-focus');
+    // neighbors
+    for (var id in n.neighbors) byId[id].container.classList.add('is-neighbor');
+    // lit edges
+    edgeObjs.forEach(function (eo) {
+      if (eo.a === n || eo.b === n) eo.line.classList.add('is-lit');
+    });
+  }
+  function clearActive(n) {
+    if (current === n) current = null;
+    if (!current) svg.classList.remove('has-active');
+    n.container.classList.remove('is-active', 'is-focus');
+    for (var id in n.neighbors) byId[id].container.classList.remove('is-neighbor');
+    edgeObjs.forEach(function (eo) {
+      if (eo.a === n || eo.b === n) eo.line.classList.remove('is-lit');
+    });
+  }
+
+  // ---- render positions ----
+  function apply() {
+    nodes.forEach(function (n) {
+      n.halo.setAttribute('cx', n.cx); n.halo.setAttribute('cy', n.cy);
+      n.ring.setAttribute('cx', n.cx); n.ring.setAttribute('cy', n.cy);
+      n.dot.setAttribute('cx', n.cx);  n.dot.setAttribute('cy', n.cy);
+      n.hit.setAttribute('cx', n.cx);  n.hit.setAttribute('cy', n.cy);
+      n.text.setAttribute('x', n.cx + (n.ldx || 0));
+      n.text.setAttribute('y', n.cy + (n.ldy || 0));
+      if (n.subEl) {
+        n.subEl.setAttribute('x', n.cx + (n.ldx || 0));
+        n.subEl.setAttribute('y', n.cy + (n.ldy || 0) + 16);
+      }
+    });
+    edgeObjs.forEach(function (eo) {
+      eo.line.setAttribute('x1', eo.a.cx); eo.line.setAttribute('y1', eo.a.cy);
+      eo.line.setAttribute('x2', eo.b.cx); eo.line.setAttribute('y2', eo.b.cy);
+    });
+  }
+
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (reduce) {
+    apply(); // still constellation, hover/focus still work
+  } else {
+    var start = null;
+    function frame(ts) {
+      if (start === null) start = ts;
+      var t = (ts - start) / 1000;
+      nodes.forEach(function (n) {
+        n.cx = n.bx + n.ax * Math.sin(t * n.sx + n.px);
+        n.cy = n.by + n.ay * Math.cos(t * n.sy + n.py);
+      });
+      apply();
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+})();
+</script>

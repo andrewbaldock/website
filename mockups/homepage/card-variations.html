@@ -1,0 +1,192 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Card variations — coastal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --mint:#1fb6ad; --mint-deep:#148f88; --aqua:#7fd8d0; --periwinkle:#8ea2e6;
+    --gold:#b98a2e; --ink:#2a2b28; --ink-soft:#5c5e57; --ink-faint:#8b8d84;
+    --bg:#f0ece4; --bg-2:#f6f8fb; --surface:rgba(255,255,255,0.72); --surface-2:#eef4f2; --line:#d9d3c7;
+    --accent:var(--mint-deep);
+    --f-display:"Cormorant Garamond",Georgia,serif; --f-body:"Inter",system-ui,sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+    --pad:clamp(1.25rem,5vw,4rem);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+  .page{max-width:1160px;margin-inline:auto;padding:clamp(2rem,5vw,4rem) var(--pad) 6rem;}
+  .intro h1{font-family:var(--f-display);font-weight:500;font-size:clamp(2rem,4vw,3rem);margin:0 0 .4rem;}
+  .intro p{color:var(--ink-soft);max-width:60ch;margin:0 0 .3rem;}
+  .intro .mono{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);}
+  .vwrap{margin-top:clamp(3rem,7vw,5rem);}
+  .vlabel{display:flex;align-items:baseline;gap:.8rem;margin-bottom:1.4rem;border-top:1px solid var(--line);padding-top:1rem;}
+  .vlabel b{font-family:var(--f-display);font-weight:500;font-size:1.5rem;}
+  .vlabel span{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);}
+  .vlabel em{font-style:normal;color:var(--ink-faint);font-size:.85rem;margin-left:auto;max-width:44ch;text-align:right;}
+
+  .grid{display:grid;grid-template-columns:1fr;gap:clamp(1.1rem,2.5vw,1.6rem);}
+  @media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr);}}
+
+  /* shared card bits */
+  .num{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;color:var(--accent);}
+  .cn{font-family:var(--f-display);font-weight:500;font-size:1.7rem;letter-spacing:-.01em;margin:.5rem 0 .5rem;}
+  .desc{color:var(--ink-soft);font-size:.94rem;line-height:1.6;}
+  .links{display:flex;flex-direction:column;gap:.5rem;margin-top:1.1rem;}
+  .links a{font-family:var(--f-mono);font-size:.76rem;color:var(--ink);display:inline-flex;gap:.45rem;width:fit-content;transition:gap .2s,color .2s;}
+  .links a:hover{color:var(--accent);gap:.65rem;}
+  .links .aw{color:var(--mint);}
+  .media{position:relative;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,color-mix(in oklab,var(--accent) 18%,var(--surface-2)),var(--surface-2));
+    display:grid;place-items:center;color:var(--ink-faint);font-family:var(--f-mono);font-size:.7rem;letter-spacing:.06em;border:1px solid var(--line);}
+  .media::after{content:"▶ "attr(data-gif);}
+  .media.ar{aspect-ratio:16/9;}
+
+  /* v1 classic */
+  .c-classic .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:1.6rem;position:relative;overflow:hidden;transition:transform .35s,box-shadow .35s,border-color .35s;backdrop-filter:blur(3px);display:flex;flex-direction:column;}
+  .c-classic .card::before{content:"";position:absolute;left:0;top:0;width:100%;height:3px;background:linear-gradient(90deg,var(--mint),var(--aqua));transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+  .c-classic .card:hover{transform:translateY(-5px);box-shadow:0 18px 40px -22px rgba(20,143,136,.5);border-color:var(--aqua);}
+  .c-classic .card:hover::before{transform:scaleX(1);}
+  .c-classic .desc{flex:1;} .c-classic .links{border-top:1px solid var(--line);padding-top:1rem;}
+
+  /* v2 media-forward */
+  .c-media .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;transition:transform .35s,box-shadow .35s,border-color .35s;display:flex;flex-direction:column;}
+  .c-media .card:hover{transform:translateY(-5px);box-shadow:0 18px 40px -22px rgba(20,143,136,.5);border-color:var(--aqua);}
+  .c-media .media{border-radius:0;border:none;border-bottom:1px solid var(--line);}
+  .c-media .body{padding:1.4rem;display:flex;flex-direction:column;flex:1;}
+  .c-media .desc{flex:1;}
+
+  /* v3 side-by-side */
+  .c-side .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:grid;grid-template-columns:38% 1fr;transition:transform .35s,box-shadow .35s,border-color .35s;}
+  .c-side .card:hover{transform:translateY(-4px);box-shadow:0 18px 40px -22px rgba(20,143,136,.5);border-color:var(--aqua);}
+  .c-side .media{border-radius:0;border:none;border-right:1px solid var(--line);aspect-ratio:auto;}
+  .c-side .body{padding:1.3rem;}
+  @media(max-width:760px){.c-side .card{grid-template-columns:1fr;}.c-side .media{border-right:none;border-bottom:1px solid var(--line);aspect-ratio:16/9;}}
+
+  /* v4 borderless editorial */
+  .c-edit .card{position:relative;padding:1.2rem 0 0;border-top:1px solid var(--ink);}
+  .c-edit .bignum{font-family:var(--f-display);font-weight:500;font-size:3.2rem;line-height:1;color:var(--line);}
+  .c-edit .cn{margin-top:.2rem;}
+  .c-edit .links{margin-top:1.3rem;}
+
+  /* v5 overlay cinematic */
+  .c-over .card{position:relative;border-radius:18px;overflow:hidden;min-height:340px;display:flex;align-items:flex-end;border:1px solid var(--line);color:#fff;}
+  .c-over .media{position:absolute;inset:0;border-radius:0;border:none;color:rgba(255,255,255,.6);}
+  .c-over .scrim{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(16,20,31,.82));}
+  .c-over .body{position:relative;padding:1.4rem;}
+  .c-over .num{color:var(--aqua);} .c-over .cn{color:#fff;} .c-over .desc{color:rgba(255,255,255,.82);}
+  .c-over .links a{color:#fff;} .c-over .links .aw{color:var(--aqua);}
+
+  /* v6 tinted accent */
+  .c-tint .card{border:1px solid var(--line);border-left:3px solid var(--ac);border-radius:14px;padding:1.6rem;background:linear-gradient(180deg,color-mix(in oklab,var(--ac) 9%,var(--surface)),var(--surface));transition:transform .3s;display:flex;flex-direction:column;}
+  .c-tint .card:hover{transform:translateY(-4px);}
+  .c-tint .num{color:var(--ac);} .c-tint .links .aw{color:var(--ac);} .c-tint .desc{flex:1;}
+
+  /* v7 index list */
+  .c-list{display:block;}
+  .c-list .row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:1.5rem;padding:1.3rem 0;border-bottom:1px solid var(--line);transition:padding-left .25s;}
+  .c-list .row:first-child{border-top:1px solid var(--line);}
+  .c-list .row:hover{padding-left:.6rem;}
+  .c-list .rn{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;color:var(--accent);}
+  .c-list .rname{font-family:var(--f-display);font-weight:500;font-size:1.5rem;}
+  .c-list .rdesc{color:var(--ink-soft);font-size:.9rem;max-width:52ch;}
+  .c-list .rlinks{display:flex;gap:1rem;}
+  .c-list .rlinks a{font-family:var(--f-mono);font-size:.74rem;color:var(--ink);white-space:nowrap;}
+  .c-list .rlinks a:hover{color:var(--accent);}
+  @media(max-width:760px){.c-list .row{grid-template-columns:1fr;gap:.5rem;}}
+
+  /* v8 frosted sea-glass */
+  .c-glass .card{background:linear-gradient(135deg,rgba(127,216,208,.16),rgba(255,255,255,.5));border:1px solid rgba(255,255,255,.6);border-radius:20px;padding:1.6rem;backdrop-filter:blur(10px);box-shadow:0 12px 40px -24px rgba(20,143,136,.6),inset 0 1px 0 rgba(255,255,255,.6);transition:transform .3s;display:flex;flex-direction:column;}
+  .c-glass .card:hover{transform:translateY(-5px);}
+  .c-glass .desc{flex:1;} .c-glass .links{border-top:1px solid rgba(255,255,255,.5);padding-top:1rem;}
+
+  /* v9 engraved frame */
+  .c-engr .card{background:var(--surface-2);border:1px solid var(--gold);border-radius:6px;padding:.4rem;transition:transform .3s;}
+  .c-engr .inner{border:1px solid var(--gold);border-radius:3px;padding:1.5rem;height:100%;display:flex;flex-direction:column;}
+  .c-engr .card:hover{transform:translateY(-4px);}
+  .c-engr .num{color:var(--gold);}
+  .c-engr .cn{font-style:italic;} .c-engr .desc{flex:1;}
+  .c-engr .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);margin-bottom:1rem;box-shadow:0 0 0 4px color-mix(in oklab,var(--gold) 18%,transparent);}
+
+  /* v10 ticket stub */
+  .c-ticket .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .3s;}
+  .c-ticket .card:hover{transform:translateY(-4px);}
+  .c-ticket .body{padding:1.5rem;flex:1;}
+  .c-ticket .stub{border-top:2px dashed var(--line);padding:1.1rem 1.5rem;display:flex;flex-direction:column;gap:.5rem;position:relative;background:var(--surface-2);}
+  .c-ticket .stub::before,.c-ticket .stub::after{content:"";position:absolute;top:-9px;width:16px;height:16px;border-radius:50%;background:var(--bg);border:1px solid var(--line);}
+  .c-ticket .stub::before{left:-9px;} .c-ticket .stub::after{right:-9px;}
+
+  /* H — media + tint, horizontal rows (the requested combo) */
+  .grid.c-hybrid{grid-template-columns:1fr;gap:clamp(1.1rem,2.4vw,1.6rem);}
+  .c-hybrid .card{display:grid;grid-template-columns:42% 1fr;overflow:hidden;border-radius:16px;
+    border:1px solid var(--line);border-left:3px solid var(--ac);
+    background:linear-gradient(120deg,color-mix(in oklab,var(--ac) 10%,var(--surface)),var(--surface));
+    transition:transform .3s,box-shadow .3s;}
+  .c-hybrid .card:hover{transform:translateY(-4px);box-shadow:0 20px 48px -26px color-mix(in oklab,var(--ac) 55%,transparent);}
+  .c-hybrid .media{border-radius:0;border:none;border-right:1px solid var(--line);aspect-ratio:auto;min-height:200px;}
+  .c-hybrid .body{padding:1.6rem 1.9rem;display:flex;flex-direction:column;}
+  .c-hybrid .desc{flex:1;}
+  .c-hybrid .num{color:var(--ac);} .c-hybrid .links .aw{color:var(--ac);}
+  .c-hybrid .links{flex-direction:row;flex-wrap:wrap;gap:1.2rem;border-top:1px solid var(--line);padding-top:1rem;margin-top:1.2rem;}
+  @media(max-width:760px){.c-hybrid .card{grid-template-columns:1fr;}.c-hybrid .media{border-right:none;border-bottom:1px solid var(--line);aspect-ratio:16/9;min-height:0;}}
+</style>
+
+<div class="page">
+  <div class="intro">
+    <p class="mono">Coastal · card explorations</p>
+    <h1>Ten ways to show the work</h1>
+    <p>Same three projects, the coastal palette, ten different card treatments. Several carry a demo-gif slot (Juno / Aether). Pick one — or say “v3’s media with v6’s tint” and I’ll graft.</p>
+  </div>
+  <div id="mount"></div>
+</div>
+
+<script>
+const P = [
+  {num:'01 — Flagship', name:'Juno', ac:'var(--gold)', gif:'juno-demo.gif',
+   desc:"A household-finance companion that models a family's whole money picture and embeds a Claude advisor — one that returns scenario deltas while the app does every calculation.",
+   links:[['Case study','→'],['Live demo','↗'],['Design system','↗']]},
+  {num:'02 — Product', name:'Aether', ac:'var(--periwinkle)', gif:'aether-demo.gif',
+   desc:'A conversational explorer with a knowledge-graph UI — ask a question, watch the answer assemble itself into connected, navigable panels.',
+   links:[['Case study','→'],['Live demo','↗']]},
+  {num:'03 — Product', name:'Magic Sticky', ac:'var(--mint)', gif:'sticky-demo.gif',
+   desc:'A frictionless MCP sticky-note store — one shared note that every one of your AI agents reads and writes, so context follows you everywhere.',
+   links:[['Case study','→']]},
+]
+const links = p => `<div class="links">${p.links.map(([l,a])=>`<a>${l} <span class="aw">${a}</span></a>`).join('')}</div>`
+const rlinks = p => `<div class="rlinks">${p.links.map(([l,a])=>`<a>${l} ${a}</a>`).join('')}</div>`
+const media = (p,cls='ar') => `<div class="media ${cls}" data-gif="${p.gif}" style="--ac:${p.ac}"></div>`
+
+const R = {
+  classic: p=>`<div class="card"><div class="num">${p.num}</div><div class="cn">${p.name}</div><div class="desc">${p.desc}</div>${links(p)}</div>`,
+  media:   p=>`<div class="card">${media(p)}<div class="body"><div class="num">${p.num}</div><div class="cn">${p.name}</div><div class="desc">${p.desc}</div>${links(p)}</div></div>`,
+  side:    p=>`<div class="card">${media(p)}<div class="body"><div class="num">${p.num}</div><div class="cn">${p.name}</div><div class="desc">${p.desc}</div>${links(p)}</div></div>`,
+  edit:    p=>`<div class="card"><div class="bignum">${p.num.split(' ')[0]}</div><div class="num">${p.num}</div><div class="cn">${p.name}</div><div class="desc">${p.desc}</div>${links(p)}</div>`,
+  over:    p=>`<div class="card">${media(p,'')}<div class="scrim"></div><div class="body"><div class="num">${p.num}</div><div class="cn">${p.name}</div><div class="desc">${p.desc}</div>${links(p)}</div></div>`,
+  tint:    p=>`<div class="card" style="--ac:${p.ac}"><div class="num">${p.num}</div><div class="cn">${p.name}</div><div class="desc">${p.desc}</div>${links(p)}</div>`,
+  list:    p=>`<div class="row"><div><div class="rn">${p.num}</div><div class="rname">${p.name}</div></div><div class="rdesc">${p.desc}</div>${rlinks(p)}</div>`,
+  glass:   p=>`<div class="card"><div class="num">${p.num}</div><div class="cn">${p.name}</div><div class="desc">${p.desc}</div>${links(p)}</div>`,
+  engr:    p=>`<div class="card"><div class="inner"><div class="dot"></div><div class="num">${p.num}</div><div class="cn">${p.name}</div><div class="desc">${p.desc}</div>${links(p)}</div></div>`,
+  ticket:  p=>`<div class="card"><div class="body"><div class="num">${p.num}</div><div class="cn">${p.name}</div><div class="desc">${p.desc}</div></div><div class="stub">${links(p)}</div></div>`,
+}
+
+const V = [
+  ['★','Media + tint · horizontal rows','c-hybrid','side','What you asked for: v2’s demo gif + v6’s per-project accent tint, laid out as wide rows. (Real logos/wordmarks slot into the body.)'],
+  ['v1','Classic bordered','c-classic','classic','The current card — surface panel, hover lift, mint→aqua top rule.'],
+  ['v2','Media-forward','c-media','media','Demo gif on top, text below. The obvious home for the Juno/Aether gifs.'],
+  ['v3','Side-by-side','c-side','side','Gif left, copy right — a compact filmstrip. Stacks on mobile.'],
+  ['v4','Borderless editorial','c-edit','edit','No box. A big serif number, hairline rule, lots of air. Quiet + confident.'],
+  ['v5','Cinematic overlay','c-over','over','Gif fills the card, copy over a dark scrim. Boldest / most app-store.'],
+  ['v6','Tinted accent','c-tint','tint','Each card a faint wash + left-bar of its own accent (gold / periwinkle / mint).'],
+  ['v7','Index list','c-list','list','Not cards — an elegant table of work. Most understated, very “senior”.'],
+  ['v8','Frosted sea-glass','c-glass','glass','Translucent glass panels, aqua tint. The spa/coastal read.'],
+  ['v9','Engraved frame','c-engr','engr','Double gold hairline frame, italic name, coin dot — the Juno/temple note.'],
+  ['v10','Ticket stub','c-ticket','ticket','Boarding-pass stub: blurb up top, links on a perforated tear-off.'],
+]
+
+document.getElementById('mount').innerHTML = V.map(([id,name,cls,kind,note])=>`
+  <section class="vwrap">
+    <div class="vlabel"><b>${name}</b><span>${id}</span><em>${note}</em></div>
+    <div class="grid ${cls}">${P.map(R[kind]).join('')}</div>
+  </section>`).join('')
+</script>

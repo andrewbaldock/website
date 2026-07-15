@@ -1,40 +1,36 @@
-import { useState, useEffect, useRef } from 'react'
+import { Monitor, Sparkles, Layers } from 'lucide-react'
 
-const CYCLE_DURATION = 12000
-const PAUSE_DURATION = 10000
+// Coastal hero — the name is dialed down so the sky + tide lead; a quiet
+// capabilities trio carries the "what I do".
+const CAPS = [
+  { Icon: Monitor, title: 'Product UI & design systems', body: 'Polished, production interfaces and the token systems that keep them consistent.' },
+  { Icon: Sparkles, title: 'AI-native / LLM apps', body: 'Agent loops, tool use, and MCP — building applications strategically, with clean seams for front and back ends to share.' },
+  { Icon: Layers, title: 'Front-end architecture', body: 'Real-time, data-intensive apps built to stay fast and maintainable at scale.' },
+]
 
 export default function Hero() {
-  const [animKey, setAnimKey] = useState(0)
-  const timerRef = useRef(null)
-
-  const scheduleNext = () => {
-    timerRef.current = setTimeout(() => {
-      setAnimKey(k => k + 1)
-    }, CYCLE_DURATION + PAUSE_DURATION)
-  }
-
-  useEffect(() => {
-    scheduleNext()
-    return () => clearTimeout(timerRef.current)
-  }, [animKey])
-
-  const handleClick = () => {
-    clearTimeout(timerRef.current)
-    setAnimKey(k => k + 1)
-  }
-
   return (
     <section className="hero">
-      <div className="hero__content">
-        <h1
-          key={animKey}
-          onClick={handleClick}
-          title="cycle colors"
-          style={{ cursor: 'pointer' }}
-        >
-          Andrew Baldock
-        </h1>
-        <p className="hero__tagline">Boss-Level UI Engineer</p>
+      <div className="wrap">
+        <span className="eyebrow mono">React · TypeScript · AI-Native Product Engineering</span>
+        <h1>Andrew <span className="amp">Baldock</span></h1>
+        <p className="tagline">Frontier-grade product UI.</p>
+        <p className="positioning">
+          <strong>Senior React &amp; TypeScript engineer and engineering manager</strong> — ten years
+          shipping polished product UI and the design systems beneath it, and years leading the team that
+          ships it, mentoring multiple engineers to senior. Now building <strong>AI-native products</strong>{' '}
+          end to end, from data model to the last pixel. Open to a senior IC or lead role.
+        </p>
+
+        <div className="caps">
+          {CAPS.map(({ Icon, title, body }) => (
+            <div className="cap" key={title}>
+              <span className="ci" aria-hidden="true"><Icon strokeWidth={1.5} /></span>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )

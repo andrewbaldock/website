@@ -1,6 +1,5 @@
 import Tippy from '@tippyjs/react'
 import { FileText } from 'lucide-react'
-import { useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { GitHubIcon, LinkedInIcon, YouTubeIcon } from './BrandIcons.jsx'
 import { AetherLogo } from './AetherLogo.jsx'
@@ -15,15 +14,15 @@ const links = [
   { icon: YouTubeIcon,  label: 'YouTube',       href: 'https://www.youtube.com/@baldockdigital/videos',     external: true   },
 ]
 
+// The coastal pages (home, Juno) bring their own nav + day/night toggle, so the
+// global icon Nav sits out on those routes.
+const COASTAL_ROUTES = new Set(['/', '/juno', '/resume'])
+
 export default function Nav() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (pathname === '/') {
-      document.documentElement.setAttribute('data-page-theme', 'dark')
-    }
-  }, [pathname])
+  if (COASTAL_ROUTES.has(pathname)) return null
 
   return (
     <nav className="nav">

@@ -1,0 +1,559 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Andrew Baldock — Senior React / TypeScript Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Mulish:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --sand: #f0ece4;
+    --sand-deep: #e7e1d5;
+    --foam: #fbfaf7;
+    --mint: #1fb6ad;
+    --mint-deep: #148f88;
+    --aqua: #7fd8d0;
+    --aqua-pale: #cfeeea;
+    --ink: #2a2b28;
+    --ink-soft: #5c5e57;
+    --ink-faint: #8b8d84;
+    --line: #d9d3c7;
+
+    --wave-h: clamp(120px, 16vw, 220px);
+
+    --f-display: "Fraunces", Georgia, serif;
+    --f-body: "Mulish", system-ui, sans-serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+    --maxw: 1120px;
+    --pad: clamp(1.25rem, 5vw, 4rem);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--sand);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: clamp(1rem, 0.55vw + 0.9rem, 1.08rem);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  /* fine grain over the whole page, static */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='0.05'/></svg>");
+  }
+
+  a { color: inherit; }
+
+  :focus-visible {
+    outline: 2px solid var(--mint-deep);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  .wrap {
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding-inline: var(--pad);
+    position: relative;
+    z-index: 1;
+  }
+
+  .mono {
+    font-family: var(--f-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* ---------- NAV ---------- */
+  header {
+    position: relative;
+    z-index: 3;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: clamp(1.25rem, 3vw, 2rem);
+    gap: 1rem;
+  }
+  .brand {
+    font-family: var(--f-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+  }
+  .brand .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--mint);
+    box-shadow: 0 0 0 4px rgba(31,182,173,0.16);
+  }
+  .nav-links {
+    display: flex;
+    gap: clamp(1rem, 2.5vw, 2.1rem);
+    list-style: none;
+    margin: 0; padding: 0;
+    flex-wrap: wrap;
+  }
+  .nav-links a {
+    font-family: var(--f-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    color: var(--ink-soft);
+    padding-bottom: 3px;
+    position: relative;
+    transition: color 0.25s ease;
+  }
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 100%; height: 1px;
+    background: var(--mint);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  /* ---------- HERO (on the sand) ---------- */
+  .hero {
+    padding-top: clamp(3.5rem, 11vw, 8rem);
+    padding-bottom: clamp(2.5rem, 7vw, 5rem);
+    position: relative;
+    z-index: 1;
+  }
+  .hero .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: clamp(1.4rem, 3vw, 2rem);
+    color: var(--mint-deep);
+  }
+  .hero .eyebrow::before {
+    content: "";
+    width: 26px; height: 1px;
+    background: var(--mint);
+  }
+  h1 {
+    font-family: var(--f-display);
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: clamp(3rem, 11vw, 7.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--ink);
+  }
+  h1 .amp {
+    display: block;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--mint-deep);
+  }
+  .tagline {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.3rem, 3.4vw, 2.15rem);
+    line-height: 1.28;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    max-width: 20ch;
+    margin: clamp(1.5rem, 4vw, 2.4rem) 0 0;
+  }
+  .positioning {
+    max-width: 46ch;
+    margin: clamp(1.3rem, 3vw, 1.8rem) 0 0;
+    color: var(--ink-soft);
+    font-size: clamp(1rem, 0.5vw + 0.9rem, 1.12rem);
+  }
+  .positioning strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ---------- TIDE LINE (signature) ---------- */
+  .tide {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: var(--wave-h);
+    margin-top: clamp(1rem, 4vw, 3rem);
+    line-height: 0;
+  }
+  .tide svg { display: block; width: 100%; height: 100%; }
+
+  /* the slow lap: the whole water body eases up the beach and recedes */
+  @keyframes lap {
+    0%, 100% { transform: translateY(6px); }
+    50%      { transform: translateY(-10px); }
+  }
+  @keyframes drift-a {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-240px); }
+  }
+  @keyframes drift-b {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-180px); }
+  }
+  @keyframes foam-breathe {
+    0%, 100% { opacity: 0.75; }
+    50%      { opacity: 0.35; }
+  }
+
+  .tide-water   { animation: lap 9s ease-in-out infinite; will-change: transform; }
+  .tide-layer-a { animation: drift-a 22s linear infinite; }
+  .tide-layer-b { animation: drift-b 16s linear infinite; }
+  .tide-foam    { animation: drift-b 16s linear infinite, foam-breathe 9s ease-in-out infinite; }
+
+  /* ---------- WORK (just past the waterline) ---------- */
+  .work {
+    background: linear-gradient(180deg, #eef4f2 0%, var(--foam) 42%, var(--foam) 100%);
+    position: relative;
+    z-index: 1;
+    padding-bottom: clamp(4rem, 9vw, 7rem);
+    margin-top: -1px;
+  }
+  .work-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-top: clamp(1rem, 3vw, 2rem);
+    padding-bottom: clamp(2rem, 5vw, 3.2rem);
+  }
+  .work-head h2 {
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
+    letter-spacing: -0.015em;
+    margin: 0;
+    color: var(--ink);
+  }
+  .work-head p {
+    margin: 0;
+    max-width: 30ch;
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.1rem, 2.5vw, 1.6rem);
+  }
+  @media (min-width: 760px) {
+    .cards { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .card {
+    background: rgba(255,255,255,0.72);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: clamp(1.5rem, 2.5vw, 2rem);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.35s cubic-bezier(.2,.7,.3,1), box-shadow 0.35s ease, border-color 0.35s ease;
+    backdrop-filter: blur(2px);
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--mint), var(--aqua));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 40px -22px rgba(20,143,136,0.5);
+    border-color: var(--aqua);
+  }
+  .card:hover::before { transform: scaleX(1); }
+
+  .card-num {
+    font-family: var(--f-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: var(--mint-deep);
+    margin-bottom: 1rem;
+  }
+  .card h3 {
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 2.4vw, 1.85rem);
+    letter-spacing: -0.01em;
+    margin: 0 0 0.6rem;
+  }
+  .card .desc {
+    color: var(--ink-soft);
+    font-size: 0.96rem;
+    line-height: 1.6;
+    margin: 0 0 1.5rem;
+    flex-grow: 1;
+  }
+  .card-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    border-top: 1px solid var(--line);
+    padding-top: 1.1rem;
+  }
+  .card-links a {
+    font-family: var(--f-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    transition: color 0.2s ease, gap 0.25s ease;
+  }
+  .card-links a .arw {
+    color: var(--mint);
+    transition: transform 0.25s ease;
+  }
+  .card-links a:hover { color: var(--mint-deep); gap: 0.75rem; }
+  .card-links a:hover .arw { transform: translate(2px, -2px); }
+  .card-links a[data-primary] { font-weight: 500; }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    background: var(--foam);
+    border-top: 1px solid var(--line);
+    position: relative;
+    z-index: 1;
+  }
+  .foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding-block: clamp(2.2rem, 5vw, 3.2rem);
+  }
+  .foot-name {
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
+  }
+  .foot-name .sub {
+    display: block;
+    font-family: var(--f-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 0.4rem;
+  }
+  .foot-links {
+    display: flex;
+    gap: clamp(1rem, 2.5vw, 2rem);
+    list-style: none;
+    margin: 0; padding: 0;
+    flex-wrap: wrap;
+  }
+  .foot-links a {
+    font-family: var(--f-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    color: var(--ink-soft);
+    transition: color 0.2s ease;
+  }
+  .foot-links a:hover { color: var(--mint-deep); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .tide-water, .tide-layer-a, .tide-layer-b, .tide-foam {
+      animation: none !important;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .nav { flex-direction: column; align-items: flex-start; gap: 1.1rem; }
+  }
+</style>
+
+<header>
+  <div class="wrap">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="#top" aria-label="Andrew Baldock, home">
+        <span class="dot" aria-hidden="true"></span>
+        A. BALDOCK
+      </a>
+      <ul class="nav-links">
+        <li><a href="/resume.pdf">Résumé</a></li>
+        <li><a href="https://www.linkedin.com/in/andrewbaldock" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://github.com/andrewbaldock" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.youtube.com/@andrewbaldock" target="_blank" rel="noopener">YouTube</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow mono">React · TypeScript · Design Systems</span>
+      <h1>Andrew<span class="amp">Baldock</span></h1>
+      <p class="tagline">Boss-level product UI — the kind that makes the hard parts feel effortless.</p>
+      <p class="positioning">
+        <strong>Senior React &amp; TypeScript engineer</strong> with ten years shipping polished
+        product interfaces and the design systems beneath them. Open to an IC or lead role.
+      </p>
+    </div>
+  </section>
+
+  <!-- SIGNATURE: the shoreline tide line -->
+  <div class="tide" role="img" aria-label="A gentle shoreline where the tide meets the sand, dividing the page">
+    <svg viewBox="0 0 1440 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#7fd8d0"/>
+          <stop offset="45%" stop-color="#38bdb2"/>
+          <stop offset="100%" stop-color="#1fb6ad"/>
+        </linearGradient>
+        <linearGradient id="wetsand" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#e7e1d5"/>
+          <stop offset="100%" stop-color="#eef4f2"/>
+        </linearGradient>
+      </defs>
+
+      <!-- wet sand band above the water, catches the receding tide -->
+      <rect x="0" y="0" width="1440" height="220" fill="url(#wetsand)"/>
+
+      <!-- the water body, slowly lapping up and receding as one -->
+      <g class="tide-water">
+        <!-- back swell -->
+        <g class="tide-layer-a">
+          <path fill="#8fdcd4" opacity="0.55" d="
+            M-240,120
+            C -60,90 60,150 240,120
+            C 420,90 540,150 720,120
+            C 900,90 1020,150 1200,120
+            C 1380,90 1500,150 1680,120
+            L 1680,240 L -240,240 Z"/>
+        </g>
+        <!-- main body -->
+        <g class="tide-layer-b">
+          <path fill="url(#water)" d="
+            M-180,140
+            C 0,112 120,168 300,140
+            C 480,112 600,168 780,140
+            C 960,112 1080,168 1260,140
+            C 1440,112 1560,168 1740,140
+            L 1740,240 L -180,240 Z"/>
+        </g>
+        <!-- foam crest line -->
+        <g class="tide-foam">
+          <path fill="none" stroke="#fbfaf7" stroke-width="2.5" stroke-linecap="round" opacity="0.7" d="
+            M-180,140
+            C 0,112 120,168 300,140
+            C 480,112 600,168 780,140
+            C 960,112 1080,168 1260,140
+            C 1440,112 1560,168 1740,140"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <section class="work">
+    <div class="wrap">
+      <div class="work-head">
+        <h2>Selected work</h2>
+        <p>Three products, each built end to end — from data model to the last pixel.</p>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <span class="card-num">01 — Product</span>
+          <h3>Juno</h3>
+          <p class="desc">
+            A private household financial companion. It holds your whole money picture,
+            runs the what-ifs, and ships with a public design system anyone can read.
+          </p>
+          <div class="card-links">
+            <a data-primary href="https://juno-demo.andrewbaldock.com" target="_blank" rel="noopener">Live demo <span class="arw" aria-hidden="true">↗</span></a>
+            <a href="https://juno.andrewbaldock.com/design" target="_blank" rel="noopener">Design system <span class="arw" aria-hidden="true">↗</span></a>
+            <a href="https://github.com/andrewbaldock/juno-moneta" target="_blank" rel="noopener">Source <span class="arw" aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+
+        <article class="card">
+          <span class="card-num">02 — Product</span>
+          <h3>Aether</h3>
+          <p class="desc">
+            A conversational explorer with a knowledge-graph UI — ask a question, watch
+            the answer assemble itself into connected, navigable panels.
+          </p>
+          <div class="card-links">
+            <a data-primary href="/aether">Case study <span class="arw" aria-hidden="true">→</span></a>
+            <a href="https://aether.andrewbaldock.com" target="_blank" rel="noopener">Live demo <span class="arw" aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+
+        <article class="card">
+          <span class="card-num">03 — Product</span>
+          <h3>Magic Sticky</h3>
+          <p class="desc">
+            A frictionless MCP sticky-note store — one shared note that every one of your
+            AI agents reads and writes, so context follows you everywhere.
+          </p>
+          <div class="card-links">
+            <a data-primary href="/magicsticky">Case study <span class="arw" aria-hidden="true">→</span></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div class="foot-name">
+        Andrew Baldock
+        <span class="sub">Senior React / TypeScript Engineer</span>
+      </div>
+      <ul class="foot-links">
+        <li><a href="https://www.linkedin.com/in/andrewbaldock" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://github.com/andrewbaldock" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.youtube.com/@andrewbaldock" target="_blank" rel="noopener">YouTube</a></li>
+        <li><a href="/resume.pdf">Résumé</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

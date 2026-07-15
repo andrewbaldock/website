@@ -1,0 +1,475 @@
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Andrew Baldock — Boss-Level UI Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --rose: #f2a7c4;
+    --lilac: #b48fd6;
+    --peach: #f6c9a8;
+    --silver: #eef1f5;
+    --silver-deep: #e3e7ee;
+    --ink: #2a2436;
+    --ink-soft: #5b5468;
+    --mint: #1fb6ad;
+    --mint-deep: #158f88;
+    --card: #ffffff;
+    --seam: rgba(31, 182, 173, 0.55);
+    --focus: #158f88;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Inter", system-ui, sans-serif;
+    color: var(--ink);
+    background: var(--silver);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  a { color: inherit; }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  .skip {
+    position: absolute;
+    left: -999px;
+    top: 0;
+    background: var(--ink);
+    color: #fff;
+    padding: 10px 16px;
+    z-index: 20;
+    border-radius: 0 0 8px 0;
+  }
+  .skip:focus { left: 0; }
+
+  /* ---- Split shell ---- */
+  .split {
+    display: grid;
+    grid-template-columns: 45fr 55fr;
+    min-height: 100vh;
+  }
+
+  /* ---- Warm side (thesis) ---- */
+  .warm {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(28px, 4.5vw, 64px);
+    color: var(--ink);
+    border-right: 1px solid var(--seam);
+  }
+  .warm::before {
+    content: "";
+    position: absolute;
+    inset: -25%;
+    z-index: 0;
+    background: linear-gradient(148deg, var(--rose) 0%, var(--lilac) 48%, var(--peach) 100%);
+    background-size: 220% 220%;
+    background-position: 0% 0%;
+    animation: drift 26s ease-in-out infinite alternate;
+  }
+  /* soft sunrise glow, static and quiet */
+  .warm::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      radial-gradient(120% 70% at 22% 12%, rgba(255,255,255,0.42), rgba(255,255,255,0) 55%),
+      radial-gradient(90% 60% at 85% 108%, rgba(42,36,54,0.10), rgba(42,36,54,0) 60%);
+    pointer-events: none;
+  }
+  @keyframes drift {
+    0%   { background-position: 0% 10%;  filter: hue-rotate(0deg); }
+    100% { background-position: 100% 90%; filter: hue-rotate(-12deg); }
+  }
+
+  .warm > * { position: relative; z-index: 2; }
+
+  .mark {
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink);
+    opacity: 0.72;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .mark::before {
+    content: "";
+    width: 26px;
+    height: 1px;
+    background: var(--ink);
+    opacity: 0.5;
+  }
+
+  .thesis { max-width: 15ch; }
+
+  .name {
+    font-family: "Fraunces", Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: clamp(3.1rem, 8.4vw, 7rem);
+    line-height: 0.94;
+    letter-spacing: -0.015em;
+    margin: 0 0 0.5rem;
+  }
+  .name .last {
+    display: block;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .tagline {
+    font-family: "Fraunces", serif;
+    font-weight: 500;
+    font-size: clamp(1.25rem, 2.4vw, 1.7rem);
+    line-height: 1.2;
+    margin: 0.4rem 0 1.2rem;
+  }
+  .tagline .accent { color: var(--mint-deep); font-style: italic; }
+
+  .positioning {
+    font-size: clamp(0.98rem, 1.25vw, 1.08rem);
+    line-height: 1.55;
+    color: var(--ink);
+    max-width: 34ch;
+    margin: 0;
+  }
+  .positioning strong { font-weight: 600; }
+
+  .warm-foot {
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    opacity: 0.72;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .warm-foot .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--mint-deep);
+    box-shadow: 0 0 0 4px rgba(21,143,136,0.18);
+  }
+
+  /* ---- Calm side (work) ---- */
+  .calm {
+    background: var(--silver);
+    padding: clamp(24px, 3.5vw, 52px) clamp(24px, 4vw, 64px) 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topnav {
+    display: flex;
+    justify-content: flex-end;
+    gap: clamp(14px, 2.2vw, 30px);
+    padding-bottom: clamp(40px, 7vw, 90px);
+    flex-wrap: wrap;
+  }
+  .topnav a {
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--ink-soft);
+    position: relative;
+    padding: 4px 2px;
+    transition: color 0.2s ease;
+  }
+  .topnav a::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 100%;
+    bottom: 0;
+    height: 1.5px;
+    background: var(--mint);
+    transition: right 0.25s ease;
+  }
+  .topnav a:hover { color: var(--ink); }
+  .topnav a:hover::after { right: 0; }
+
+  .work-head {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 clamp(20px, 3vw, 34px);
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .work-head .count {
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 1rem;
+    color: var(--mint-deep);
+    font-weight: 400;
+  }
+
+  .work { display: flex; flex-direction: column; gap: clamp(16px, 2vw, 22px); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--silver-deep);
+    border-radius: 16px;
+    padding: clamp(22px, 2.6vw, 30px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .card.in { opacity: 1; transform: none; }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px -24px rgba(42,36,54,0.35);
+    border-color: rgba(31,182,173,0.4);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .card h3 {
+    font-family: "Fraunces", serif;
+    font-weight: 500;
+    font-size: clamp(1.5rem, 2.4vw, 1.95rem);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .kind {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    background: var(--silver);
+    border: 1px solid var(--silver-deep);
+    padding: 5px 11px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .card p {
+    margin: 0.7rem 0 1.15rem;
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+    line-height: 1.55;
+    max-width: 52ch;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 8px;
+  }
+  .links a {
+    text-decoration: none;
+    font-size: 0.86rem;
+    font-weight: 500;
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 13px;
+    border: 1px solid var(--silver-deep);
+    border-radius: 999px;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .links a .arw { color: var(--mint); transition: transform 0.2s ease; }
+  .links a:hover {
+    border-color: var(--mint);
+    background: rgba(31,182,173,0.08);
+    color: var(--mint-deep);
+  }
+  .links a:hover .arw { transform: translate(2px, -2px); }
+  .links a.primary {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+  .links a.primary .arw { color: var(--mint); }
+  .links a.primary:hover { background: #191320; }
+
+  /* ---- Footer ---- */
+  footer {
+    margin-top: auto;
+    padding: clamp(40px, 6vw, 72px) 0 clamp(28px, 4vw, 40px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 18px 24px;
+    border-top: 1px solid var(--silver-deep);
+    margin-top: clamp(48px, 7vw, 90px);
+  }
+  .foot-name {
+    font-family: "Fraunces", serif;
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+  .foot-links { display: flex; gap: clamp(14px, 2vw, 26px); flex-wrap: wrap; }
+  .foot-links a {
+    text-decoration: none;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    transition: color 0.2s ease;
+  }
+  .foot-links a:hover { color: var(--mint-deep); }
+
+  /* ---- Mobile stack ---- */
+  @media (max-width: 860px) {
+    .split { grid-template-columns: 1fr; }
+    .warm {
+      position: static;
+      height: auto;
+      min-height: 78vh;
+      border-right: none;
+      border-bottom: 1px solid var(--seam);
+      gap: 40px;
+    }
+    .calm { padding-top: clamp(28px, 6vw, 44px); }
+    .topnav { justify-content: flex-start; padding-bottom: clamp(34px, 8vw, 56px); }
+  }
+
+  @media (max-width: 420px) {
+    .card-top { flex-direction: column; align-items: flex-start; gap: 10px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .warm::before { animation: none; background-position: 40% 40%; }
+    .card { opacity: 1; transform: none; transition: none; }
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+
+<a class="skip" href="#work">Skip to work</a>
+
+<div class="split">
+
+  <aside class="warm">
+    <div class="mark">Portfolio · 2026</div>
+
+    <div class="thesis">
+      <h1 class="name">Andrew<span class="last">Baldock</span></h1>
+      <p class="tagline">Boss-level UI engineer — <span class="accent">polish is the point.</span></p>
+      <p class="positioning">
+        Senior React &amp; TypeScript engineer building
+        <strong>polished product UI and design systems</strong>.
+        Ten years shipping. Open to an IC or lead role.
+      </p>
+    </div>
+
+    <div class="warm-foot"><span class="dot"></span> Available for the right team</div>
+  </aside>
+
+  <main class="calm">
+    <nav class="topnav" aria-label="Primary">
+      <a href="#">Résumé</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">GitHub</a>
+      <a href="#">YouTube</a>
+    </nav>
+
+    <section id="work" aria-labelledby="work-head">
+      <p class="work-head" id="work-head">Selected work <span class="count">three builds</span></p>
+
+      <div class="work">
+
+        <article class="card">
+          <div class="card-top">
+            <h3>Juno</h3>
+            <span class="kind">Financial companion</span>
+          </div>
+          <p>A private household financial companion — your whole money picture in one place, honest what-ifs you can actually run, and a public design system anyone can browse.</p>
+          <div class="links">
+            <a class="primary" href="https://juno-demo.andrewbaldock.com">Live demo <span class="arw" aria-hidden="true">↗</span></a>
+            <a href="https://juno.andrewbaldock.com/design">Design system <span class="arw" aria-hidden="true">↗</span></a>
+            <a href="https://github.com/andrewbaldock/juno-moneta">Source <span class="arw" aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <h3>Aether</h3>
+            <span class="kind">Conversational AI</span>
+          </div>
+          <p>A conversational explorer with a knowledge-graph UI — ask a question, watch the answer assemble itself into panels and a graph you can steer.</p>
+          <div class="links">
+            <a class="primary" href="https://aether.andrewbaldock.com">Live demo <span class="arw" aria-hidden="true">↗</span></a>
+            <a href="/aether">Case study <span class="arw" aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <h3>Magic Sticky</h3>
+            <span class="kind">Developer tool</span>
+          </div>
+          <p>An MCP sticky-note store — a frictionless shared context layer every one of your agents can read and write, no setup ceremony.</p>
+          <div class="links">
+            <a href="/magicsticky">Case study <span class="arw" aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <footer>
+      <span class="foot-name">Andrew Baldock</span>
+      <div class="foot-links">
+        <a href="#">LinkedIn</a>
+        <a href="#">GitHub</a>
+        <a href="#">YouTube</a>
+        <a href="#">Résumé</a>
+      </div>
+    </footer>
+  </main>
+
+</div>
+
+<script>
+  (function () {
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var cards = document.querySelectorAll(".card");
+    if (reduce || !("IntersectionObserver" in window)) {
+      cards.forEach(function (c) { c.classList.add("in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e, i) {
+        if (e.isIntersecting) {
+          setTimeout(function () { e.target.classList.add("in"); }, i * 90);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    cards.forEach(function (c) { io.observe(c); });
+  })();
+</script>

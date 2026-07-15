@@ -1,0 +1,11 @@
+{
+  "name": "Andrew Baldock",
+  "short_name": "AB",
+  "icons": [
+    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512" }
+  ],
+  "theme_color": "#2FD3A2",
+  "background_color": "#0E1B16",
+  "display": "standalone"
+}

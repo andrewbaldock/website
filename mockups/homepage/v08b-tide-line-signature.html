@@ -1,0 +1,640 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Andrew Baldock — v08b Tide Line (signature)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- all 3 font pairings preloaded so the toggle is instant (mockup only) -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Public+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* =========================================================================
+     TOKENS — the coastal-celestial palette, keyed by time-of-day on <html>.
+     data-tod = dawn | day | dusk | night   (JS sets it from the hour)
+     The whole page recolors off these, so day↔night is one flip.
+  ========================================================================== */
+  :root {
+    /* --- brand constants (do not shift by hour) --- */
+    --mint:        #1fb6ad;
+    --mint-deep:   #148f88;
+    --aqua:        #7fd8d0;
+    --periwinkle:  #8ea2e6;
+    --gold:        #b98a2e;
+    --sun:         #dca43a;
+    --moon:        #aebfe8;
+
+    /* --- day (default) --- */
+    --bg:          #f0ece4;   /* dry sand ground */
+    --bg-2:        #f6f8fb;   /* cool silver lift */
+    --ink:         #2a2b28;
+    --ink-soft:    #5c5e57;
+    --ink-faint:   #8b8d84;
+    --surface:     rgba(255,255,255,0.72);
+    --surface-2:   #eef4f2;
+    --line:        #d9d3c7;
+    --accent:      var(--mint-deep);
+
+    /* sky wash (a whisper, not a photo) + engraving stroke */
+    --sky-a:       #dfe7ee;
+    --sky-b:       #f0ece4;
+    --engrave:     rgba(42,43,40,0.55);
+    --engrave-soft:rgba(42,43,40,0.28);
+
+    /* the water body */
+    --water-a:     #7fd8d0;
+    --water-b:     #38bdb2;
+    --water-c:     #1fb6ad;
+    --foam:        #fbfaf7;
+    --sand-dry:    #f0ece4;
+    --sand-damp:   #e2d9c8;
+    --sand-wet:    #d3ccbe;
+    --moonlight:   transparent;   /* only lights up at night */
+
+    --f-display: "Cormorant Garamond", Georgia, serif;
+    --f-body:    "Inter", system-ui, sans-serif;
+    --f-mono:    "IBM Plex Mono", ui-monospace, monospace;
+
+    --maxw: 1120px;
+    --pad:  clamp(1.25rem, 5vw, 4rem);
+    --tide-h: clamp(120px, 15vw, 200px);
+
+    --sky-transition: 1.2s ease;
+  }
+
+  /* ---- DAWN: cool page, soft rose sky ---- */
+  :root[data-tod="dawn"] {
+    --bg: #f2ecec; --bg-2: #f7f2f4;
+    --sky-a: #f6dbe0; --sky-b: #efe7ec;
+    --surface-2: #f3edef;
+    --accent: var(--mint-deep);
+  }
+  /* ---- DUSK: warming, rose→lilac sky ---- */
+  :root[data-tod="dusk"] {
+    --bg: #efe8ec; --bg-2: #efe6ee;
+    --sky-a: #f2c8d6; --sky-b: #d9c4e2;   /* rose → lilac */
+    --water-a: #6fc9c6; --water-b: #3fa9c0; --water-c: #4d7fb0;
+    --surface-2: #eee7ef;
+  }
+  /* ---- NIGHT: dark slate-indigo, celestial, moonlight on water ---- */
+  :root[data-tod="night"] {
+    --bg:        #10141f;
+    --bg-2:      #161b2a;
+    --ink:       #e7ecf4;
+    --ink-soft:  #aeb6c6;
+    --ink-faint: #6f7890;
+    --surface:   rgba(30,37,54,0.60);
+    --surface-2: #141a28;
+    --line:      #2b3346;
+    --accent:    #3fd2c7;
+
+    --sky-a: #171d2e; --sky-b: #10141f;
+    --engrave:      rgba(220,228,242,0.60);
+    --engrave-soft: rgba(174,191,232,0.30);
+
+    --water-a: #245b6e; --water-b: #17384a; --water-c: #0f2436;
+    --foam:    #b9d6df;
+    --sand-dry:  #10141f; --sand-damp: #141b28; --sand-wet: #182234;
+    --moonlight: rgba(190,210,240,0.55);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: clamp(1rem, 0.55vw + 0.9rem, 1.08rem);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+    padding-bottom: var(--tide-h);         /* never hide behind the fixed tide */
+    transition: background var(--sky-transition), color var(--sky-transition);
+  }
+
+  /* fine grain over the whole page */
+  body::before {
+    content: "";
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none; opacity: 0.5; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='0.05'/></svg>");
+  }
+  :root[data-tod="night"] body::before { mix-blend-mode: screen; opacity: 0.35; }
+
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+  .wrap {
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding-inline: var(--pad);
+    position: relative; z-index: 2;
+  }
+  .mono {
+    font-family: var(--f-mono);
+    font-size: 0.74rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+
+  /* =========================================================================
+     SKY — the signature complication. Engraved sun/moon on its real arc,
+     a whisper of phase tint behind. NOT a weather widget.
+  ========================================================================== */
+  .sky {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: clamp(300px, 42vw, 460px);
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, var(--sky-a) 0%, var(--sky-b) 78%, transparent 100%);
+    transition: background var(--sky-transition);
+    -webkit-mask-image: linear-gradient(180deg, #000 62%, transparent 100%);
+            mask-image: linear-gradient(180deg, #000 62%, transparent 100%);
+  }
+  .sky svg { display: block; width: 100%; height: 100%; }
+  .sky .stroke  { stroke: var(--engrave);      fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .sky .stroke-soft { stroke: var(--engrave-soft); fill: none; stroke-width: 1.3; stroke-linecap: round; }
+  #sun-g   { color: var(--sun); }
+  #moon-g  { color: var(--moon); }
+  @keyframes twinkle { 0%,100% { opacity: 0.9; } 50% { opacity: 0.35; } }
+  .star { animation: twinkle 4s ease-in-out infinite; }
+  .star:nth-child(2n) { animation-duration: 5.5s; }
+  .star:nth-child(3n) { animation-duration: 6.7s; }
+
+  /* ---------- NAV ---------- */
+  header { position: relative; z-index: 3; }
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: clamp(1.25rem, 3vw, 2rem); gap: 1rem;
+  }
+  .brand {
+    font-family: var(--f-mono); font-size: 0.8rem; letter-spacing: 0.12em;
+    color: var(--ink-soft); display: inline-flex; align-items: center; gap: 0.6rem;
+    text-decoration: none;
+  }
+  .brand .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--mint); box-shadow: 0 0 0 4px rgba(31,182,173,0.16);
+  }
+  .nav-links { display: flex; gap: clamp(1rem, 2.5vw, 2.1rem); list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+  .nav-links a {
+    font-family: var(--f-mono); font-size: 0.78rem; letter-spacing: 0.06em;
+    text-decoration: none; color: var(--ink-soft); padding-bottom: 3px;
+    position: relative; transition: color 0.25s ease;
+  }
+  .nav-links a::after {
+    content: ""; position: absolute; left: 0; bottom: 0; width: 100%; height: 1px;
+    background: var(--mint); transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  /* ---------- HERO — name dialed WAY down; sky+tide lead ---------- */
+  .hero {
+    padding-top: clamp(4rem, 13vw, 9rem);
+    padding-bottom: clamp(2.5rem, 7vw, 5rem);
+    position: relative; z-index: 2;
+  }
+  .hero .eyebrow { display: inline-flex; align-items: center; gap: 0.7rem; margin-bottom: clamp(1.1rem, 2.5vw, 1.6rem); color: var(--accent); }
+  .hero .eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--mint); }
+  h1 {
+    font-family: var(--f-display);
+    font-optical-sizing: auto; font-weight: 500;
+    font-size: clamp(2rem, 4.5vw, 3.2rem);   /* was up to 120px — now tasteful */
+    line-height: 1.02; letter-spacing: -0.01em; margin: 0; color: var(--ink);
+  }
+  h1 .amp { font-style: italic; font-weight: 400; color: var(--accent); }
+  .tagline {
+    font-family: var(--f-display); font-style: italic; font-weight: 400;
+    font-size: clamp(1.5rem, 4vw, 2.6rem); line-height: 1.22; letter-spacing: -0.01em;
+    color: var(--ink); max-width: 22ch; margin: clamp(1.6rem, 4vw, 2.4rem) 0 0;
+  }
+  .positioning { max-width: 46ch; margin: clamp(1.2rem, 3vw, 1.7rem) 0 0; color: var(--ink-soft); font-size: clamp(1rem, 0.5vw + 0.9rem, 1.12rem); }
+  .positioning strong { color: var(--ink); font-weight: 600; }
+
+  /* ---------- WORK ---------- */
+  .work {
+    background: linear-gradient(180deg, var(--surface-2) 0%, var(--bg-2) 46%, var(--bg-2) 100%);
+    position: relative; z-index: 2;
+    padding-bottom: clamp(4rem, 9vw, 7rem);
+    border-radius: 26px 26px 0 0;
+    transition: background var(--sky-transition);
+  }
+  .work-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding-top: clamp(2rem, 5vw, 3.4rem); padding-bottom: clamp(2rem, 5vw, 3.2rem); }
+  .work-head h2 { font-family: var(--f-display); font-weight: 500; font-size: clamp(1.6rem, 4vw, 2.5rem); letter-spacing: -0.015em; margin: 0; color: var(--ink); }
+  .work-head p { margin: 0; max-width: 30ch; color: var(--ink-soft); font-size: 0.98rem; }
+
+  .cards { display: grid; grid-template-columns: 1fr; gap: clamp(1.1rem, 2.5vw, 1.6rem); }
+  @media (min-width: 760px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+    padding: clamp(1.5rem, 2.5vw, 2rem); display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+    transition: transform 0.35s cubic-bezier(.2,.7,.3,1), box-shadow 0.35s ease, border-color 0.35s ease, background var(--sky-transition);
+    backdrop-filter: blur(3px);
+  }
+  .card::before {
+    content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--mint), var(--aqua));
+    transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
+  }
+  .card:hover { transform: translateY(-5px); box-shadow: 0 18px 40px -22px rgba(20,143,136,0.5); border-color: var(--aqua); }
+  .card:hover::before { transform: scaleX(1); }
+  .card-num { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 1rem; }
+  .card h3 { font-family: var(--f-display); font-weight: 500; font-size: clamp(1.5rem, 2.4vw, 1.85rem); letter-spacing: -0.01em; margin: 0 0 0.6rem; }
+  .card .desc { color: var(--ink-soft); font-size: 0.96rem; line-height: 1.6; margin: 0 0 1.5rem; flex-grow: 1; }
+  .card-links { display: flex; flex-direction: column; gap: 0.55rem; border-top: 1px solid var(--line); padding-top: 1.1rem; }
+  .card-links a { font-family: var(--f-mono); font-size: 0.78rem; letter-spacing: 0.02em; text-decoration: none; color: var(--ink); display: inline-flex; align-items: center; gap: 0.5rem; width: fit-content; transition: color 0.2s ease, gap 0.25s ease; }
+  .card-links a .arw { color: var(--mint); transition: transform 0.25s ease; }
+  .card-links a:hover { color: var(--accent); gap: 0.75rem; }
+  .card-links a:hover .arw { transform: translate(2px, -2px); }
+  .card-links a[data-primary] { font-weight: 500; }
+
+  /* ---------- FOOTER ---------- */
+  footer { background: var(--bg-2); border-top: 1px solid var(--line); position: relative; z-index: 2; transition: background var(--sky-transition); }
+  .foot { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; padding-block: clamp(2.2rem, 5vw, 3.2rem); }
+  .foot-name { font-family: var(--f-display); font-weight: 500; font-size: 1.35rem; letter-spacing: -0.01em; }
+  .foot-name .sub { display: block; font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-top: 0.4rem; }
+  .foot-links { display: flex; gap: clamp(1rem, 2.5vw, 2rem); list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+  .foot-links a { font-family: var(--f-mono); font-size: 0.78rem; letter-spacing: 0.05em; text-decoration: none; color: var(--ink-soft); transition: color 0.2s ease; }
+  .foot-links a:hover { color: var(--accent); }
+
+  /* =========================================================================
+     TIDE — persistent shoreline, FIXED to the viewport bottom. Always in view.
+     Wave motion is byte-for-byte the v08 keyframes (Andrew: keep exactly).
+  ========================================================================== */
+  .tide {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    height: var(--tide-h);
+    z-index: 4; line-height: 0; pointer-events: none;
+  }
+  .tide svg { display: block; width: 100%; height: 100%; }
+
+  @keyframes lap    { 0%,100% { transform: translateY(6px); } 50% { transform: translateY(-10px); } }
+  @keyframes drift-a{ from { transform: translateX(0); } to { transform: translateX(-240px); } }
+  @keyframes drift-b{ from { transform: translateX(0); } to { transform: translateX(-180px); } }
+  @keyframes foam-breathe { 0%,100% { opacity: 0.75; } 50% { opacity: 0.35; } }
+  @keyframes moon-shimmer { 0%,100% { opacity: 0.5; transform: scaleY(1); } 50% { opacity: 0.85; transform: scaleY(1.04); } }
+
+  .tide-water   { animation: lap 9s ease-in-out infinite; will-change: transform; }
+  .tide-layer-a { animation: drift-a 22s linear infinite; }
+  .tide-layer-b { animation: drift-b 16s linear infinite; }
+  .tide-foam    { animation: drift-b 16s linear infinite, foam-breathe 9s ease-in-out infinite; }
+  #moonlight    { animation: moon-shimmer 6s ease-in-out infinite; transform-origin: center bottom; }
+
+  /* tide colors via CSS (SVG presentation attrs can't read var()) */
+  #water stop, #sand stop, #moonbeam stop { transition: stop-color var(--sky-transition); }
+  #water .g0 { stop-color: var(--water-a); }
+  #water .g1 { stop-color: var(--water-b); }
+  #water .g2 { stop-color: var(--water-c); }
+  #sand  .g0 { stop-color: var(--sand-dry); }
+  #sand  .g1 { stop-color: var(--sand-damp); }
+  #sand  .g2 { stop-color: var(--sand-wet); }
+  #moonbeam .g0 { stop-color: var(--moonlight); }
+  #moonbeam .g1 { stop-color: transparent; }
+  .tide-layer-a > path { fill: var(--water-a); transition: fill var(--sky-transition); }
+  .tide-foam    > path { stroke: var(--foam); transition: stroke var(--sky-transition); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .tide-water, .tide-layer-a, .tide-layer-b, .tide-foam, #moonlight, .star { animation: none !important; }
+    :root { --sky-transition: 0s; }
+  }
+
+  /* =========================================================================
+     FONT PAIRINGS — toggled by data-font on <html> (mockup only).
+  ========================================================================== */
+  :root[data-font="a"] { --f-display: "Cormorant Garamond", Georgia, serif; --f-body: "Inter", system-ui, sans-serif; }
+  :root[data-font="b"] { --f-display: "Newsreader", Georgia, serif;         --f-body: "Public Sans", system-ui, sans-serif; }
+  :root[data-font="c"] { --f-display: "Instrument Serif", Georgia, serif;   --f-body: "Geist", system-ui, sans-serif; }
+  :root[data-font="c"] h1, :root[data-font="c"] .tagline { letter-spacing: 0; }  /* Instrument Serif runs tight */
+
+  /* =========================================================================
+     PREVIEW PANEL — dev-only chrome, will NOT ship with the real build.
+  ========================================================================== */
+  #panel {
+    position: fixed; top: 12px; right: 12px; z-index: 20;
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.04em;
+    background: rgba(20,26,40,0.82); color: #dfe6f2; backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.14); border-radius: 12px;
+    padding: 12px 13px; width: 210px; box-shadow: 0 12px 30px -12px rgba(0,0,0,0.5);
+  }
+  #panel h4 { margin: 0 0 9px; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #9fb0cf; font-weight: 500; }
+  #panel .row { margin-bottom: 11px; }
+  #panel label { display: block; margin-bottom: 5px; color: #b9c4da; }
+  #panel .hourval { color: #fff; }
+  #panel input[type=range] { width: 100%; accent-color: #3fd2c7; }
+  #panel .phase { color: #58e0d4; text-transform: capitalize; }
+  #panel .quick { display: flex; gap: 4px; margin-top: 6px; }
+  #panel .quick button, #panel select { font-family: inherit; font-size: 10px; color: #dfe6f2; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 6px; padding: 4px 6px; cursor: pointer; }
+  #panel .quick button { flex: 1; }
+  #panel .quick button:hover, #panel select:hover { background: rgba(63,210,199,0.22); }
+  #panel select { width: 100%; }
+  #panel .note { margin-top: 4px; color: #6f7c98; font-size: 9.5px; line-height: 1.35; }
+  #panel .collapse { position: absolute; top: 9px; right: 10px; cursor: pointer; color: #7f8ca8; background: none; border: none; font-size: 13px; }
+  #panel.min .body { display: none; }
+  #panel.min { width: auto; }
+  @media (max-width: 560px) { #panel { top: 8px; right: 8px; width: 172px; } }
+</style>
+
+<!-- SKY: sun/moon on its real arc, a whisper of phase tint -->
+<div class="sky" aria-hidden="true">
+  <svg id="skySvg" viewBox="0 0 1440 460" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
+    <!-- faint horizon rule, echoes the tide below -->
+    <path class="stroke-soft" d="M0 300 H1440" opacity="0.4"/>
+    <g id="stars"></g>
+    <g id="celestial"></g>
+  </svg>
+</div>
+
+<header>
+  <div class="wrap">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="#top" aria-label="Andrew Baldock, home">
+        <span class="dot" aria-hidden="true"></span>
+        A. BALDOCK
+      </a>
+      <ul class="nav-links">
+        <li><a href="/resume.pdf">Résumé</a></li>
+        <li><a href="https://www.linkedin.com/in/andrewbaldock" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://github.com/andrewbaldock" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.youtube.com/@andrewbaldock" target="_blank" rel="noopener">YouTube</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow mono">React · TypeScript · Design Systems</span>
+      <h1>Andrew <span class="amp">Baldock</span></h1>
+      <p class="tagline">Product interfaces with the hard parts made to feel effortless.</p>
+      <p class="positioning">
+        <strong>Senior React &amp; TypeScript engineer</strong> with ten years shipping polished
+        product UI and the design systems beneath it. Open to an IC or lead role.
+      </p>
+    </div>
+  </section>
+
+  <section class="work">
+    <div class="wrap">
+      <div class="work-head">
+        <h2>Selected work</h2>
+        <p>Three products, each built end to end — from data model to the last pixel.</p>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <span class="card-num">01 — Product</span>
+          <h3>Juno</h3>
+          <p class="desc">A private household financial companion. It holds your whole money picture, runs the what-ifs, and ships with a public design system anyone can read.</p>
+          <div class="card-links">
+            <a data-primary href="https://juno-demo.andrewbaldock.com" target="_blank" rel="noopener">Live demo <span class="arw" aria-hidden="true">↗</span></a>
+            <a href="https://juno.andrewbaldock.com/design" target="_blank" rel="noopener">Design system <span class="arw" aria-hidden="true">↗</span></a>
+            <a href="https://github.com/andrewbaldock/juno-moneta" target="_blank" rel="noopener">Source <span class="arw" aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+        <article class="card">
+          <span class="card-num">02 — Product</span>
+          <h3>Aether</h3>
+          <p class="desc">A conversational explorer with a knowledge-graph UI — ask a question, watch the answer assemble itself into connected, navigable panels.</p>
+          <div class="card-links">
+            <a data-primary href="/aether">Case study <span class="arw" aria-hidden="true">→</span></a>
+            <a href="https://aether.andrewbaldock.com" target="_blank" rel="noopener">Live demo <span class="arw" aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+        <article class="card">
+          <span class="card-num">03 — Product</span>
+          <h3>Magic Sticky</h3>
+          <p class="desc">A frictionless MCP sticky-note store — one shared note that every one of your AI agents reads and writes, so context follows you everywhere.</p>
+          <div class="card-links">
+            <a data-primary href="/magicsticky">Case study <span class="arw" aria-hidden="true">→</span></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div class="foot-name">Andrew Baldock<span class="sub">Senior React / TypeScript Engineer</span></div>
+      <ul class="foot-links">
+        <li><a href="https://www.linkedin.com/in/andrewbaldock" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://github.com/andrewbaldock" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.youtube.com/@andrewbaldock" target="_blank" rel="noopener">YouTube</a></li>
+        <li><a href="/resume.pdf">Résumé</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<!-- SIGNATURE TIDE — fixed to the viewport bottom, always the shoreline -->
+<div class="tide" role="img" aria-label="A shoreline where the tide meets the sand at the foot of the page">
+  <svg viewBox="0 0 1440 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+        <stop class="g0" offset="0%"/>
+        <stop class="g1" offset="45%"/>
+        <stop class="g2" offset="100%"/>
+      </linearGradient>
+      <!-- dry -> damp -> wet sand, a real beach band above the waterline -->
+      <linearGradient id="sand" x1="0" y1="0" x2="0" y2="1">
+        <stop class="g0" offset="0%"/>
+        <stop class="g1" offset="55%"/>
+        <stop class="g2" offset="100%"/>
+      </linearGradient>
+      <radialGradient id="moonbeam" cx="50%" cy="42%" r="60%">
+        <stop class="g0" offset="0%"/>
+        <stop class="g0" offset="38%"/>
+        <stop class="g1" offset="100%"/>
+      </radialGradient>
+    </defs>
+
+    <!-- sand band catches the receding tide -->
+    <rect x="0" y="0" width="1440" height="200" fill="url(#sand)"/>
+
+    <!-- moonlight reflection (cx set by JS to sit under the moon; night only) -->
+    <ellipse id="moonlight" cx="720" cy="150" rx="60" ry="58" fill="url(#moonbeam)" opacity="0"/>
+
+    <g class="tide-water">
+      <g class="tide-layer-a">
+        <path opacity="0.55" d="M-240,110 C -60,80 60,140 240,110 C 420,80 540,140 720,110 C 900,80 1020,140 1200,110 C 1380,80 1500,140 1680,110 L 1680,220 L -240,220 Z"/>
+      </g>
+      <g class="tide-layer-b">
+        <path fill="url(#water)" d="M-180,130 C 0,102 120,158 300,130 C 480,102 600,158 780,130 C 960,102 1080,158 1260,130 C 1440,102 1560,158 1740,130 L 1740,220 L -180,220 Z"/>
+      </g>
+      <g class="tide-foam">
+        <path fill="none" stroke-width="2.5" stroke-linecap="round" opacity="0.75" d="M-180,130 C 0,102 120,158 300,130 C 480,102 600,158 780,130 C 960,102 1080,158 1260,130 C 1440,102 1560,158 1740,130"/>
+      </g>
+    </g>
+  </svg>
+</div>
+
+<!-- ===================== PREVIEW PANEL (dev-only) ===================== -->
+<aside id="panel" aria-label="Preview controls">
+  <button class="collapse" title="collapse">–</button>
+  <h4>Time of day</h4>
+  <div class="body">
+    <div class="row">
+      <label>Hour: <span class="hourval" id="hourVal">–</span> · <span class="phase" id="phaseVal">–</span></label>
+      <input type="range" id="hour" min="0" max="23" step="1" value="10">
+      <div class="quick">
+        <button data-h="7">Dawn</button>
+        <button data-h="13">Day</button>
+        <button data-h="18">Dusk</button>
+        <button data-h="22">Night</button>
+      </div>
+    </div>
+    <div class="row">
+      <label>Follow real time</label>
+      <select id="live"><option value="0">Pinned (use slider)</option><option value="1">Live clock</option></select>
+    </div>
+    <div class="row">
+      <label>Font pairing</label>
+      <select id="font">
+        <option value="a">Cormorant Garamond / Inter</option>
+        <option value="b">Newsreader / Public Sans</option>
+        <option value="c">Instrument Serif / Geist</option>
+      </select>
+    </div>
+    <div class="note">Dev tool — not part of the shipped page. Drag to preview any hour.</div>
+  </div>
+</aside>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var NS = "http://www.w3.org/2000/svg";
+
+  // ---- ported from Juno motifs.tsx: hour source + 12-step sun/moon arc ----
+  function phaseFor(h) {
+    if (h >= 6 && h < 8)  return "dawn";
+    if (h >= 8 && h < 17) return "day";
+    if (h >= 17 && h < 19) return "dusk";
+    return "night";
+  }
+  // sky svg is 1440 x 460; give the arc room. horizon at y=300.
+  var CX = 720, ARC_RX = 620, ARC_RY = 220, ARC_BASE_Y = 300;
+  function at(i) {                                   // i = 0..11 along the arc
+    var a = Math.PI * (1 - i / 11);
+    return [Math.round(CX + ARC_RX * Math.cos(a)),
+            Math.round(ARC_BASE_Y - ARC_RY * Math.sin(a))];
+  }
+  function el(tag, attrs) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+
+  var celestial = document.getElementById("celestial");
+  var starsG    = document.getElementById("stars");
+  var moonBeam  = document.getElementById("moonlight");
+
+  // fixed star field (night only, fractional positions like Juno)
+  var STAR_POS = [[0.14,0.16],[0.24,0.30],[0.33,0.14],[0.46,0.24],[0.62,0.13],
+                  [0.72,0.28],[0.82,0.18],[0.90,0.32],[0.55,0.34],[0.08,0.36]];
+  function buildStars() {
+    starsG.innerHTML = "";
+    STAR_POS.forEach(function (p, k) {
+      var x = Math.round(p[0] * 1440), y = Math.round(p[1] * 300);
+      var r = k % 2 ? 3.4 : 2.2;
+      var g = el("g", { class: "star" });
+      g.appendChild(el("path", { class: "stroke", d: "M" + x + " " + (y - r) + " V" + (y + r) + " M" + (x - r) + " " + y + " H" + (x + r) }));
+      starsG.appendChild(g);
+    });
+  }
+  buildStars();
+
+  function render(h) {
+    var tod = phaseFor(h);
+    root.setAttribute("data-tod", tod);
+
+    var day = h >= 6 && h < 18;                       // Juno's day boolean
+    var idx = day ? h - 6 : ((h - 18 + 24) % 24);     // 0..11 position
+    var pt  = at(idx), bx = pt[0], by = pt[1];
+
+    celestial.innerHTML = "";
+    if (day) {
+      // sun: disc + 8 engraved rays (scaled up from Juno's 10/14)
+      var g = el("g", { id: "sun-g", opacity: "0.95" });
+      g.appendChild(el("circle", { cx: bx, cy: by, r: 20, fill: "currentColor", stroke: "currentColor" }));
+      var rays = "";
+      for (var i = 0; i < 8; i++) {
+        var a = (i / 8) * Math.PI * 2, c = Math.cos(a), s = Math.sin(a);
+        rays += "M" + (bx + 26 * c).toFixed(1) + " " + (by + 26 * s).toFixed(1) +
+                "L" + (bx + 36 * c).toFixed(1) + " " + (by + 36 * s).toFixed(1) + " ";
+      }
+      g.appendChild(el("path", { d: rays, stroke: "currentColor", "stroke-width": 2, fill: "none", "stroke-linecap": "round" }));
+      celestial.appendChild(g);
+      starsG.style.display = "none";
+      moonBeam.style.opacity = 0;                       // no reflection by day
+    } else if (tod === "dusk") {
+      // dusk: moon is up but it's still light — draw the moon, skip the reflection
+      var Rd = 26;
+      var gd = el("g", { id: "moon-g", opacity: "0.95" });
+      var defsd = el("defs", {});
+      var maskd = el("mask", { id: "moonmask" });
+      maskd.appendChild(el("circle", { cx: bx, cy: by, r: Rd, fill: "#fff" }));
+      maskd.appendChild(el("circle", { cx: bx + 20, cy: by - 14, r: Rd, fill: "#000" }));
+      defsd.appendChild(maskd); gd.appendChild(defsd);
+      gd.appendChild(el("circle", { cx: bx, cy: by, r: Rd, fill: "currentColor", mask: "url(#moonmask)" }));
+      celestial.appendChild(gd);
+      starsG.style.display = "none";
+      moonBeam.style.opacity = 0;
+    } else {
+      // moon: two-circle mask crescent (Juno technique) + shift beam under it
+      var R = 26;
+      var g2 = el("g", { id: "moon-g", opacity: "0.95" });
+      var defs = el("defs", {});
+      var mask = el("mask", { id: "moonmask" });
+      mask.appendChild(el("circle", { cx: bx, cy: by, r: R, fill: "#fff" }));
+      mask.appendChild(el("circle", { cx: bx + 20, cy: by - 14, r: R, fill: "#000" }));
+      defs.appendChild(mask);
+      g2.appendChild(defs);
+      g2.appendChild(el("circle", { cx: bx, cy: by, r: R, fill: "currentColor", mask: "url(#moonmask)" }));
+      celestial.appendChild(g2);
+      starsG.style.display = "";
+      // moonlight glimmer tracks the moon's x on the tide (tide shares 0..1440 x)
+      moonBeam.setAttribute("cx", Math.max(90, Math.min(1350, bx)));
+      moonBeam.style.opacity = 1;
+    }
+    document.getElementById("hourVal").textContent = String(h).padStart(2, "0") + ":00";
+    document.getElementById("phaseVal").textContent = tod;
+  }
+
+  // ---- state: live clock vs pinned slider ----
+  function clockHour() { return new Date().getHours(); }
+  var live = false, timer = null;
+  var hourInput = document.getElementById("hour");
+
+  function tick() { if (live) render(clockHour()); }
+  function applyLive(on) {
+    live = on;
+    if (timer) { clearInterval(timer); timer = null; }
+    if (live) { render(clockHour()); timer = setInterval(tick, 60000); }
+    else { render(+hourInput.value); }
+  }
+
+  hourInput.addEventListener("input", function () { if (!live) render(+this.value); });
+  document.querySelectorAll("#panel .quick button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.getElementById("live").value = "0"; applyLive(false);
+      hourInput.value = this.dataset.h; render(+this.dataset.h);
+    });
+  });
+  document.getElementById("live").addEventListener("change", function () { applyLive(this.value === "1"); });
+  document.getElementById("font").addEventListener("change", function () { root.setAttribute("data-font", this.value); });
+  document.querySelector("#panel .collapse").addEventListener("click", function () {
+    var p = document.getElementById("panel"); p.classList.toggle("min");
+    this.textContent = p.classList.contains("min") ? "+" : "–";
+  });
+
+  // init: default font A, start pinned at the slider's value
+  root.setAttribute("data-font", "a");
+  render(+hourInput.value);
+})();
+</script>

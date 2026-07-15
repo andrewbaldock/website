@@ -1,0 +1,642 @@
+<!-- Celestial Silver — homepage mockup v01 for andrewbaldock.com -->
+<meta charset="utf-8">
+<title>Andrew Baldock — Senior React / TypeScript Engineer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ---------- tokens ---------- */
+  :root {
+    --platinum: #eef1f5;   /* ground */
+    --platinum-lo: #e5e9f0; /* slightly deeper ground for banding */
+    --silver: #c9cfda;     /* lines, hairlines */
+    --silver-soft: #d8dde6;
+    --ink: #1c2230;        /* cool ink text */
+    --ink-soft: #4a5266;   /* secondary text */
+    --ink-faint: #79839a;  /* captions */
+    --mint: #1fb6ad;       /* single accent */
+    --mint-deep: #178c85;
+    --periwinkle: #8ea2e6; /* faint stars */
+    --card: #f6f8fb;
+    --white: #fdfdff;
+    --radius: 18px;
+    --maxw: 1120px;
+    --ease: cubic-bezier(.22,.61,.36,1);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--platinum);
+    color: var(--ink);
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  /* soft celestial ground wash: coastal dawn */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(120% 80% at 78% -10%, rgba(142,162,230,.20), transparent 55%),
+      radial-gradient(90% 70% at 10% 8%, rgba(31,182,173,.10), transparent 50%),
+      radial-gradient(140% 120% at 50% 120%, rgba(214,190,224,.28), transparent 60%),
+      linear-gradient(180deg, var(--platinum), var(--platinum-lo));
+  }
+
+  a { color: inherit; }
+
+  :focus-visible {
+    outline: 2px solid var(--mint);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- nav ---------- */
+  .nav {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 26px 28px;
+    max-width: var(--maxw);
+    margin: 0 auto;
+  }
+  .mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 600;
+    font-size: 21px;
+    letter-spacing: .01em;
+    text-decoration: none;
+  }
+  .mark .glyph {
+    width: 26px; height: 26px;
+    flex: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: .04em;
+    color: var(--ink-soft);
+    position: relative;
+    padding: 4px 0;
+    transition: color .25s var(--ease);
+  }
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 100%;
+    bottom: -1px;
+    height: 1px;
+    background: var(--mint);
+    transition: right .3s var(--ease);
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a:hover::after { right: 0; }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    text-align: center;
+    padding: 84px 28px 30px;
+    overflow: visible;
+  }
+  .starfield {
+    position: absolute;
+    inset: -40px 0 auto 0;
+    width: 100%;
+    height: 620px;
+    z-index: 0;
+    pointer-events: none;
+    will-change: transform;
+  }
+  .hero-inner { position: relative; z-index: 2; }
+
+  .eyebrow {
+    font-size: 12.5px;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 600;
+    margin: 0 0 26px;
+  }
+  .eyebrow .dot {
+    display: inline-block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--mint);
+    vertical-align: middle;
+    margin: 0 10px 2px;
+  }
+
+  .hero h1 {
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 600;
+    font-size: clamp(52px, 11vw, 128px);
+    line-height: .96;
+    letter-spacing: -.01em;
+    margin: 0 0 22px;
+    color: var(--ink);
+  }
+  .hero h1 .amp {
+    display: block;
+    font-size: .82em;
+  }
+
+  .tagline {
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(22px, 3.4vw, 32px);
+    line-height: 1.3;
+    color: var(--ink-soft);
+    max-width: 22ch;
+    margin: 0 auto 26px;
+  }
+  .tagline em { color: var(--mint-deep); font-style: italic; }
+
+  .positioning {
+    max-width: 52ch;
+    margin: 0 auto;
+    font-size: 16.5px;
+    color: var(--ink-soft);
+  }
+
+  .hero-cta {
+    margin-top: 38px;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    text-decoration: none;
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    padding: 13px 24px;
+    border-radius: 999px;
+    transition: transform .25s var(--ease), box-shadow .3s var(--ease), background .25s var(--ease);
+  }
+  .btn-primary {
+    background: var(--mint);
+    color: #04302c;
+    box-shadow: 0 8px 22px -8px rgba(31,182,173,.6);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -10px rgba(31,182,173,.7); }
+  .btn-ghost {
+    background: rgba(255,255,255,.5);
+    color: var(--ink);
+    border: 1px solid var(--silver);
+  }
+  .btn-ghost:hover { transform: translateY(-2px); border-color: var(--mint); }
+  .btn .arrow { transition: transform .25s var(--ease); }
+  .btn:hover .arrow { transform: translateX(3px); }
+
+  /* ---------- linkage: constellation descends into work ---------- */
+  .linkage {
+    display: block;
+    width: 100%;
+    max-width: var(--maxw);
+    margin: 0 auto;
+    height: 150px;
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+    margin-top: -6px;
+  }
+
+  /* ---------- work ---------- */
+  .work {
+    position: relative;
+    z-index: 2;
+    padding: 4px 28px 96px;
+    max-width: var(--maxw);
+    margin: 0 auto;
+  }
+  .work-head {
+    text-align: center;
+    margin-bottom: 46px;
+  }
+  .section-label {
+    font-size: 12.5px;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 600;
+    margin: 0 0 12px;
+  }
+  .work-head h2 {
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 600;
+    font-size: clamp(30px, 5vw, 46px);
+    margin: 0;
+    line-height: 1.1;
+  }
+  .work-head p {
+    margin: 12px auto 0;
+    max-width: 46ch;
+    color: var(--ink-soft);
+    font-size: 16px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 26px;
+    align-items: stretch;
+  }
+
+  .card {
+    position: relative;
+    background: linear-gradient(180deg, var(--white), var(--card));
+    border: 1px solid var(--silver-soft);
+    border-radius: var(--radius);
+    padding: 30px 28px 26px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 18px 40px -30px rgba(28,34,48,.4);
+    transition: transform .4s var(--ease), box-shadow .4s var(--ease), border-color .4s var(--ease);
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    border-color: var(--mint);
+    box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 30px 55px -30px rgba(28,34,48,.5);
+  }
+  /* the "star" node crowning each card, where the constellation line lands */
+  .card .star {
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px; height: 14px;
+  }
+  .card .star::before {
+    content: "";
+    position: absolute; inset: 3px;
+    border-radius: 50%;
+    background: var(--mint);
+    box-shadow: 0 0 0 4px rgba(31,182,173,.16);
+  }
+
+  .card h3 {
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 600;
+    font-size: 30px;
+    margin: 6px 0 4px;
+    letter-spacing: -.005em;
+  }
+  .card .kicker {
+    font-size: 12px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--mint-deep);
+    font-weight: 600;
+    margin: 0;
+  }
+  .card p.desc {
+    color: var(--ink-soft);
+    font-size: 15.5px;
+    line-height: 1.6;
+    margin: 14px 0 22px;
+    flex: 1;
+  }
+  .card-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--silver-soft);
+  }
+  .card-links a {
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: .01em;
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color .2s var(--ease);
+  }
+  .card-links a .lk {
+    color: var(--mint-deep);
+    transition: transform .2s var(--ease);
+  }
+  .card-links a:hover { color: var(--mint-deep); }
+  .card-links a:hover .lk { transform: translate(2px,-2px); }
+  .card-links a.muted { color: var(--ink-faint); font-weight: 500; }
+  .card-links a.muted:hover { color: var(--ink); }
+
+  /* ---------- reveal ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity .8s var(--ease), transform .8s var(--ease);
+  }
+  .reveal.in { opacity: 1; transform: none; }
+  .d1 { transition-delay: .06s; }
+  .d2 { transition-delay: .16s; }
+  .d3 { transition-delay: .26s; }
+
+  /* ---------- footer ---------- */
+  .footer {
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid var(--silver);
+    padding: 46px 28px 60px;
+    max-width: var(--maxw);
+    margin: 0 auto;
+  }
+  .footer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 22px;
+  }
+  .footer .name {
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 600;
+    font-size: 24px;
+  }
+  .footer-links {
+    display: flex;
+    gap: 26px;
+    flex-wrap: wrap;
+  }
+  .footer-links a {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: .03em;
+    color: var(--ink-soft);
+    transition: color .2s var(--ease);
+  }
+  .footer-links a:hover { color: var(--mint-deep); }
+  .footer .fine {
+    margin-top: 30px;
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    letter-spacing: .02em;
+  }
+
+  /* ---------- ambient drift (signature motion) ---------- */
+  @keyframes drift {
+    0%   { transform: translate3d(0,0,0); }
+    50%  { transform: translate3d(-14px,-10px,0); }
+    100% { transform: translate3d(0,0,0); }
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: .35; }
+    50%     { opacity: .95; }
+  }
+  .constellation { animation: drift 26s ease-in-out infinite; transform-origin: center; }
+  .tw { animation: twinkle 5s ease-in-out infinite; }
+  .tw2 { animation: twinkle 7s ease-in-out infinite .8s; }
+  .tw3 { animation: twinkle 6s ease-in-out infinite 1.6s; }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 860px) {
+    .grid { grid-template-columns: 1fr; gap: 34px; }
+    .linkage { display: none; }
+    .work { padding-top: 26px; }
+    .card { padding-top: 34px; }
+  }
+  @media (max-width: 560px) {
+    body { font-size: 16px; }
+    .nav { padding: 20px 20px; flex-wrap: wrap; gap: 14px; }
+    .nav-links { gap: 20px; }
+    .hero { padding-top: 54px; }
+    .wrap, .work, .footer { padding-left: 20px; padding-right: 20px; }
+    .starfield { height: 480px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .constellation, .tw, .tw2, .tw3 { animation: none !important; }
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .starfield { transform: none !important; }
+    * { transition-duration: .001ms !important; }
+  }
+</style>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" aria-label="Primary">
+  <a class="mark" href="#top" aria-label="Andrew Baldock — home">
+    <svg class="glyph" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="10.5" stroke="#c9cfda"/>
+      <circle cx="12" cy="6" r="1.6" fill="#1fb6ad"/>
+      <circle cx="17" cy="14" r="1.4" fill="#8ea2e6"/>
+      <circle cx="7.5" cy="15.5" r="1.4" fill="#8ea2e6"/>
+      <path d="M12 6 L17 14 L7.5 15.5 Z" stroke="#1fb6ad" stroke-width=".8" opacity=".55"/>
+    </svg>
+    <span>Andrew Baldock</span>
+  </a>
+  <div class="nav-links">
+    <a href="#" >Résumé</a>
+    <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/andrewbaldock" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.youtube.com/" target="_blank" rel="noopener">YouTube</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="top">
+  <!-- signature: slow-drifting constellation -->
+  <svg class="starfield" viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <radialGradient id="starGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#1fb6ad" stop-opacity=".9"/>
+        <stop offset="100%" stop-color="#1fb6ad" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="lineFade" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#8ea2e6" stop-opacity=".55"/>
+        <stop offset="100%" stop-color="#1fb6ad" stop-opacity=".55"/>
+      </linearGradient>
+    </defs>
+    <g class="constellation">
+      <!-- constellation edges -->
+      <g stroke="url(#lineFade)" stroke-width="1" fill="none">
+        <path d="M150 120 L340 210"/>
+        <path d="M340 210 L520 96"/>
+        <path d="M520 96 L690 200"/>
+        <path d="M690 200 L880 130"/>
+        <path d="M880 130 L1050 240"/>
+        <path d="M340 210 L300 360"/>
+        <path d="M690 200 L720 380"/>
+        <path d="M880 130 L1010 60"/>
+        <path d="M520 96 L560 30"/>
+        <path d="M300 360 L520 420"/>
+        <path d="M720 380 L520 420"/>
+      </g>
+      <!-- faint periwinkle stars -->
+      <g fill="#8ea2e6">
+        <circle class="tw"  cx="150"  cy="120" r="2.1"/>
+        <circle class="tw2" cx="520"  cy="96"  r="2.6"/>
+        <circle class="tw3" cx="880"  cy="130" r="2.3"/>
+        <circle class="tw"  cx="1050" cy="240" r="1.9"/>
+        <circle class="tw2" cx="300"  cy="360" r="2"/>
+        <circle class="tw3" cx="1010" cy="60"  r="1.7"/>
+        <circle class="tw"  cx="560"  cy="30"  r="1.6"/>
+        <circle class="tw2" cx="120"  cy="300" r="1.5"/>
+        <circle class="tw3" cx="960"  cy="330" r="1.6"/>
+        <circle class="tw"  cx="430"  cy="470" r="1.5"/>
+        <circle class="tw2" cx="800"  cy="470" r="1.6"/>
+      </g>
+      <!-- mint anchor stars (brighter) -->
+      <g>
+        <circle cx="340" cy="210" r="12" fill="url(#starGlow)"/>
+        <circle cx="340" cy="210" r="3.1" fill="#1fb6ad"/>
+        <circle cx="690" cy="200" r="12" fill="url(#starGlow)"/>
+        <circle cx="690" cy="200" r="3.1" fill="#1fb6ad"/>
+        <circle cx="520" cy="420" r="10" fill="url(#starGlow)"/>
+        <circle cx="520" cy="420" r="2.7" fill="#1fb6ad"/>
+        <circle cx="720" cy="380" r="9"  fill="url(#starGlow)"/>
+        <circle cx="720" cy="380" r="2.4" fill="#1fb6ad"/>
+      </g>
+    </g>
+  </svg>
+
+  <div class="hero-inner">
+    <p class="eyebrow">Boss-level UI engineer <span class="dot"></span> IC or lead</p>
+    <h1>Andrew<span class="amp">Baldock</span></h1>
+    <p class="tagline">I build interfaces that feel <em>considered</em> — down to the last pixel.</p>
+    <p class="positioning">Senior React &amp; TypeScript engineer with ten years shipping polished product UI and the design systems that keep it coherent. Comfortable owning the whole surface, from the type scale to the state machine.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#work">See the work <span class="arrow" aria-hidden="true">↓</span></a>
+      <a class="btn btn-ghost" href="#" >Résumé <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</header>
+
+<!-- linkage: three lines descend from the hero constellation to the cards -->
+<svg class="linkage" viewBox="0 0 1120 150" preserveAspectRatio="none" aria-hidden="true">
+  <g fill="none" stroke="#c9cfda" stroke-width="1">
+    <path d="M560 0 C 300 40, 187 60, 187 150"/>
+    <path d="M560 0 C 560 60, 560 60, 560 150"/>
+    <path d="M560 0 C 820 40, 933 60, 933 150"/>
+  </g>
+  <circle cx="560" cy="2" r="3" fill="#1fb6ad"/>
+</svg>
+
+<!-- ============ WORK ============ -->
+<main class="work" id="work">
+  <div class="work-head reveal">
+    <p class="section-label">Selected work</p>
+    <h2>Three things worth opening</h2>
+    <p>Each one is live, each one is mine end to end — product thinking, the UI, and the system underneath.</p>
+  </div>
+
+  <div class="grid">
+    <!-- Juno -->
+    <article class="card reveal d1">
+      <span class="star" aria-hidden="true"></span>
+      <p class="kicker">Financial companion</p>
+      <h3>Juno</h3>
+      <p class="desc">A private financial companion for a single household. It models the whole money picture — accounts, plans, obligations — and answers what-ifs against your real numbers instead of averages. It even ships with its own public design system.</p>
+      <div class="card-links">
+        <a href="https://juno-demo.andrewbaldock.com" target="_blank" rel="noopener">Live demo <span class="lk" aria-hidden="true">↗</span></a>
+        <a href="https://juno.andrewbaldock.com/design" target="_blank" rel="noopener">Design system <span class="lk" aria-hidden="true">↗</span></a>
+        <a class="muted" href="https://github.com/andrewbaldock/juno-moneta" target="_blank" rel="noopener">Source</a>
+      </div>
+    </article>
+
+    <!-- Aether -->
+    <article class="card reveal d2">
+      <span class="star" aria-hidden="true"></span>
+      <p class="kicker">Conversational explorer</p>
+      <h3>Aether</h3>
+      <p class="desc">A conversational explorer that answers in a living knowledge-graph UI. Ask a question and the interface builds a map of the answer — nodes, links, and panels you can wander through — instead of a wall of text.</p>
+      <div class="card-links">
+        <a href="/aether">Case study <span class="lk" aria-hidden="true">→</span></a>
+        <a href="https://aether.andrewbaldock.com" target="_blank" rel="noopener">Live demo <span class="lk" aria-hidden="true">↗</span></a>
+      </div>
+    </article>
+
+    <!-- Magic Sticky -->
+    <article class="card reveal d3">
+      <span class="star" aria-hidden="true"></span>
+      <p class="kicker">MCP tooling</p>
+      <h3>Magic Sticky</h3>
+      <p class="desc">A frictionless sticky-note store that any AI assistant can read and write through MCP. One note stays the shared prompt, so every model you talk to inherits your current context without you re-explaining yourself.</p>
+      <div class="card-links">
+        <a href="/magicsticky">Case study <span class="lk" aria-hidden="true">→</span></a>
+      </div>
+    </article>
+  </div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-row">
+    <span class="name">Andrew Baldock</span>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/andrewbaldock" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.youtube.com/" target="_blank" rel="noopener">YouTube</a>
+      <a href="#" >Résumé</a>
+    </div>
+  </div>
+  <p class="fine">Senior React / TypeScript engineer · open to IC or lead roles · built on the California coast.</p>
+</footer>
+
+<script>
+  (function () {
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // scroll-reveal fade-up
+    var items = document.querySelectorAll(".reveal");
+    if ("IntersectionObserver" in window && !reduce) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
+      items.forEach(function (el) { io.observe(el); });
+    } else {
+      items.forEach(function (el) { el.classList.add("in"); });
+    }
+
+    // gentle parallax on the hero constellation
+    if (!reduce) {
+      var field = document.querySelector(".starfield");
+      var ticking = false;
+      window.addEventListener("scroll", function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () {
+          var y = window.scrollY || 0;
+          field.style.transform = "translate3d(0," + (y * 0.14) + "px,0)";
+          ticking = false;
+        });
+      }, { passive: true });
+    }
+  })();
+</script>

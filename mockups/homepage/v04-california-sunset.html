@@ -1,0 +1,593 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Andrew Baldock — Senior React/TypeScript Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --silver: #eceff3;
+    --silver-deep: #e2e6ec;
+    --silver-line: #d3d9e1;
+    --ink: #2a2436;
+    --ink-soft: #6a6379;
+    --mint: #1fb6ad;
+    --rose: #f2a7c4;
+    --lilac: #b48fd6;
+    --gold: #e8b96a;
+    --paper: #f6f7f9;
+    --shadow: 24px 36px 70px -40px rgba(42, 36, 54, 0.35);
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--silver);
+    color: var(--ink);
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  a { color: inherit; }
+
+  .wrap {
+    width: min(1120px, 100% - 48px);
+    margin-inline: auto;
+  }
+
+  ::selection { background: rgba(31, 182, 173, 0.22); }
+
+  :focus-visible {
+    outline: 2px solid var(--mint);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  /* ---------- Nav ---------- */
+  header {
+    position: relative;
+    z-index: 6;
+    padding-top: 28px;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .brand {
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .brand .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, var(--gold), var(--rose) 70%);
+    box-shadow: 0 0 0 4px rgba(242, 167, 196, 0.18);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--ink-soft);
+    padding: 8px 14px;
+    border-radius: 999px;
+    transition: color 0.3s var(--ease), background 0.3s var(--ease);
+  }
+
+  .nav-links a:hover { color: var(--ink); background: rgba(255, 255, 255, 0.6); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    padding-top: clamp(70px, 13vw, 150px);
+    padding-bottom: clamp(56px, 9vw, 110px);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* the signature: a single wide sunset horizon band with a low sun disc */
+  .horizon {
+    position: absolute;
+    inset: auto 0 0 0;
+    top: clamp(150px, 24vw, 260px);
+    height: clamp(260px, 40vw, 420px);
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  .horizon-band {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(236, 239, 243, 0) 0%,
+        rgba(242, 167, 196, 0.30) 34%,
+        rgba(180, 143, 214, 0.34) 60%,
+        rgba(232, 185, 106, 0.30) 84%,
+        rgba(236, 239, 243, 0) 100%
+      ),
+      linear-gradient(
+        95deg,
+        var(--rose) 0%,
+        var(--lilac) 46%,
+        var(--gold) 100%
+      );
+    background-size: 100% 100%, 220% 100%;
+    background-position: 0 0, 0% 0;
+    filter: saturate(0.92) blur(2px);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 74%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 74%, transparent 100%);
+    opacity: 0.9;
+    animation: drift 46s ease-in-out infinite alternate;
+  }
+
+  @keyframes drift {
+    to { background-position: 0 0, 100% 0; }
+  }
+
+  /* thin sun disc sitting low behind the name */
+  .sun {
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    width: clamp(220px, 30vw, 340px);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 46%,
+      rgba(255, 246, 233, 0.95) 0%,
+      rgba(244, 205, 152, 0.75) 34%,
+      rgba(232, 185, 106, 0.28) 58%,
+      rgba(232, 185, 106, 0) 72%);
+    filter: blur(0.4px);
+    z-index: -1;
+  }
+
+  /* the crisp thin rim that reads as a low disc, not a blob */
+  .sun::after {
+    content: "";
+    position: absolute;
+    inset: 26%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 249, 240, 0.9) 0%, rgba(250, 224, 186, 0.5) 60%, rgba(250, 224, 186, 0) 78%);
+    box-shadow: 0 0 44px 8px rgba(250, 220, 176, 0.35);
+  }
+
+  /* mint hairline horizon — the one small cool accent */
+  .horizon-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 62%;
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent, rgba(31, 182, 173, 0.55) 22%, rgba(31, 182, 173, 0.65) 50%, rgba(31, 182, 173, 0.55) 78%, transparent);
+    box-shadow: 0 0 12px rgba(31, 182, 173, 0.25);
+  }
+
+  .hero-inner { position: relative; text-align: center; }
+
+  .eyebrow {
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 26px;
+  }
+
+  .hero h1 {
+    font-family: "Fraunces", serif;
+    font-weight: 400;
+    font-size: clamp(58px, 12vw, 148px);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  .tagline {
+    font-family: "Fraunces", serif;
+    font-size: clamp(22px, 3.4vw, 34px);
+    font-weight: 500;
+    line-height: 1.28;
+    letter-spacing: -0.01em;
+    margin: 34px auto 0;
+    max-width: 20ch;
+    color: var(--ink);
+  }
+
+  .tagline em {
+    font-style: italic;
+    font-weight: 500;
+    background: linear-gradient(100deg, var(--rose), var(--lilac) 55%, var(--gold));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .positioning {
+    max-width: 44ch;
+    margin: 26px auto 0;
+    color: var(--ink-soft);
+    font-size: 16.5px;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 38px;
+    padding: 13px 24px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--paper);
+    background: var(--ink);
+    box-shadow: 0 14px 30px -14px rgba(42, 36, 54, 0.6);
+    transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  }
+
+  .hero-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 38px -14px rgba(42, 36, 54, 0.66);
+  }
+
+  .hero-cta .arrow { transition: transform 0.35s var(--ease); }
+  .hero-cta:hover .arrow { transform: translateX(4px); }
+
+  /* ---------- Work ---------- */
+  .work {
+    position: relative;
+    padding: clamp(64px, 9vw, 120px) 0 clamp(40px, 6vw, 80px);
+  }
+
+  .work-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 42px;
+  }
+
+  .work-head h2 {
+    font-family: "Fraunces", serif;
+    font-weight: 400;
+    font-size: clamp(30px, 5vw, 46px);
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .work-head h2 em { font-style: italic; color: var(--ink-soft); }
+
+  .work-head p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 15px;
+    max-width: 30ch;
+    text-align: right;
+  }
+
+  .cards {
+    display: grid;
+    gap: 22px;
+  }
+
+  .card {
+    position: relative;
+    background: var(--paper);
+    border: 1px solid var(--silver-line);
+    border-radius: 22px;
+    padding: 34px 34px 30px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.4s var(--ease), border-color 0.4s var(--ease);
+  }
+
+  /* a whisper of the sunset only on the featured card's top edge */
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--rose), var(--lilac) 52%, var(--gold));
+    opacity: 0;
+    transition: opacity 0.4s var(--ease);
+  }
+
+  .card:hover { transform: translateY(-4px); border-color: #c6cdd7; }
+  .card:hover::before { opacity: 1; }
+
+  .card-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  .card h3 {
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 27px;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  .kind {
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  .card p {
+    margin: 0 0 22px;
+    color: var(--ink-soft);
+    font-size: 15.5px;
+    max-width: 52ch;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--silver-line);
+    background: #fff;
+    transition: border-color 0.3s var(--ease), color 0.3s var(--ease), background 0.3s var(--ease);
+  }
+
+  .link svg { flex: none; }
+
+  .link:hover { border-color: var(--mint); color: var(--mint); }
+
+  .link.primary {
+    color: var(--paper);
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .link.primary:hover { color: var(--paper); background: #3a3348; border-color: #3a3348; }
+
+  .link .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--mint);
+    box-shadow: 0 0 0 3px rgba(31, 182, 173, 0.2);
+  }
+
+  @media (min-width: 760px) {
+    .cards { grid-template-columns: 1fr 1fr; }
+    .card.feature { grid-column: 1 / -1; }
+    .card.feature .card-top { align-items: flex-end; }
+    .card.feature h3 { font-size: 34px; }
+    .card.feature p { font-size: 16.5px; max-width: 60ch; }
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--silver-line);
+    margin-top: clamp(48px, 7vw, 90px);
+    padding: 46px 0 60px;
+  }
+
+  .foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .foot .name {
+    font-family: "Fraunces", serif;
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .foot-links { display: flex; gap: 4px; flex-wrap: wrap; }
+
+  .foot-links a {
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 13px;
+    border-radius: 999px;
+    transition: color 0.3s var(--ease), background 0.3s var(--ease);
+  }
+
+  .foot-links a:hover { color: var(--ink); background: rgba(255, 255, 255, 0.7); }
+
+  /* ---------- Reveal ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .horizon-band { animation: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    * { transition-duration: 0.001ms !important; }
+  }
+</style>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="Andrew Baldock, home"><span class="dot" aria-hidden="true"></span>AB</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/resume.pdf">Résumé</a>
+      <a href="https://www.linkedin.com/in/andrewbaldock" rel="me">LinkedIn</a>
+      <a href="https://github.com/andrewbaldock" rel="me">GitHub</a>
+      <a href="https://www.youtube.com/@andrewbaldock" rel="me">YouTube</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="horizon" aria-hidden="true">
+      <div class="horizon-band"></div>
+      <div class="sun"></div>
+      <div class="horizon-line"></div>
+    </div>
+
+    <div class="wrap hero-inner">
+      <p class="eyebrow">Boss-level UI engineer</p>
+      <h1>Andrew Baldock</h1>
+      <p class="tagline">React interfaces built for their <em>golden hour</em>.</p>
+      <p class="positioning">
+        Senior React/TypeScript engineer with ten years shipping polished product UI and
+        the design systems underneath it. Open to a staff-level IC seat or leading a team.
+      </p>
+      <a class="hero-cta" href="#work">
+        See the work
+        <svg class="arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M2 8h11M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <section class="work" id="work">
+    <div class="wrap">
+      <div class="work-head reveal">
+        <h2>Selected <em>work</em></h2>
+        <p>Products shipped end to end — the interface and the system beneath it.</p>
+      </div>
+
+      <div class="cards">
+        <!-- Juno: featured -->
+        <article class="card feature reveal">
+          <div class="card-top">
+            <h3>Juno</h3>
+            <span class="kind">Product · Design system</span>
+          </div>
+          <p>
+            A private household financial companion. Juno holds the whole money picture in one
+            calm place, lets you run what-ifs on real decisions, and ships its own public design
+            system — the language of the product, documented in the open.
+          </p>
+          <div class="links">
+            <a class="link primary" href="https://juno-demo.andrewbaldock.com"><span class="live-dot" aria-hidden="true"></span>Live demo</a>
+            <a class="link" href="https://juno.andrewbaldock.com/design">Design system</a>
+            <a class="link" href="https://github.com/andrewbaldock/juno-moneta">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+              Source
+            </a>
+          </div>
+        </article>
+
+        <!-- Aether -->
+        <article class="card reveal">
+          <div class="card-top">
+            <h3>Aether</h3>
+            <span class="kind">Product · Data UI</span>
+          </div>
+          <p>
+            A conversational explorer that answers in structure, not walls of text — laying out
+            a live knowledge-graph UI you can steer as the conversation unfolds.
+          </p>
+          <div class="links">
+            <a class="link" href="/aether">Case study</a>
+            <a class="link primary" href="https://aether.andrewbaldock.com"><span class="live-dot" aria-hidden="true"></span>Live demo</a>
+          </div>
+        </article>
+
+        <!-- Magic Sticky -->
+        <article class="card reveal">
+          <div class="card-top">
+            <h3>Magic Sticky</h3>
+            <span class="kind">Tooling · MCP</span>
+          </div>
+          <p>
+            A frictionless sticky-note store that every one of your AI assistants can read and
+            write through MCP — shared context, kept as simple as a note on the fridge.
+          </p>
+          <div class="links">
+            <a class="link" href="/magicsticky">Case study</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="name">Andrew Baldock</span>
+    <nav class="foot-links" aria-label="Elsewhere">
+      <a href="https://www.linkedin.com/in/andrewbaldock" rel="me">LinkedIn</a>
+      <a href="https://github.com/andrewbaldock" rel="me">GitHub</a>
+      <a href="https://www.youtube.com/@andrewbaldock" rel="me">YouTube</a>
+      <a href="/resume.pdf">Résumé</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var items = document.querySelectorAll(".reveal");
+    if (reduce || !("IntersectionObserver" in window)) {
+      items.forEach(function (el) { el.classList.add("in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>

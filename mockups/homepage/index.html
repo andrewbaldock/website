@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>andrewbaldock.com — Homepage Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --page: #eef1f5; --card: #ffffff; --ink: #1c2230; --muted: #5d6675;
+    --line: #d8dde5; --mint: #1fb6ad; --mint-ink: #0c756e;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  header { max-width: 1200px; margin: 0 auto; padding: 56px 28px 12px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--mint-ink); margin: 0; }
+  h1 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; font-size: clamp(34px, 5vw, 52px); line-height: 1.05; margin: 6px 0 10px; }
+  .sub { color: var(--muted); max-width: 60ch; font-size: 15px; line-height: 1.6; margin: 0; }
+  .grid { max-width: 1200px; margin: 0 auto; padding: 32px 28px 80px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 26px; }
+  .card { display: block; text-decoration: none; color: inherit; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--card); transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 18px 44px rgba(28,34,48,.14); border-color: var(--mint); }
+  .card:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+  .frame { position: relative; height: 240px; overflow: hidden; border-bottom: 1px solid var(--line); background: #f4f6f9; }
+  .frame iframe { position: absolute; top: 0; left: 0; width: 1280px; height: 800px; border: 0; transform: scale(.3125); transform-origin: top left; pointer-events: none; }
+  .meta { padding: 14px 16px 18px; }
+  .row { display: flex; align-items: baseline; gap: 10px; }
+  .num { font-family: "Cormorant Garamond", serif; font-size: 22px; font-weight: 600; color: var(--mint-ink); line-height: 1; }
+  .name { font-weight: 600; font-size: 15.5px; }
+  .desc { color: var(--muted); font-size: 13px; line-height: 1.5; margin: 6px 0 0; }
+  footer { max-width: 1200px; margin: 0 auto; padding: 0 28px 60px; color: var(--muted); font-size: 13px; }
+  @media (prefers-reduced-motion: reduce) { .card { transition: none; } }
+</style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Rebrand · Homepage Directions</p>
+    <h1>Fifteen ways home</h1>
+    <p class="sub">Silver-forward, coastal-celestial explorations for andrewbaldock.com — each a distinct art direction on the same palette (silver · mint · coast), built to complement Juno. Click any card to open it full-screen; motion is faked in CSS so nothing needs a build. Pick a favorite, or elements to graft into a hybrid.</p>
+  </header>
+  <main class="grid" id="grid"></main>
+  <footer>Local mockups · <code>~/Code/website/mockups/homepage/</code> · see the handoff doc for the plan.</footer>
+  <script>
+    const variants = [
+      ["v01-celestial-silver.html", "Celestial Silver", "Platinum ground, a drifting constellation, one mint accent — the literal read of a clean celestial mind."],
+      ["v02-golden-gate-dawn.html", "Golden Gate Dawn", "The bridge as line-art in daytime sunrise fog — silver → peach → periwinkle."],
+      ["v03-spa-aquatic-calm.html", "Spa / Aquatic Calm", "Mint + silver + water caustics; huge whitespace. A deep breath."],
+      ["v04-california-sunset.html", "California Sunset", "A restrained rose → lilac → gold horizon band over calm silver."],
+      ["v05-silver-editorial.html", "Silver Editorial", "The Juno-complement: Cormorant masthead, mint + gold hairlines, coin mark."],
+      ["v06-frosted-glass-coast.html", "Frosted Glass Coast", "Tasteful glassmorphism — frosted silver panels over a soft daytime coast."],
+      ["v07-aurora-mint.html", "Aurora Mint", "A slow mint → aqua → lilac aurora behind the name. Motion centerpiece."],
+      ["v08-tide-line.html", "Tide Line", "Beachy minimal — a single animated shoreline wave at the fold."],
+      ["v09-duotone-bridge.html", "Duotone Bridge", "The bridge as silver → mint duotone with architect's annotations."],
+      ["v10-platinum-monochrome.html", "Platinum Monochrome", "Near-greyscale, ultra-minimal; one mint hairline threads the page."],
+      ["v11-celestial-dark.html", "Celestial Dark", "Keeps dark, but elegant — deep slate, silver, a quiet star map. Not disco."],
+      ["v12-sunrise-split.html", "Sunrise Split", "A hard split — warm sunrise panel beside calm silver work."],
+      ["v13-sea-glass.html", "Sea Glass", "Translucent mint/aqua/rose sea-glass shapes drifting on silver. Spa-like."],
+      ["v14-coastal-luxe-serif.html", "Coastal Luxe Serif", "Fashion-house restraint — oversized serif, thin gold + mint rules."],
+      ["v15-mind-constellation.html", "Mind Constellation", "Projects as draggable star-nodes on silver lines — the celestial mind, playable."],
+    ];
+    const grid = document.getElementById("grid");
+    variants.forEach(([file, name, desc], i) => {
+      const a = document.createElement("a");
+      a.className = "card"; a.href = file; a.target = "_blank"; a.rel = "noopener";
+      const n = String(i + 1).padStart(2, "0");
+      a.innerHTML =
+        '<div class="frame"><iframe src="' + file + '" loading="lazy" title="' + name + ' preview" tabindex="-1" scrolling="no"></iframe></div>' +
+        '<div class="meta"><div class="row"><span class="num">' + n + '</span><span class="name">' + name + '</span></div>' +
+        '<p class="desc">' + desc + '</p></div>';
+      grid.appendChild(a);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Andrew Baldock — UI Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --silver:#e9ecf0;
+    --silver-2:#f4f6f9;
+    --teal:#0c756e;
+    --aqua:#7fd8d0;
+    --mint:#1fb6ad;
+    --ink:#14202a;
+    --ink-2:#1c2b38;
+    --gold:#b98a2e;
+    --line:#c8d1da;
+    --muted:#5c6b78;
+    --muted-d:#8ea3b2;
+
+    --display:"Space Grotesk", system-ui, sans-serif;
+    --body:"Inter", system-ui, sans-serif;
+    --mono:"IBM Plex Mono", ui-monospace, monospace;
+
+    --wrap:1200px;
+    --pad:clamp(20px,5vw,64px);
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--silver);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+
+  a{color:inherit}
+  .wrap{max-width:var(--wrap);margin:0 auto;padding-inline:var(--pad)}
+
+  :focus-visible{outline:2px solid var(--mint);outline-offset:3px;border-radius:2px}
+
+  .mono{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:sticky;top:0;z-index:50;
+    background:transparent;
+    transition:background .35s ease, border-color .35s ease, backdrop-filter .35s ease;
+    border-bottom:1px solid transparent;
+  }
+  .nav.scrolled{
+    background:rgba(20,32,42,.86);
+    backdrop-filter:saturate(140%) blur(10px);
+    border-bottom:1px solid rgba(127,216,208,.18);
+  }
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .brand{display:flex;align-items:center;gap:10px;color:#eef3f6;text-decoration:none;font-family:var(--display);font-weight:600;letter-spacing:.02em}
+  .brand .mk{
+    width:26px;height:26px;flex:0 0 26px;border:1.5px solid var(--mint);border-radius:6px;
+    display:grid;place-items:center;font-size:.66rem;font-family:var(--mono);color:var(--aqua);letter-spacing:.02em;
+  }
+  .nav-links{display:flex;align-items:center;gap:6px}
+  .nav-links a{
+    color:#cdd8e0;text-decoration:none;font-family:var(--mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;
+    padding:9px 12px;border-radius:6px;transition:color .2s ease, background .2s ease;
+  }
+  .nav-links a:hover{color:#fff;background:rgba(127,216,208,.1)}
+  .nav-links a.res{color:var(--ink);background:var(--aqua)}
+  .nav-links a.res:hover{background:#9fe4dd;color:var(--ink)}
+  @media (max-width:620px){
+    .nav-links a{padding:8px 7px;font-size:.62rem;letter-spacing:.06em}
+    .brand-name{display:none}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    background:
+      radial-gradient(120% 90% at 78% 8%, rgba(31,182,173,.16), transparent 55%),
+      radial-gradient(90% 80% at 8% 0%, rgba(127,216,208,.08), transparent 50%),
+      linear-gradient(180deg,#14202a 0%, #16242f 60%, #182833 100%);
+    color:#eaf1f4;
+    overflow:hidden;
+    border-bottom:1px solid rgba(127,216,208,.14);
+  }
+  .hero-in{padding-top:clamp(48px,7vw,84px)}
+  .eyebrow{color:var(--aqua);display:flex;align-items:center;gap:12px}
+  .eyebrow .tick{width:26px;height:1px;background:var(--gold);display:inline-block}
+  h1{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:clamp(2.9rem,9.2vw,7.4rem);
+    line-height:.94;
+    letter-spacing:-.02em;
+    margin:.28em 0 0;
+    color:#f3f7f9;
+  }
+  .tagline{
+    font-family:var(--display);font-weight:400;
+    font-size:clamp(1.15rem,2.6vw,1.7rem);
+    line-height:1.28;color:#d3e0e6;max-width:23ch;margin:.9rem 0 0;letter-spacing:-.01em;
+  }
+  .position{
+    color:var(--muted-d);max-width:52ch;margin:1.1rem 0 0;font-size:1.02rem;line-height:1.6;
+  }
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin:1.9rem 0 0}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;text-decoration:none;
+    font-family:var(--mono);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;
+    padding:13px 20px;border-radius:8px;transition:transform .18s ease, background .2s ease, border-color .2s ease;
+  }
+  .btn .arw{transition:transform .2s ease}
+  .btn:hover .arw{transform:translateX(3px)}
+  .btn-primary{background:var(--mint);color:#08201e;font-weight:500}
+  .btn-primary:hover{background:#2ccabf}
+  .btn-ghost{border:1px solid rgba(127,216,208,.4);color:#dbe7ec}
+  .btn-ghost:hover{border-color:var(--aqua);background:rgba(127,216,208,.08)}
+
+  /* ---------- BRIDGE BAND ---------- */
+  .band{position:relative;margin-top:clamp(28px,4vw,48px)}
+  .band svg{display:block;width:100%;height:auto}
+
+  /* structural elements */
+  .struct{fill:none;stroke:url(#duo);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .struct-thin{fill:none;stroke:url(#duo);stroke-width:1.3;stroke-linecap:round;opacity:.92}
+  .deck{fill:none;stroke:url(#duo);stroke-width:3;stroke-linecap:round}
+  .anchor{fill:#243544;stroke:url(#duo);stroke-width:1.6}
+  .waterline{fill:none;stroke:var(--mint);stroke-width:1;stroke-dasharray:2 7;opacity:.4}
+
+  /* annotation (draw-on) */
+  .anno{fill:none;stroke:var(--mint);stroke-width:1;stroke-linecap:round;
+    stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset 1.15s cubic-bezier(.65,.02,.28,1)}
+  .anno.gold{stroke:var(--gold)}
+  .drawn .anno{stroke-dashoffset:0}
+  .anno-t{fill:var(--muted-d);font-family:var(--mono);font-size:12.5px;letter-spacing:.13em;
+    opacity:0;transition:opacity .5s ease .35s}
+  .anno-t.g{fill:var(--gold);opacity:0}
+  .drawn .anno-t{opacity:.92}
+  .drawn .anno-t.g{opacity:1}
+
+  /* stagger */
+  .a2 .anno{transition-delay:.28s}
+  .a3 .anno{transition-delay:.52s}
+  .a4 .anno{transition-delay:.76s}
+  .a2 .anno-t{transition-delay:.7s}
+  .a3 .anno-t{transition-delay:.95s}
+  .a4 .anno-t{transition-delay:1.15s}
+
+  /* title block */
+  .tb-box{fill:none;stroke:var(--line);stroke-width:1;opacity:.55}
+  .tb-gold{stroke:var(--gold);stroke-width:2}
+  .tb-t{fill:#b7c6d1;font-family:var(--mono);font-size:12.5px;letter-spacing:.1em}
+  .tb-t.head{fill:#eaf1f4;font-size:13.5px;letter-spacing:.06em}
+
+  /* mint scan */
+  .scan{mix-blend-mode:screen;animation:scan 7s cubic-bezier(.5,0,.5,1) infinite alternate}
+  @keyframes scan{from{transform:translateX(-120px)}to{transform:translateX(1130px)}}
+
+  @media (prefers-reduced-motion:reduce){
+    .anno{transition:none;stroke-dashoffset:0}
+    .anno-t{transition:none;opacity:.92}
+    .anno-t.g{opacity:1}
+    .scan{display:none}
+    .btn,.card,.card a{transition:none}
+  }
+
+  /* ---------- WORK ---------- */
+  .work{padding:clamp(64px,9vw,120px) 0 clamp(48px,7vw,88px)}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:24px;flex-wrap:wrap;
+    padding-bottom:26px;border-bottom:1px solid var(--line)}
+  .sec-head .k{color:var(--teal)}
+  .sec-head h2{font-family:var(--display);font-weight:500;font-size:clamp(1.5rem,3.4vw,2.25rem);
+    letter-spacing:-.02em;margin:0;line-height:1.1;max-width:16ch}
+  .sec-head .count{color:var(--muted);font-family:var(--mono);font-size:.72rem;letter-spacing:.14em}
+
+  .cards{margin-top:2px}
+  .card{
+    display:grid;grid-template-columns:150px 1fr minmax(180px,auto);gap:clamp(20px,4vw,54px);
+    align-items:start;padding:clamp(30px,4vw,46px) 0;border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  .card::before{
+    content:"";position:absolute;left:0;top:-1px;height:2px;width:0;background:var(--mint);
+    transition:width .5s cubic-bezier(.5,0,.28,1);
+  }
+  .card:hover::before{width:150px}
+  .card .idx{font-family:var(--mono);font-size:.74rem;letter-spacing:.12em;color:var(--muted)}
+  .card .idx b{display:block;color:var(--teal);font-weight:500;font-size:1.5rem;letter-spacing:.02em;
+    font-family:var(--display);margin-bottom:10px;line-height:1}
+  .card h3{font-family:var(--display);font-weight:600;font-size:clamp(1.5rem,3vw,2rem);
+    letter-spacing:-.02em;margin:0;line-height:1.05}
+  .card .desc{color:var(--muted);margin:.6rem 0 0;max-width:46ch;font-size:1.02rem}
+  .card .meta{margin-top:1rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.13em;
+    text-transform:uppercase;color:#7f909e}
+  .links{display:flex;flex-direction:column;gap:2px}
+  .links a{
+    display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);
+    font-family:var(--mono);font-size:.76rem;letter-spacing:.06em;padding:9px 0;
+    border-top:1px solid var(--line);transition:color .2s ease, padding-left .2s ease;
+  }
+  .links a:first-child{border-top:0}
+  .links a .dot{width:5px;height:5px;border-radius:50%;background:var(--mint);flex:0 0 5px;transition:transform .2s ease}
+  .links a .ex{margin-left:auto;color:var(--muted);transition:transform .2s ease, color .2s ease}
+  .links a:hover{color:var(--teal);padding-left:6px}
+  .links a:hover .ex{transform:translate(2px,-2px);color:var(--teal)}
+
+  @media (max-width:820px){
+    .card{grid-template-columns:1fr;gap:14px}
+    .card .idx{display:flex;align-items:baseline;gap:14px}
+    .card .idx b{margin-bottom:0}
+    .links{margin-top:8px}
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--ink);color:#cdd8e0;padding:clamp(48px,7vw,84px) 0}
+  .foot-in{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap}
+  .foot-name{font-family:var(--display);font-weight:600;font-size:clamp(1.6rem,4vw,2.4rem);
+    color:#f1f6f8;letter-spacing:-.02em;line-height:1}
+  .foot-name span{display:block;color:var(--aqua);font-family:var(--mono);font-size:.7rem;
+    letter-spacing:.16em;text-transform:uppercase;margin-top:12px;font-weight:400}
+  .foot-links{display:flex;gap:8px;flex-wrap:wrap}
+  .foot-links a{color:#cdd8e0;text-decoration:none;font-family:var(--mono);font-size:.74rem;
+    letter-spacing:.1em;text-transform:uppercase;padding:10px 14px;border:1px solid rgba(127,216,208,.22);
+    border-radius:7px;transition:border-color .2s ease, color .2s ease, background .2s ease}
+  .foot-links a:hover{border-color:var(--aqua);color:#fff;background:rgba(127,216,208,.08)}
+  .foot-rule{height:1px;background:rgba(127,216,208,.16);margin:clamp(32px,5vw,56px) 0 24px}
+  .foot-fine{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    color:#7f909e;font-family:var(--mono);font-size:.68rem;letter-spacing:.1em}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="Andrew Baldock — home">
+      <span class="mk">AB</span>
+      <span class="brand-name">Andrew Baldock</span>
+    </a>
+    <div class="nav-links">
+      <a class="res" href="/resume.pdf">Résumé</a>
+      <a href="https://www.linkedin.com/in/andrewbaldock">LinkedIn</a>
+      <a href="https://github.com/andrewbaldock">GitHub</a>
+      <a href="https://www.youtube.com/@andrewbaldock">YouTube</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-in">
+    <div class="eyebrow mono"><span class="tick"></span>UI Engineer · React / TypeScript · Est. 2016</div>
+    <h1>Andrew&nbsp;Baldock</h1>
+    <p class="tagline">UI engineered like a bridge — precise, load-bearing, built to last.</p>
+    <p class="position">Senior React and TypeScript engineer specializing in polished product UI and design systems. Ten years shipping. Open to IC or lead roles.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#work">See the work <span class="arw">→</span></a>
+      <a class="btn btn-ghost" href="/resume.pdf">Résumé</a>
+    </div>
+  </div>
+
+  <!-- ---------- SIGNATURE: DUOTONE BRIDGE ---------- -->
+  <div class="wrap">
+    <div class="band" id="band">
+      <svg viewBox="0 0 1200 440" role="img" aria-labelledby="bridge-title bridge-desc" preserveAspectRatio="xMidYMid meet">
+        <title id="bridge-title">Suspension bridge rendered as a silver-to-mint architect's drawing</title>
+        <desc id="bridge-desc">A duotone Golden Gate–style bridge with blueprint annotation lines, dimension marks and mono labels, standing as the signature of a UI engineer's portfolio.</desc>
+
+        <defs>
+          <linearGradient id="duo" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#c9d3dd"/>
+            <stop offset=".45" stop-color="#4fb3ab"/>
+            <stop offset="1" stop-color="#7fd8d0"/>
+          </linearGradient>
+          <linearGradient id="scanfade" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#7fd8d0" stop-opacity="0"/>
+            <stop offset=".5" stop-color="#7fd8d0" stop-opacity=".55"/>
+            <stop offset="1" stop-color="#7fd8d0" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+
+        <!-- waterline -->
+        <line class="waterline" x1="60" y1="362" x2="1140" y2="362"/>
+
+        <!-- anchorages -->
+        <rect class="anchor" x="112" y="296" width="18" height="18" rx="2"/>
+        <rect class="anchor" x="1070" y="296" width="18" height="18" rx="2"/>
+
+        <!-- side-span cables -->
+        <path class="struct-thin" d="M121,300 Q250,246 380,90"/>
+        <path class="struct-thin" d="M1079,300 Q950,246 820,90"/>
+
+        <!-- main cable (catenary) -->
+        <path class="struct" d="M380,90 Q600,370 820,90"/>
+
+        <!-- suspender cables -->
+        <g class="struct-thin">
+          <line x1="424" y1="140" x2="424" y2="340"/>
+          <line x1="468" y1="180" x2="468" y2="340"/>
+          <line x1="512" y1="208" x2="512" y2="340"/>
+          <line x1="556" y1="224" x2="556" y2="340"/>
+          <line x1="600" y1="230" x2="600" y2="340"/>
+          <line x1="644" y1="224" x2="644" y2="340"/>
+          <line x1="688" y1="208" x2="688" y2="340"/>
+          <line x1="732" y1="180" x2="732" y2="340"/>
+          <line x1="776" y1="140" x2="776" y2="340"/>
+        </g>
+
+        <!-- deck -->
+        <line class="deck" x1="121" y1="340" x2="1079" y2="340"/>
+        <line class="struct-thin" x1="130" y1="345" x2="1070" y2="345"/>
+
+        <!-- towers -->
+        <g class="struct">
+          <!-- left tower -->
+          <line x1="373" y1="80" x2="373" y2="360"/>
+          <line x1="387" y1="80" x2="387" y2="360"/>
+          <line x1="367" y1="84" x2="393" y2="84"/>
+          <line x1="366" y1="340" x2="394" y2="340"/>
+          <line x1="368" y1="215" x2="392" y2="215"/>
+          <path d="M373,215 L387,340 M387,215 L373,340" stroke-width="1.3"/>
+          <path d="M373,90 L387,215 M387,90 L373,215" stroke-width="1.3"/>
+          <!-- right tower -->
+          <line x1="813" y1="80" x2="813" y2="360"/>
+          <line x1="827" y1="80" x2="827" y2="360"/>
+          <line x1="807" y1="84" x2="833" y2="84"/>
+          <line x1="806" y1="340" x2="834" y2="340"/>
+          <line x1="808" y1="215" x2="832" y2="215"/>
+          <path d="M813,215 L827,340 M827,215 L813,340" stroke-width="1.3"/>
+          <path d="M813,90 L827,215 M827,90 L813,215" stroke-width="1.3"/>
+        </g>
+
+        <!-- ======== ANNOTATIONS (draw-on) ======== -->
+
+        <!-- 1: main-span dimension -->
+        <g class="a1">
+          <path class="anno" pathLength="100" d="M380,362 L380,400"/>
+          <path class="anno" pathLength="100" d="M820,362 L820,400"/>
+          <path class="anno" pathLength="100" d="M386,396 L814,396"/>
+          <path class="anno gold" pathLength="100" d="M392,392 L386,396 L392,400"/>
+          <path class="anno gold" pathLength="100" d="M808,392 L814,396 L808,400"/>
+          <text class="anno-t" x="600" y="416" text-anchor="middle">MAIN SPAN — 1 280 m</text>
+        </g>
+
+        <!-- 2: tower height dimension -->
+        <g class="a2">
+          <path class="anno" pathLength="100" d="M373,90 L338,90"/>
+          <path class="anno" pathLength="100" d="M373,340 L338,340"/>
+          <path class="anno" pathLength="100" d="M342,96 L342,334"/>
+          <path class="anno gold" pathLength="100" d="M338,102 L342,96 L346,102"/>
+          <path class="anno gold" pathLength="100" d="M338,328 L342,334 L346,328"/>
+          <text class="anno-t g" x="330" y="215" text-anchor="middle" transform="rotate(-90 330 215)">TOWER 227 m</text>
+        </g>
+
+        <!-- 3: main cable leader -->
+        <g class="a3">
+          <path class="anno" pathLength="100" d="M694,206 L742,150 L840,150"/>
+          <circle cx="694" cy="206" r="2.4" fill="#1fb6ad"/>
+          <text class="anno-t" x="846" y="146">MAIN CABLE / CATENARY</text>
+        </g>
+
+        <!-- 4: suspenders leader -->
+        <g class="a4">
+          <path class="anno" pathLength="100" d="M556,300 L512,322 L392,322"/>
+          <circle cx="556" cy="300" r="2.4" fill="#1fb6ad"/>
+          <text class="anno-t" x="386" y="326" text-anchor="end">SUSPENDERS</text>
+        </g>
+
+        <!-- title block cartouche -->
+        <g>
+          <line class="tb-gold" x1="946" y1="372" x2="1140" y2="372"/>
+          <rect class="tb-box" x="946" y="372" width="194" height="58"/>
+          <line class="tb-box" x1="946" y1="391" x2="1140" y2="391"/>
+          <line class="tb-box" x1="946" y1="410" x2="1140" y2="410"/>
+          <text class="tb-t head" x="954" y="386">ANDREW BALDOCK</text>
+          <text class="tb-t" x="954" y="405">UI ENGINEER — REACT / TS</text>
+          <text class="tb-t" x="954" y="424">SHEET 01 · REV 2026</text>
+        </g>
+
+        <!-- mint scan -->
+        <rect class="scan" x="0" y="72" width="120" height="292" fill="url(#scanfade)" opacity=".22"/>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="work" id="work">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="mono k">Selected work</div>
+          <h2>Three things I designed and shipped end to end.</h2>
+        </div>
+        <div class="count">01–03 / BUILT 2025–26</div>
+      </div>
+
+      <div class="cards">
+
+        <!-- Juno -->
+        <article class="card">
+          <div class="idx"><b>01</b><span>Finance</span></div>
+          <div>
+            <h3>Juno</h3>
+            <p class="desc">A private household financial companion — your whole money picture in one place, what-if planning, and a public design system that grounds the aesthetic.</p>
+            <div class="meta">React · TypeScript · Supabase · Design System</div>
+          </div>
+          <div class="links">
+            <a href="https://juno-demo.andrewbaldock.com"><span class="dot"></span>Live demo<span class="ex">↗</span></a>
+            <a href="https://juno.andrewbaldock.com/design"><span class="dot"></span>Design system<span class="ex">↗</span></a>
+            <a href="https://github.com/andrewbaldock/juno-moneta"><span class="dot"></span>Source<span class="ex">↗</span></a>
+          </div>
+        </article>
+
+        <!-- Aether -->
+        <article class="card">
+          <div class="idx"><b>02</b><span>AI · Explorer</span></div>
+          <div>
+            <h3>Aether</h3>
+            <p class="desc">A conversational explorer with a knowledge-graph UI — ask a question, watch the answer compose itself into panels, charts, and an interactive graph.</p>
+            <div class="meta">React · SSE · Knowledge Graph · Tool-driven UI</div>
+          </div>
+          <div class="links">
+            <a href="/aether"><span class="dot"></span>Case study<span class="ex">↗</span></a>
+            <a href="https://aether.andrewbaldock.com"><span class="dot"></span>Live demo<span class="ex">↗</span></a>
+          </div>
+        </article>
+
+        <!-- Magic Sticky -->
+        <article class="card">
+          <div class="idx"><b>03</b><span>Tooling · MCP</span></div>
+          <div>
+            <h3>Magic Sticky</h3>
+            <p class="desc">A frictionless MCP sticky-note store — a small stack of living context notes every one of my agents can read and write, no setup required.</p>
+            <div class="meta">MCP · Bun · Hono · Model Context Protocol</div>
+          </div>
+          <div class="links">
+            <a href="/magicsticky"><span class="dot"></span>Case study<span class="ex">↗</span></a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-in">
+      <div class="foot-name">Andrew Baldock<span>Boss-level UI engineer · IC or lead</span></div>
+      <div class="foot-links">
+        <a href="https://www.linkedin.com/in/andrewbaldock">LinkedIn</a>
+        <a href="https://github.com/andrewbaldock">GitHub</a>
+        <a href="https://www.youtube.com/@andrewbaldock">YouTube</a>
+        <a href="/resume.pdf">Résumé</a>
+      </div>
+    </div>
+    <div class="foot-rule"></div>
+    <div class="foot-fine">
+      <span>DRAWN BY A. BALDOCK — 1:1 CRAFT</span>
+      <span>© 2026 · SAN FRANCISCO</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // nav background on scroll
+  var nav = document.getElementById('nav');
+  var onScroll = function(){ nav.classList.toggle('scrolled', window.scrollY > 24); };
+  onScroll();
+  window.addEventListener('scroll', onScroll, {passive:true});
+
+  // draw-on annotations when the bridge band enters view
+  var band = document.getElementById('band');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    band.classList.add('drawn');
+  } else if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ band.classList.add('drawn'); io.disconnect(); }
+      });
+    }, {threshold:0.25});
+    io.observe(band);
+  } else {
+    band.classList.add('drawn');
+  }
+</script>
+</body>
+</html>

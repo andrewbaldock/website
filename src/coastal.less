@@ -1,0 +1,613 @@
+// =============================================================================
+// COASTAL-CELESTIAL SYSTEM  (andrewbaldock.com rebrand — v09 Tide Line)
+// Ported from the design handoff (~/Code/design_handoff_coastal_rebrand).
+//
+// SCOPING: every rule here is gated to coastal pages only, so it can't touch the
+// still-old /resume, /aether, /magicsticky pages:
+//   - global element rules (body, a) are under `:root[data-tod]`
+//   - component rules live under the `.coastal` page wrapper
+// useTimeOfDay() sets `data-tod` on <html> while a coastal page is mounted and
+// removes it on unmount, so the old pages revert to their own styling.
+// =============================================================================
+
+// ---- tokens (custom props are inert until referenced, so global :root is safe) ----
+:root {
+  --mint:#1fb6ad; --mint-deep:#148f88; --aqua:#7fd8d0; --periwinkle:#8ea2e6;
+  --gold:#b98a2e; --sun:#dca43a; --moon:#aebfe8;
+
+  --bg:#f0ece4; --bg-2:#f6f8fb;
+  --ink:#2a2b28; --ink-soft:#5c5e57; --ink-faint:#8b8d84;
+  --surface:rgba(255,255,255,0.72); --surface-2:#eef4f2; --line:#d9d3c7;
+  --accent:var(--mint-deep);
+
+  --sky-a:#dfe7ee; --sky-b:#f0ece4;
+  --engrave:rgba(42,43,40,0.55); --engrave-soft:rgba(42,43,40,0.28);
+
+  --water-a:#7fd8d0; --water-b:#38bdb2; --water-c:#1fb6ad; --foam:#fbfaf7;
+  --sand-dry:#f0ece4; --sand-damp:#f1ede4; --sand-wet:#ece7dc;
+  --moonlight:transparent;
+
+  --f-display:"Cormorant Garamond",Georgia,serif;
+  --f-body:"Inter",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+
+  --maxw:1120px; --readw:760px;
+  --pad:clamp(1.25rem,5vw,4rem);
+  --tide-h:clamp(96px,12vw,150px);
+  --sky-transition:1.2s ease;
+}
+// A dusk-to-dark progression rather than one jump. The evening (golden → sunset
+// → dusk) stays a light theme with a warming, then pinking, then mauve sky; the
+// last two steps (twilight, night) flip to the dark theme, so night arrives in
+// stages. `predawn` is the morning's mirror of `twilight`. Each --sky-transition
+// crossfade overlaps the next as the eased hour drifts through the bands.
+
+// ---- morning ----
+:root[data-tod="predawn"]{ // dark, first cool lightening before sunrise
+  --bg:#1e2236; --bg-2:#242a42; --ink:#dbe0f0; --ink-soft:#a9b1c9; --ink-faint:#767f97;
+  --surface:rgba(34,40,62,0.60); --surface-2:#1d2236; --line:#333a54; --accent:#4fd3c8;
+  --sky-a:#2c3352; --sky-b:#1a2036;
+  --engrave:rgba(215,222,242,0.52); --engrave-soft:rgba(175,186,222,0.26);
+  --water-a:#2f5f72; --water-b:#1d4054; --water-c:#122a3e; --foam:#9fbccd;
+  --sand-dry:#1e2236; --sand-damp:#232842; --sand-wet:#29304c;
+  --moonlight:rgba(185,202,238,0.42);
+}
+:root[data-tod="dawn"]{ --bg:#f3ece9; --bg-2:#f8f2ef; --sky-a:#f9d7cf; --sky-b:#f0e6e4; --surface-2:#f4ede9; }
+
+// ---- evening (light theme, sky warms then pinks then goes mauve) ----
+:root[data-tod="golden"]{ --bg:#f4ece2; --bg-2:#f9f2e8; --sky-a:#ffdca6; --sky-b:#f6e2cf; --surface-2:#f3ece1; }
+:root[data-tod="sunset"]{ --bg:#f1e4e2; --bg-2:#f7e9e6; --sky-a:#ffb89e; --sky-b:#f4c3ce;
+  --water-a:#6fc9c6; --water-b:#4ea9bd; --water-c:#4d7fb0; --surface-2:#f3e7e4; }
+:root[data-tod="dusk"]{ --bg:#ddd6de; --bg-2:#e0d9e3; --sky-a:#dcb2bf; --sky-b:#bcb3d0;
+  --ink:#33333a; --ink-soft:#545063; --line:#cbc1cf;
+  --water-a:#5aa6b2; --water-b:#48819f; --water-c:#456497; --surface-2:#e1dae3; }
+
+// ---- deep twilight → night (dark theme, arriving in two steps) ----
+:root[data-tod="twilight"]{
+  --bg:#24263e; --bg-2:#2b2e48; --ink:#dfe2f0; --ink-soft:#b0b6cc; --ink-faint:#7e8299;
+  --surface:rgba(40,44,68,0.60); --surface-2:#23263c; --line:#3a3f5c; --accent:#57d7cc;
+  --sky-a:#6a4f82; --sky-b:#33395e;
+  --engrave:rgba(220,225,245,0.55); --engrave-soft:rgba(180,190,225,0.28);
+  --water-a:#3a6f80; --water-b:#234a5e; --water-c:#163247; --foam:#a9c6d4;
+  --sand-dry:#24263e; --sand-damp:#282c46; --sand-wet:#2e3350;
+  --moonlight:rgba(190,205,240,0.45);
+}
+:root[data-tod="night"]{
+  --bg:#10141f; --bg-2:#161b2a; --ink:#e7ecf4; --ink-soft:#aeb6c6; --ink-faint:#6f7890;
+  --surface:rgba(30,37,54,0.60); --surface-2:#141a28; --line:#2b3346; --accent:#3fd2c7;
+  --sky-a:#171d2e; --sky-b:#10141f;
+  --engrave:rgba(220,228,242,0.60); --engrave-soft:rgba(174,191,232,0.30);
+  --water-a:#245b6e; --water-b:#17384a; --water-c:#0f2436; --foam:#b9d6df;
+  --sand-dry:#10141f; --sand-damp:#141b28; --sand-wet:#182234;
+  --moonlight:rgba(190,210,240,0.55);
+}
+
+// ---- page-level overrides, only while a coastal page is mounted ----
+:root[data-tod] body{
+  background:var(--bg); color:var(--ink); font-family:var(--f-body);
+  font-size:clamp(1rem,0.55vw + 0.9rem,1.08rem); line-height:1.65;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  overflow-x:hidden; padding-bottom:calc(var(--tide-h) + 1rem);
+  transition:background var(--sky-transition),color var(--sky-transition);
+}
+:root[data-tod] body::before{
+  content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+  opacity:0.5; mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='0.05'/></svg>");
+}
+:root[data-tod="night"] body::before,
+:root[data-tod="twilight"] body::before,
+:root[data-tod="predawn"] body::before{ mix-blend-mode:screen; opacity:0.35; }
+:root[data-tod] a{ color:inherit; text-decoration:none; }
+:root[data-tod] a:hover{ color:var(--accent); }
+:root[data-tod] ::selection{ background:var(--mint); color:#fff; }
+
+// =============================================================================
+// COASTAL PAGE
+// =============================================================================
+.coastal{
+  position:relative;
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:3px; }
+
+  .wrap{ max-width:var(--maxw); margin-inline:auto; padding-inline:var(--pad); position:relative; z-index:2; }
+  .read{ max-width:var(--readw); }
+  .mono{ font-family:var(--f-mono); font-size:0.74rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-faint); }
+
+  // ---------- SKY ----------
+  .sky{
+    position:absolute; top:0; left:0; right:0; height:clamp(300px,42vw,460px);
+    z-index:0; pointer-events:none;
+    background:linear-gradient(180deg,var(--sky-a) 0%,var(--sky-b) 78%,transparent 100%);
+    transition:background var(--sky-transition);
+    -webkit-mask-image:linear-gradient(180deg,#000 62%,transparent 100%);
+            mask-image:linear-gradient(180deg,#000 62%,transparent 100%);
+    svg{ display:block; width:100%; height:100%; }
+    .stroke{ stroke:var(--engrave); fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+    .stroke-soft{ stroke:var(--engrave-soft); fill:none; stroke-width:1.3; stroke-linecap:round; }
+    #sun-g{ color:var(--sun); }
+    #moon-g{ color:var(--moon); }
+    .star{ animation:twinkle 4s ease-in-out infinite; }
+    .star:nth-child(2n){ animation-duration:5.5s; }
+    .star:nth-child(3n){ animation-duration:6.7s; }
+  }
+
+  // ---------- CLOUDS (home left-side sky, mirror of the bridge) ----------
+  // The traced cloud-landscape line-art, masked and painted with --accent —
+  // same technique as the bridge, pinned to the left as its counterweight.
+  // Kept moving (the bridge is static) with a slow horizontal drift.
+  // Right edge tracks the content column's left edge (50% − maxw/2) so the
+  // scene never overlaps the hero text; it extends off-screen to the left.
+  // width as a % of the viewport (like the bridge) so it scales the same way.
+  // Grown ~15% (39%→45%) and horizon-anchored: the raised `top` (clamp − 4.5vw)
+  // keeps the drawn land line on the bridge's waterline at every size while the
+  // clouds grow upward. Right edge sits half a gutter-pad inside the content
+  // column's left edge, so the scene nearly meets the hero text.
+  .clouds{
+    position:absolute; top:calc(clamp(36px,3.5vw,88px) - 4.5vw); z-index:1;
+    right:calc(50% + var(--maxw) / 2 - var(--pad) / 2); width:45%;
+    aspect-ratio:1/1; pointer-events:none;
+    background-color:var(--accent); opacity:0.55;
+    -webkit-mask:url("/images/cloud-scene.svg") right top / contain no-repeat;
+            mask:url("/images/cloud-scene.svg") right top / contain no-repeat;
+    transition:background-color var(--sky-transition),opacity var(--sky-transition);
+    animation:cloud-drift 60s ease-in-out infinite;
+  }
+  @media(max-width:900px){ .clouds{ opacity:0.45; } }
+  @media(max-width:600px){ .clouds{ display:none; } }
+
+  // ---------- SKY LIFE (occasional gulls + a drifting line-cloud) ----------
+  // Thin --accent strokes (non-scaling so they stay bridge-fine), each fading in
+  // only during its pass so the sky is usually still.
+  .skylife{
+    position:absolute; top:0; left:0; right:0; height:clamp(300px,42vw,460px);
+    z-index:1; pointer-events:none;
+    svg{ display:block; width:100%; height:100%; overflow:visible; }
+    path{
+      fill:none; stroke:var(--accent); stroke-width:1.8;
+      stroke-linecap:round; stroke-linejoin:round;
+      vector-effect:non-scaling-stroke; transition:stroke var(--sky-transition);
+    }
+    .gull,.drift-cloud,.plane,.sat{ opacity:0; will-change:transform,opacity; }
+    // plane: the flyer (jet + its short contrail) rides across at one constant
+    // speed; the contrail is glued just behind the tail so it leaves with the jet.
+    .plane .jet{ transform-box:fill-box; transform-origin:center; transform:scale(-0.5,0.5); } // flipped: nose points left
+    .plane .body{ fill:var(--accent); stroke:none; }
+    .plane .trail{ stroke-width:1.5; stroke-linecap:round; }
+    .plane .flyer{ animation:jet-move 340s linear infinite 60s; }
+    .sat{ fill:var(--accent); }
+    // wings flap, faster than the glide; origin at the gull's own centre
+    .wings{ transform-box:fill-box; transform-origin:center; animation:flap 0.5s ease-in-out infinite; }
+    .g2 .wings{ animation-duration:0.62s; }
+    .g1{ animation:gull-a 165s ease-in-out infinite; }
+    .g2{ animation:gull-b 205s ease-in-out infinite 80s; }
+    .dc1{ animation:drift-cross-a 330s ease-in-out infinite 25s; }
+    .dc2{ animation:drift-cross-b 400s ease-in-out infinite 200s; }
+    .plane{ animation:plane-show 340s linear infinite 60s; }
+    .s1{ animation:sat-a 300s linear infinite 140s; }
+  }
+  @media(max-width:600px){ .skylife{ display:none; } }
+
+  // ---------- BAY BRIDGE (home right-side background engraving) ----------
+  // watercolor water wash — shares the bridge's box, sits behind the line-work
+  .bridge-water{
+    position:absolute; top:clamp(36px,3.5vw,88px); left:47%; right:0; z-index:0; pointer-events:none;
+    aspect-ratio:1512/1122; opacity:0.62; display:block;
+  }
+  @media(max-width:900px){ .bridge-water{ left:32%; } }
+  @media(max-width:600px){ .bridge-water{ display:none; } }
+
+  // left edge pinned near page-center, right edge to the viewport edge — so the
+  // bridge scales with width and always spans from the middle out to the right.
+  .bridge{
+    position:absolute; top:clamp(36px,3.5vw,88px); left:47%; right:0; z-index:1; pointer-events:none;
+    aspect-ratio:1512/1122;
+    background-color:var(--accent); opacity:0.42;
+    -webkit-mask:url("/images/bay-bridge.svg") right top / contain no-repeat;
+            mask:url("/images/bay-bridge.svg") right top / contain no-repeat;
+    transition:background-color var(--sky-transition),opacity var(--sky-transition);
+  }
+  @media(max-width:900px){ .bridge{ left:32%; } }
+  @media(max-width:600px){ .bridge{ left:6%; opacity:0.06; } }
+
+  // ---------- BRIDGE LIGHTS (night only) — twinkling lamps along the deck ----
+  .bridge-lights{
+    position:absolute; top:clamp(36px,3.5vw,88px); left:47%; right:0; z-index:1;
+    aspect-ratio:1512/1122; pointer-events:none;
+    opacity:0; transition:opacity var(--sky-transition);
+    svg{ display:block; width:100%; height:100%; overflow:visible; }
+    .lamp{ fill:#ffe6a3; animation:twinkle-lamp 3s ease-in-out infinite; filter:drop-shadow(0 0 3px #ffd98a); }
+  }
+  @media(max-width:900px){ .bridge-lights{ left:32%; } }
+  @media(max-width:600px){ .bridge-lights{ display:none; } }
+
+  // ---------- NAV / TOPBAR ----------
+  header{ position:relative; z-index:3; }
+  // position:static + text-align reset override the old global .nav / .hero rules
+  // (App.less) that would otherwise leak in via the shared class names.
+  .nav{ position:static; top:auto; right:auto; display:flex; align-items:center; justify-content:space-between; padding-top:clamp(1.25rem,3vw,2rem); gap:1rem; }
+  .brand{ font-family:var(--f-mono); font-size:0.8rem; letter-spacing:0.12em; color:var(--ink-soft); display:inline-flex; align-items:center; gap:0.6rem; text-decoration:none; }
+  .brand .dot{ width:9px; height:9px; border-radius:50%; background:var(--mint); box-shadow:0 0 0 4px rgba(31,182,173,0.16); }
+  .nav-right{ display:flex; align-items:center; gap:clamp(1rem,2.5vw,2.1rem); }
+  .nav-links{ display:flex; gap:clamp(1rem,2.5vw,2.1rem); list-style:none; margin:0; padding:0; flex-wrap:wrap; }
+  .nav-links a{ font-family:var(--f-mono); font-size:0.78rem; letter-spacing:0.06em; text-decoration:none; color:var(--ink-soft); padding-bottom:3px; position:relative; transition:color 0.25s ease; }
+  .nav-links a::after{ content:""; position:absolute; left:0; bottom:0; width:100%; height:1px; background:var(--mint); transform:scaleX(0); transform-origin:left; transition:transform 0.3s ease; }
+  .nav-links a:hover{ color:var(--ink); }
+  .nav-links a:hover::after{ transform:scaleX(1); }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; padding-top:clamp(1.25rem,3vw,2rem); gap:1rem; }
+  .back{ font-family:var(--f-mono); font-size:0.78rem; letter-spacing:0.06em; text-decoration:none; color:var(--ink-soft); display:inline-flex; align-items:center; gap:0.5rem; transition:gap 0.2s ease,color 0.2s ease; }
+  .back:hover{ color:var(--ink); gap:0.75rem; }
+
+  .tod-toggle{
+    flex:none; width:38px; height:38px; border-radius:50%; display:grid; place-items:center; cursor:pointer;
+    background:transparent; border:1px solid var(--line); color:var(--accent);
+    transition:border-color 0.25s ease,transform 0.25s ease,background var(--sky-transition); -webkit-tap-highlight-color:transparent;
+    svg{ width:19px; height:19px; display:block; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+  }
+  .tod-toggle:hover{ background:var(--surface); border-color:var(--aqua); transform:rotate(-12deg); }
+  .tod-toggle[aria-expanded="true"]{ background:var(--surface); border-color:var(--aqua); }
+
+  // ---------- TIME-OF-DAY PANEL ----------
+  .tod{ position:relative; flex:none; }
+  .tod-panel{
+    position:absolute; top:calc(100% + 10px); right:0; z-index:20; width:230px;
+    display:flex; flex-direction:column; gap:0.85rem;
+    padding:0.95rem 1rem 1rem; border-radius:14px;
+    background:var(--surface); border:1px solid var(--line);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 12px 34px -12px rgba(20,30,50,0.4);
+    animation:todPop 0.16s ease both;
+  }
+  @keyframes todPop{ from{ opacity:0; transform:translateY(-4px) scale(0.98); } to{ opacity:1; transform:none; } }
+  .tod-panel-head{ display:flex; align-items:baseline; justify-content:space-between; }
+  .tod-time{ font-family:var(--f-mono); font-size:0.95rem; letter-spacing:0.04em; color:var(--ink); font-variant-numeric:tabular-nums; }
+  .tod-live{ font-family:var(--f-mono); font-size:0.6rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); }
+  .tod-live::before{ content:"● "; font-size:0.7em; }
+
+  // the sky-arc slider: track paints dawn→day→dusk→night across the 24h span
+  .tod-slider{
+    -webkit-appearance:none; appearance:none; width:100%; height:8px; margin:0.15rem 0;
+    border-radius:999px; cursor:pointer; background:transparent; outline-offset:6px;
+    transition:opacity 0.25s ease,filter 0.25s ease;
+    --tod-track:linear-gradient(90deg,
+      #16203a 0%, #2c3c63 18%, #f2c6b0 25%, #ffd98a 35%,
+      #7fd8d0 52%, #ffd98a 66%, #e7a08e 76%, #2c3c63 84%, #16203a 100%);
+  }
+  .tod-slider::-webkit-slider-runnable-track{ height:8px; border-radius:999px; background:var(--tod-track); border:1px solid rgba(0,0,0,0.08); }
+  .tod-slider::-moz-range-track{ height:8px; border-radius:999px; background:var(--tod-track); border:1px solid rgba(0,0,0,0.08); }
+  .tod-slider::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none; margin-top:-6px;
+    width:19px; height:19px; border-radius:50%;
+    background:#fff; border:2px solid var(--accent);
+    box-shadow:0 1px 5px rgba(20,30,50,0.35), 0 0 0 4px rgba(63,210,199,0.16);
+    transition:transform 0.12s ease;
+  }
+  .tod-slider::-moz-range-thumb{
+    width:19px; height:19px; border-radius:50%; border:2px solid var(--accent); background:#fff;
+    box-shadow:0 1px 5px rgba(20,30,50,0.35), 0 0 0 4px rgba(63,210,199,0.16);
+  }
+  .tod-slider:active::-webkit-slider-thumb{ transform:scale(1.15); }
+  // "track local time" is on → the control reads as passive until you touch it
+  .tod-slider.is-tracking{ opacity:0.5; filter:grayscale(0.5); }
+  .tod-slider.is-tracking:hover{ opacity:0.85; filter:none; }
+
+  .tod-track{ display:flex; align-items:center; gap:0.55rem; font-family:var(--f-mono); font-size:0.72rem; letter-spacing:0.05em; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .tod-track input{ accent-color:var(--accent); width:15px; height:15px; cursor:pointer; }
+
+  // ---------- HERO (home) ----------
+  .hero{ text-align:left; padding-top:clamp(1.75rem,4vw,3rem); padding-bottom:clamp(1.25rem,2.5vw,2rem); position:relative; z-index:2; }
+  .hero .eyebrow{ display:inline-flex; align-items:center; gap:0.7rem; margin-bottom:clamp(1rem,2.4vw,1.5rem); color:var(--accent); }
+  .hero .eyebrow::before{ content:""; width:26px; height:1px; background:var(--mint); }
+  // animation:none / opacity:1 override the old .hero h1 neon titleLoop (App.less)
+  h1{ font-family:var(--f-display); font-optical-sizing:auto; font-weight:500; font-size:clamp(2rem,4.5vw,3.2rem); line-height:1.02; letter-spacing:-0.01em; margin:0; color:var(--ink); animation:none; opacity:1; text-transform:none; }
+  h1 .amp{ font-style:italic; font-weight:500; color:var(--accent); }
+  .tagline{ font-family:var(--f-display); font-style:italic; font-weight:400; font-size:clamp(1.3rem,2.4vw,1.9rem); line-height:1.24; letter-spacing:-0.01em; color:var(--ink); max-width:24ch; margin:clamp(1rem,2vw,1.4rem) 0 0; }
+  .positioning{ max-width:52ch; margin:clamp(1.1rem,2.6vw,1.6rem) 0 0; color:var(--ink-soft); font-size:clamp(1rem,0.5vw + 0.9rem,1.12rem); }
+  .positioning strong{ color:var(--ink); font-weight:600; }
+
+  .caps{ display:grid; grid-template-columns:1fr; gap:clamp(1rem,2.2vw,1.6rem); margin-top:clamp(1.5rem,3vw,2.2rem); max-width:860px; }
+  @media(min-width:680px){ .caps{ grid-template-columns:repeat(3,1fr); } }
+  .cap{ display:flex; flex-direction:column; gap:0.5rem; padding-top:1rem; border-top:1px solid var(--line); }
+  .cap .ci{ width:22px; height:22px; color:var(--accent); }
+  .cap .ci svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+  .cap h3{ font-family:var(--f-body); font-weight:600; font-size:0.98rem; letter-spacing:0.01em; margin:0.15rem 0 0; color:var(--ink); }
+  .cap p{ margin:0; font-size:0.9rem; line-height:1.55; color:var(--ink-soft); }
+
+  // ---------- WORK ----------
+  // no distinct panel — blends straight out of the hero so there's no color seam
+  .work{ background:transparent; position:relative; z-index:2; padding-bottom:clamp(5rem,11vw,8rem); transition:background var(--sky-transition); }
+  .work-head{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem; flex-wrap:wrap; padding-top:clamp(1.25rem,2.5vw,2rem); padding-bottom:clamp(1.5rem,3.5vw,2.4rem); }
+  .work-head h2{ font-family:var(--f-display); font-weight:500; font-size:clamp(1.6rem,4vw,2.5rem); letter-spacing:-0.015em; margin:0; color:var(--ink); }
+  .work-head p{ margin:0; max-width:44ch; color:var(--ink-soft); font-size:0.98rem; }
+  .work-stack{ display:block; margin-top:0.5rem; font-family:var(--f-mono); font-size:0.74rem; letter-spacing:0.06em; color:var(--accent); }
+
+  .cards{ display:grid; grid-template-columns:1fr; gap:clamp(1.1rem,2.5vw,1.6rem); }
+  @media(min-width:760px){ .cards{ grid-template-columns:repeat(3,1fr); } }
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:clamp(1.5rem,2.5vw,2rem); display:flex; flex-direction:column; position:relative; overflow:hidden;
+    transition:transform 0.35s cubic-bezier(.2,.7,.3,1),box-shadow 0.35s ease,border-color 0.35s ease,background var(--sky-transition); backdrop-filter:blur(3px); }
+  .card::before{ content:""; position:absolute; left:0; top:0; width:100%; height:3px; background:linear-gradient(90deg,var(--mint),var(--aqua)); transform:scaleX(0); transform-origin:left; transition:transform 0.4s ease; }
+  .card:hover{ transform:translateY(-5px); box-shadow:0 18px 40px -22px rgba(20,143,136,0.5); border-color:var(--aqua); }
+  .card:hover::before{ transform:scaleX(1); }
+  .card--lead{ background:var(--surface); box-shadow:0 10px 30px -20px rgba(20,143,136,0.4); }
+  .card--lead .card-num{ color:var(--gold); }
+  .card--lead::before{ background:linear-gradient(90deg,var(--gold),var(--mint)); transform:scaleX(1); }
+  .card-num{ font-family:var(--f-mono); font-size:0.72rem; letter-spacing:0.14em; color:var(--accent); margin-bottom:1rem; }
+  .card h3{ font-family:var(--f-display); font-weight:500; font-size:clamp(1.5rem,2.4vw,1.85rem); letter-spacing:-0.01em; margin:0 0 0.6rem; }
+  .card .desc{ color:var(--ink-soft); font-size:0.96rem; line-height:1.6; margin:0 0 1.5rem; flex-grow:1; }
+  .card-links{ display:flex; flex-direction:column; gap:0.55rem; border-top:1px solid var(--line); padding-top:1.1rem; }
+  .card-links a{ font-family:var(--f-mono); font-size:0.78rem; letter-spacing:0.02em; text-decoration:none; color:var(--ink); display:inline-flex; align-items:center; gap:0.5rem; width:fit-content; transition:color 0.2s ease,gap 0.25s ease; }
+  .card-links a .arw{ color:var(--mint); transition:transform 0.25s ease; }
+  .card-links a:hover{ color:var(--accent); gap:0.75rem; }
+  .card-links a:hover .arw{ transform:translate(2px,-2px); }
+  .card-links a[data-primary]{ font-weight:500; }
+
+  // ---------- WORK ROWS (media + per-project tint, horizontal) ----------
+  .work-rows{ display:grid; grid-template-columns:1fr; gap:clamp(1.1rem,2.4vw,1.6rem); }
+  .wrow{ position:relative; display:grid; grid-template-columns:42% 1fr; overflow:hidden; border-radius:18px; cursor:pointer;
+    border:2px solid color-mix(in oklab,var(--ac) 62%,var(--line)); border-left:6px solid var(--ac);
+    background:linear-gradient(120deg,color-mix(in oklab,var(--ac) 20%,var(--surface)),color-mix(in oklab,var(--ac) 6%,var(--surface)));
+    box-shadow:0 18px 50px -22px color-mix(in oklab,var(--ac) 75%,transparent);
+    transition:transform 0.35s cubic-bezier(.2,.7,.3,1),box-shadow 0.35s ease,border-color 0.35s ease; backdrop-filter:blur(3px); }
+  .wrow:hover{ transform:translateY(-6px); border-color:var(--ac); box-shadow:0 32px 72px -22px color-mix(in oklab,var(--ac) 92%,transparent); }
+  .wrow-media{ position:relative; border-right:1.5px solid color-mix(in oklab,var(--ac) 50%,var(--line)); background:color-mix(in oklab,var(--ac) 14%,var(--surface-2)); min-height:210px; overflow:hidden; }
+  .wrow-links{ border-top-color:color-mix(in oklab,var(--ac) 30%,var(--line)) !important; }
+  // subtle Juno rays behind the small coin
+  .wrow-coinwrap{ position:relative; width:30px; height:30px; display:grid; place-items:center; flex:none; }
+  .wrow-coinwrap .rays{ position:absolute; left:50%; top:50%; width:190%; height:190%; transform:translate(-50%,-50%); opacity:0.28; pointer-events:none; }
+  .wrow-coinwrap .wrow-coin{ position:relative; z-index:1; }
+  // whole card is a link to the case study; inner links stay clickable above it
+  .wrow-cover::after{ content:""; position:absolute; inset:0; z-index:1; }
+  .wrow-links a:not(.wrow-cover){ position:relative; z-index:2; }
+  .wrow-media img,.wrow-media video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  .wrow-media .slot{ position:absolute; inset:0; display:grid; place-items:center; color:var(--ink-faint); font-family:var(--f-mono); font-size:0.7rem; letter-spacing:0.06em; }
+  .wrow-body{ padding:clamp(1.4rem,2.5vw,2rem); display:flex; flex-direction:column; }
+  .wrow-mark{ min-height:34px; display:flex; align-items:center; margin-bottom:0.7rem; }
+  .wrow .card-num{ color:var(--ac); margin-bottom:0.75rem; }
+  .wrow .desc{ flex:1; }
+  .wrow-links{ display:flex; flex-direction:row; flex-wrap:wrap; gap:1.2rem; border-top:1px solid var(--line); padding-top:1.1rem; margin-top:1.2rem; }
+  .wrow-links a{ font-family:var(--f-mono); font-size:0.78rem; text-decoration:none; color:var(--ink); display:inline-flex; align-items:center; gap:0.45rem; transition:color 0.2s ease,gap 0.25s ease; }
+  .wrow-links a:hover{ color:var(--accent); gap:0.65rem; }
+  .wrow-links a .arw{ color:var(--ac); }
+  // brand marks
+  .wrow-brand{ display:inline-flex; align-items:center; gap:0.6rem; }
+  .wrow-coin{ width:30px; height:30px; object-fit:contain; }
+  .wrow-word{ font-family:var(--f-display); font-weight:600; font-size:1.7rem; letter-spacing:0.04em; color:var(--ink); line-height:1; }
+  .wrow-word .u{ font-size:0.62em; letter-spacing:0.16em; }
+  .wrow-alogo{ color:var(--mint-deep); display:inline-flex; }
+  .wrow-aword{ font-family:"Grenze Gotisch",var(--f-display); font-weight:600; font-size:1.75rem; color:var(--ink); line-height:1; }
+  @media(max-width:760px){ .wrow{ grid-template-columns:1fr; } .wrow-media{ border-right:none; border-bottom:1px solid var(--line); aspect-ratio:16/9; min-height:0; } }
+
+  // ---------- FOOTER ----------
+  footer{ background:var(--bg-2); border-top:1px solid var(--line); position:relative; z-index:2; transition:background var(--sky-transition); }
+  .foot{ display:flex; align-items:center; justify-content:space-between; gap:1.5rem; flex-wrap:wrap; padding-block:clamp(2.2rem,5vw,3.2rem); }
+  .foot-name{ font-family:var(--f-display); font-weight:500; font-size:1.35rem; letter-spacing:-0.01em; }
+  .foot-name .sub{ display:block; font-family:var(--f-mono); font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-faint); margin-top:0.4rem; }
+  .foot-links{ display:flex; gap:clamp(1rem,2.5vw,2rem); list-style:none; margin:0; padding:0; flex-wrap:wrap; }
+  .foot-links a{ font-family:var(--f-mono); font-size:0.78rem; letter-spacing:0.05em; text-decoration:none; color:var(--ink-soft); transition:color 0.2s ease; }
+  .foot-links a:hover{ color:var(--accent); }
+
+  // ---------- TIDE ----------
+  .tide{ position:fixed; left:0; right:0; bottom:0; height:var(--tide-h); z-index:4; line-height:0; pointer-events:none; }
+  .tide > svg{ display:block; width:100%; height:100%; }
+  .tide-water{ animation:lap 9s ease-in-out infinite; will-change:transform; }
+  .tide-layer-a{ animation:drift-a 22s linear infinite; }
+  .tide-layer-b{ animation:drift-b 16s linear infinite; }
+  .tide-foam{ animation:drift-b 16s linear infinite,foam-breathe 9s ease-in-out infinite; }
+  #reflection{ animation:moon-shimmer 6s ease-in-out infinite; transform-origin:center bottom; }
+  #water stop,#sand stop{ transition:stop-color var(--sky-transition); }
+  #water .g0{ stop-color:var(--water-a); } #water .g1{ stop-color:var(--water-b); } #water .g2{ stop-color:var(--water-c); }
+  // g0 fades from transparent-SAND (not `transparent`, which is transparent-black
+  // and interpolates through grey — the muddy band bug)
+  #sand .g0{ stop-color:var(--sand-dry); stop-opacity:0; } #sand .g1{ stop-color:var(--sand-damp); } #sand .g2{ stop-color:var(--sand-wet); }
+  .tide-layer-a > path{ fill:var(--water-a); transition:fill var(--sky-transition); }
+  .tide-foam > path{ stroke:var(--foam); transition:stroke var(--sky-transition); }
+
+  // =============================================================================
+  // JUNO CASE STUDY
+  // =============================================================================
+  .cs-hero{ position:relative; z-index:2; padding-top:clamp(2rem,6vw,4rem); padding-bottom:clamp(1.5rem,4vw,3rem); text-align:center; }
+  .cs-eyebrow{ display:inline-flex; align-items:center; gap:0.7rem; color:var(--gold); margin-bottom:clamp(1.6rem,4vw,2.4rem); justify-content:center; }
+  .cs-eyebrow::before,.cs-eyebrow::after{ content:""; width:26px; height:1px; background:currentColor; opacity:0.6; }
+
+  .garden{ position:absolute; left:0; right:0; bottom:0; height:clamp(150px,22vw,240px); z-index:1; pointer-events:none;
+    color:var(--mint); opacity:0.55;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 30%,#000 100%);
+            mask-image:linear-gradient(180deg,transparent 0,#000 30%,#000 100%); }
+  .garden svg{ display:block; width:100%; height:100%; }
+  .garden .g-stroke{ stroke:currentColor; fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+
+  .presence{ position:relative; z-index:2; }
+  .coinwrap{ position:relative; width:clamp(120px,20vw,168px); height:clamp(120px,20vw,168px); margin:0 auto clamp(0.4rem,1.5vw,0.9rem); display:grid; place-items:center; }
+  .coinwrap .rays{ position:absolute; left:50%; top:50%; width:280%; height:280%; transform:translate(-50%,-50%); opacity:0.5; z-index:1; pointer-events:none; }
+  .coinwrap .glow{ position:absolute; inset:-18%; z-index:0; border-radius:50%;
+    background:radial-gradient(circle,color-mix(in oklab,var(--gold) 34%,transparent) 0%,transparent 62%); }
+  .coinwrap .coin{ position:relative; z-index:2; width:100%; height:100%; object-fit:contain;
+    filter:drop-shadow(0 6px 16px color-mix(in oklab,var(--gold) 40%,transparent)); }
+  .wordmark{ font-family:var(--f-display); font-weight:600; font-size:clamp(3rem,9vw,5.6rem); line-height:0.9; letter-spacing:0.04em; margin:0.2rem 0 0; color:var(--ink); }
+  .wordmark .u{ font-size:0.62em; letter-spacing:0.18em; }
+  .rules{ display:flex; align-items:center; justify-content:center; gap:0.7rem; margin-top:0.7rem; }
+  .rules i{ height:1px; flex:0 1 60px; background:var(--gold); opacity:0.55; }
+  .rules b{ font-family:var(--f-mono); font-size:0.66rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); font-weight:500; white-space:nowrap; }
+  .cs-tagline{ font-family:var(--f-display); font-style:italic; font-weight:400; font-size:clamp(1.4rem,3.4vw,2.1rem); line-height:1.3; letter-spacing:-0.01em; color:var(--ink); max-width:30ch; margin:clamp(1.6rem,3.5vw,2.2rem) auto 0; }
+  .cs-byline{ margin:clamp(1rem,2.2vw,1.4rem) auto 0; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+  .cs-byline b{ color:var(--ink); font-weight:600; }
+  .cta-row{ display:flex; flex-wrap:wrap; gap:0.75rem; margin-top:clamp(1.6rem,3.5vw,2.2rem); justify-content:center; }
+
+  .laurel{ display:flex; align-items:center; justify-content:center; gap:1rem; margin:clamp(2.5rem,6vw,4rem) 0 0; color:var(--gold); opacity:0.7; }
+  .laurel i{ height:1px; width:min(120px,22vw); background:currentColor; opacity:0.5; }
+  .laurel svg{ width:30px; height:30px; flex:none; }
+  .laurel .lstroke{ stroke:currentColor; fill:none; stroke-width:1.4; stroke-linecap:round; stroke-linejoin:round; }
+
+  .btn{ font-family:var(--f-mono); font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; text-decoration:none;
+    display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.15rem; border-radius:11px; transition:transform 0.2s ease,box-shadow 0.25s ease,border-color 0.25s ease; }
+  .btn-primary{ background:var(--accent); color:var(--bg); border:1px solid transparent; }
+  .btn-primary:hover{ color:var(--bg); transform:translateY(-2px); box-shadow:0 12px 28px -14px rgba(20,143,136,0.7); }
+  .btn-ghost{ background:transparent; color:var(--ink); border:1px solid var(--line); }
+  .btn-ghost:hover{ border-color:var(--aqua); transform:translateY(-2px); }
+
+  .cs-shot{ position:relative; z-index:2; margin-top:clamp(2.5rem,6vw,4rem); }
+  .shot-frame{ border:1px solid var(--line); border-radius:20px; overflow:hidden; background:var(--surface-2); box-shadow:0 30px 70px -40px rgba(20,143,136,0.5); aspect-ratio:16/10; }
+
+  .block{ position:relative; z-index:2; padding-top:clamp(3rem,7vw,5rem); }
+  .kicker{ margin:0 0 0.9rem; }
+  .h2{ font-family:var(--f-display); font-weight:500; font-size:clamp(1.7rem,4vw,2.6rem); letter-spacing:-0.015em; line-height:1.08; margin:0 0 1.1rem; color:var(--ink); }
+  .lede{ font-family:var(--f-display); font-style:italic; font-weight:400; font-size:clamp(1.25rem,2.6vw,1.7rem); line-height:1.35; color:var(--ink); margin:0 0 1.3rem; }
+  .body{ color:var(--ink-soft); margin:0 0 1.1rem; }
+  .body strong{ color:var(--ink); font-weight:600; }
+  .points{ list-style:none; margin:1.4rem 0 0; padding:0; display:grid; gap:0.9rem; }
+  .points li{ position:relative; padding-left:1.6rem; color:var(--ink-soft); }
+  .points li::before{ content:""; position:absolute; left:0; top:0.62em; width:8px; height:8px; border-radius:50%; background:var(--mint); box-shadow:0 0 0 4px color-mix(in oklab,var(--mint) 18%,transparent); }
+  .points li strong{ color:var(--ink); font-weight:600; }
+  code{ font-family:var(--f-mono); font-size:0.85em; background:var(--surface-2); padding:0.1em 0.4em; border-radius:5px; }
+
+  .diagram{ margin:1.8rem 0 0; border:1px solid var(--line); border-radius:18px; background:var(--surface); padding:clamp(1.2rem,3vw,2rem); }
+  .diagram svg{ display:block; width:100%; height:auto; }
+  .dg-box{ fill:var(--surface-2); stroke:var(--line); stroke-width:1.2; }
+  .dg-box.accent{ stroke:var(--mint); }
+  .dg-box.gold{ stroke:var(--gold); }
+  .dg-t{ fill:var(--ink); font-family:var(--f-body); font-weight:600; font-size:15px; }
+  .dg-s{ fill:var(--ink-soft); font-family:var(--f-mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; }
+  .dg-line{ stroke:var(--engrave-soft); stroke-width:1.4; fill:none; stroke-linecap:round; }
+  .dg-line.accent{ stroke:var(--mint); }
+  .dg-line.gold{ stroke:var(--gold); }
+  .dg-cap{ fill:var(--ink-faint); font-family:var(--f-mono); font-size:10px; letter-spacing:0.06em; }
+
+  .features{ display:grid; grid-template-columns:1fr; gap:clamp(1.1rem,2.4vw,1.6rem); margin-top:1.6rem; }
+  @media(min-width:640px){ .features{ grid-template-columns:repeat(2,1fr); } }
+  @media(min-width:960px){ .features{ grid-template-columns:repeat(3,1fr); } }
+  .feature{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:1.4rem; transition:border-color 0.25s ease,transform 0.25s ease,background var(--sky-transition); }
+  .feature:hover{ border-color:var(--aqua); transform:translateY(-3px); }
+  .feature .fi{ width:24px; height:24px; color:var(--accent); }
+  .feature .fi svg{ width:24px; height:24px; stroke:currentColor; fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+  .feature h3{ font-family:var(--f-body); font-weight:600; font-size:1.02rem; margin:0.8rem 0 0.4rem; color:var(--ink); }
+  .feature p{ margin:0; font-size:0.92rem; line-height:1.55; color:var(--ink-soft); }
+
+  .gallery{ display:grid; grid-template-columns:1fr; gap:clamp(1rem,2.4vw,1.5rem); margin-top:1.6rem; }
+  @media(min-width:720px){ .gallery{ grid-template-columns:repeat(2,1fr); } }
+  .gcell{ border:1px solid var(--line); border-radius:16px; overflow:hidden; background:var(--surface-2); aspect-ratio:16/11; }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:0.55rem; margin-top:1.4rem; }
+  .chip{ font-family:var(--f-mono); font-size:0.74rem; letter-spacing:0.04em; color:var(--ink-soft); background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:0.45rem 0.85rem; }
+
+  .cta-band{ position:relative; z-index:2; margin-top:clamp(3.5rem,8vw,6rem); background:linear-gradient(180deg,var(--surface-2),var(--bg-2)); border-top:1px solid var(--line); border-radius:26px 26px 0 0; transition:background var(--sky-transition); }
+  .cta-inner{ padding-block:clamp(2.6rem,6vw,4rem); text-align:center; }
+  .cta-line{ font-family:var(--f-display); font-weight:500; font-size:clamp(1.8rem,4.5vw,2.8rem); letter-spacing:-0.015em; margin:0 0 1.4rem; color:var(--ink); }
+  .cta-inner .cta-row{ justify-content:center; }
+  .cs-foot{ position:relative; z-index:2; padding-block:clamp(1.6rem,4vw,2.2rem); }
+
+  // ---- screenshot placeholder (until owner-supplied images land) ----
+  .shot-slot{ width:100%; height:100%; display:flex; align-items:center; justify-content:center; text-align:center;
+    padding:1.2rem; color:var(--ink-faint); font-family:var(--f-mono); font-size:0.72rem; letter-spacing:0.05em; line-height:1.5;
+    border:1px dashed var(--line); }
+  .shot-slot img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  // =============================================================================
+  // RÉSUMÉ PAGE (/resume)
+  // =============================================================================
+  .r-wrap{ max-width:860px; margin-inline:auto; padding-inline:var(--pad); position:relative; z-index:2; }
+  .r-main{ padding-top:clamp(1.5rem,3vw,2.5rem); }
+
+  .r-actions{ display:flex; align-items:center; gap:0.9rem; }
+  .r-dl{ font-family:var(--f-mono); font-size:0.74rem; letter-spacing:0.08em; text-transform:uppercase; text-decoration:none;
+    display:inline-flex; align-items:center; gap:0.45rem; padding:0.55rem 0.95rem; border-radius:10px;
+    color:var(--ink); background:var(--surface); border:1px solid var(--line);
+    transition:transform 0.2s ease,border-color 0.25s ease,gap 0.2s ease; }
+  .r-dl:hover{ color:var(--accent); border-color:var(--aqua); transform:translateY(-2px); gap:0.65rem; }
+
+  .r-head{ text-align:center; padding-top:clamp(2rem,5vw,3.5rem); padding-bottom:clamp(1.6rem,3.5vw,2.4rem); border-bottom:1px solid var(--line); }
+  .r-name{ font-family:var(--f-display); font-weight:500; font-size:clamp(2.4rem,5vw,3.4rem); line-height:1.02; letter-spacing:-0.01em; margin:0; color:var(--ink); }
+  .r-title{ font-family:var(--f-display); font-style:italic; font-weight:400; font-size:clamp(1.15rem,2vw,1.5rem); color:var(--accent); margin:0.5rem 0 0; }
+  .r-contact{ font-family:var(--f-mono); font-size:0.76rem; letter-spacing:0.04em; color:var(--ink-faint); margin:1rem 0 0; line-height:1.9; }
+  .r-contact a{ color:var(--ink-soft); text-decoration:none; }
+  .r-contact a:hover{ color:var(--accent); }
+  .r-sep{ margin:0 0.6rem; opacity:0.5; }
+
+  .r-section{ margin-top:clamp(2rem,4vw,3rem); }
+  .r-section-title{ font-family:var(--f-mono); font-size:0.74rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent);
+    display:flex; align-items:center; gap:0.9rem; margin:0 0 1.4rem; }
+  .r-section-title::after{ content:""; flex:1; height:1px; background:var(--line); }
+
+  .r-summary{ color:var(--ink); font-size:1.02rem; line-height:1.7; margin:0; }
+  .r-stack{ margin:1rem 0 0; color:var(--ink-soft); font-size:0.94rem; line-height:1.7; }
+  .r-stack strong{ color:var(--ink); font-weight:600; }
+
+  .r-job{ margin-bottom:clamp(1.5rem,3vw,2rem); }
+  .r-job:last-child{ margin-bottom:0; }
+  .r-job-head{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .r-role{ font-family:var(--f-display); font-weight:500; font-size:1.28rem; letter-spacing:-0.01em; color:var(--ink); }
+  .r-meta{ font-family:var(--f-mono); font-size:0.72rem; letter-spacing:0.04em; color:var(--ink-faint); white-space:nowrap; }
+  .r-blurb{ margin:0.5rem 0 0; color:var(--ink-soft); line-height:1.7; }
+  .r-blurb strong{ color:var(--ink); font-weight:600; }
+  .r-bullets{ list-style:none; margin:0.9rem 0 0; padding:0; display:grid; gap:0.7rem; }
+  .r-bullets li{ position:relative; padding-left:1.5rem; color:var(--ink-soft); line-height:1.65; font-size:0.97rem; }
+  .r-bullets li::before{ content:""; position:absolute; left:0; top:0.62em; width:7px; height:7px; border-radius:50%; background:var(--mint); box-shadow:0 0 0 4px color-mix(in oklab,var(--mint) 16%,transparent); }
+  .r-bullets li strong{ color:var(--ink); font-weight:600; }
+  .r-bullets li em{ font-style:italic; color:var(--ink-faint); }
+  .r-tech{ margin:0.7rem 0 0; font-family:var(--f-mono); font-size:0.74rem; letter-spacing:0.02em; color:var(--ink-faint); }
+  .r-edu{ color:var(--ink-soft); line-height:1.8; margin:0 0 0.4rem; }
+  .r-edu strong{ color:var(--ink); font-weight:600; }
+
+  .r-footer{ display:flex; align-items:center; justify-content:space-between; gap:1.5rem; flex-wrap:wrap; margin-top:clamp(2.5rem,5vw,3.5rem); padding-top:clamp(1.6rem,3vw,2rem); border-top:1px solid var(--line); }
+}
+
+// =============================================================================
+// KEYFRAMES (global — names are unique to this system)
+// =============================================================================
+@keyframes twinkle{ 0%,100%{ opacity:0.9; } 50%{ opacity:0.35; } }
+@keyframes lap{ 0%,100%{ transform:translateY(6px); } 50%{ transform:translateY(-10px); } }
+// travel exactly one wave period (480 user units) so the loop is seamless
+@keyframes drift-a{ from{ transform:translateX(0); } to{ transform:translateX(-480px); } }
+@keyframes drift-b{ from{ transform:translateX(0); } to{ transform:translateX(-480px); } }
+@keyframes foam-breathe{ 0%,100%{ opacity:0.75; } 50%{ opacity:0.35; } }
+@keyframes moon-shimmer{ 0%,100%{ opacity:0.5; transform:scaleY(1); } 50%{ opacity:0.85; transform:scaleY(1.04); } }
+@keyframes cloud-drift{ 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(22px); } }
+
+// gulls glide the full width on a gentle arcing (french-curve) path, then park
+// invisible for the rest of the cycle (so they appear now and then)
+@keyframes gull-a{
+  0%{ transform:translate(-160px,96px); opacity:0; } 5%{ opacity:0.55; }
+  14%{ transform:translate(260px,52px); } 28%{ transform:translate(700px,88px); }
+  40%{ transform:translate(1160px,46px); } 46%{ opacity:0.55; }
+  50%,100%{ transform:translate(1580px,74px); opacity:0; }
+}
+// second gull flies the other way (right → left)
+@keyframes gull-b{
+  0%{ transform:translate(1620px,64px); opacity:0; } 5%{ opacity:0.5; }
+  16%{ transform:translate(1120px,106px); } 30%{ transform:translate(660px,56px); }
+  42%{ transform:translate(200px,98px); } 46%{ opacity:0.5; }
+  50%,100%{ transform:translate(-220px,60px); opacity:0; }
+}
+// a line-cloud drifts the full width on a lazy curve, then waits
+@keyframes drift-cross-a{
+  0%{ transform:translate(-180px,64px) scale(1.6); opacity:0; } 8%{ opacity:0.5; }
+  22%{ transform:translate(400px,44px) scale(1.6); } 38%{ transform:translate(1000px,60px) scale(1.6); }
+  42%{ opacity:0.5; } 46%,100%{ transform:translate(1520px,42px) scale(1.6); opacity:0; }
+}
+// the other cloud drifts right → left
+@keyframes drift-cross-b{
+  0%{ transform:translate(1540px,120px) scale(1.15); opacity:0; } 10%{ opacity:0.42; }
+  24%{ transform:translate(1020px,102px) scale(1.15); } 40%{ transform:translate(420px,118px) scale(1.15); }
+  44%{ opacity:0.42; } 48%,100%{ transform:translate(-220px,104px) scale(1.15); opacity:0; }
+}
+// plane: crosses right → left at one constant speed; the contrail rides along
+// inside the flyer group. show = group opacity, move = jet + trail together.
+@keyframes plane-show{ 0%{ opacity:0; } 1%{ opacity:0.5; } 30%{ opacity:0.5; } 40%,100%{ opacity:0; } }
+@keyframes jet-move{ 0%{ transform:translate(1600px,50px); } 26%,100%{ transform:translate(-140px,78px); } }
+// a tiny satellite tracks slowly and steadily straight across the sky
+@keyframes sat-a{ 0%{ transform:translate(-40px,44px); opacity:0; } 4%{ opacity:0.85; } 30%{ opacity:0.85; } 34%,100%{ transform:translate(1500px,150px); opacity:0; } }
+// wingbeat
+@keyframes flap{ 0%,100%{ transform:scaleY(1); } 50%{ transform:scaleY(0.42); } }
+
+// the bridge engraving wants a touch more presence on the dark ground
+:root[data-tod="night"] .coastal .bridge,
+:root[data-tod="twilight"] .coastal .bridge,
+:root[data-tod="predawn"] .coastal .bridge{ opacity:0.4; }
+// deck lamps only glow once it's dark
+:root[data-tod="night"] .coastal .bridge-lights,
+:root[data-tod="twilight"] .coastal .bridge-lights,
+:root[data-tod="predawn"] .coastal .bridge-lights{ opacity:1; }
+@keyframes twinkle-lamp{ 0%,100%{ opacity:0.2; } 50%{ opacity:1; } }
+
+@media(prefers-reduced-motion:reduce){
+  :root[data-tod]{ --sky-transition:0s; }
+  .coastal .tide-water,.coastal .tide-layer-a,.coastal .tide-layer-b,.coastal .tide-foam,.coastal #reflection,.coastal .star,.coastal .cloud-a,.coastal .cloud-b,.coastal .gull,.coastal .drift-cloud,.coastal .plane,.coastal .plane .flyer,.coastal .plane .trail,.coastal .sat,.coastal .bridge-lights .lamp{ animation:none !important; }
+}

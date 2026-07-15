@@ -2,6 +2,23 @@
 // top now and then, a jet that cruises past once in a while, and a small
 // line-cloud drifting by. Strokes are --accent and thin (bridge-fine); each
 // element fades in only during its pass so the sky is usually still.
+//
+// A tiny scheduler plays these passes ONE AT A TIME (rarely two) — see the
+// useEffect below. Each pass is a one-shot CSS animation that runs only while
+// its element carries the `play` class; the scheduler adds/removes it.
+
+import { useEffect, useRef } from 'react'
+
+// selector → how long that element's one-shot pass runs (must match coastal.less)
+const PASSES = [
+  { sel: '.g1', ms: 19000 },
+  { sel: '.g2', ms: 22000 },
+  { sel: '.dc1', ms: 42000 },
+  { sel: '.dc2', ms: 50000 },
+  { sel: '.plane', ms: 30000 },
+  { sel: '.s1', ms: 44000 },
+]
+const rand = (a, b) => a + Math.random() * (b - a)
 
 // A seagull "m": two shallow wings. Centered at 0,0; s = scale.
 function gull(s = 1) {
@@ -19,8 +36,55 @@ const PLANE = 'M46 0 C42 -2 38 -2.5 30 -2.6 L22 -2.6 L6 -15 L1 -15 L14 -2.8 L2 -
   + 'L22 2.6 L30 2.6 C38 2.5 42 2 46 0 Z'
 
 export default function SkyLife() {
+  const rootRef = useRef(null)
+
+  // One pass at a time, rarely two. Self-scheduling setTimeout loop: play a
+  // random pass, occasionally overlap a second, rest, repeat.
+  useEffect(() => {
+    const root = rootRef.current
+    if (!root) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const timers = new Set()
+    const after = (ms, fn) => { const t = setTimeout(() => { timers.delete(t); fn() }, ms); timers.add(t) }
+    let last = -1
+
+    const play = (p) => {
+      const el = root.querySelector(p.sel)
+      if (!el) return
+      el.classList.add('play')
+      after(p.ms, () => el.classList.remove('play'))
+    }
+
+    const tick = () => {
+      let i = Math.floor(Math.random() * PASSES.length)
+      if (i === last) i = (i + 1) % PASSES.length   // no immediate repeat
+      last = i
+      const primary = PASSES[i]
+      play(primary)
+
+      let endMs = primary.ms
+      if (Math.random() < 0.15) {                    // rarely, a second overlaps
+        let j = Math.floor(Math.random() * PASSES.length)
+        if (j === i) j = (j + 1) % PASSES.length
+        const delay = rand(2000, primary.ms * 0.4)
+        after(delay, () => play(PASSES[j]))
+        endMs = Math.max(endMs, delay + PASSES[j].ms)
+      }
+
+      after(endMs + rand(7000, 18000), tick)         // rest, then next pass
+    }
+
+    after(rand(1500, 4000), tick)
+
+    return () => {
+      timers.forEach(clearTimeout)
+      root.querySelectorAll('.play').forEach((el) => el.classList.remove('play'))
+    }
+  }, [])
+
   return (
-    <div className="skylife" aria-hidden="true">
+    <div className="skylife" aria-hidden="true" ref={rootRef}>
       <svg viewBox="0 0 1440 300" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
         {/* Contrail gradient: opaque at the jet, fading fast toward the old end. */}
         <defs>

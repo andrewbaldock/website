@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useTimeOfDay } from '../coastal/useTimeOfDay'
 import Sky from '../coastal/Sky.jsx'
 import SkyLife from '../coastal/SkyLife.jsx'
+import BridgeLights from '../coastal/BridgeLights.jsx'
 import Tide from '../coastal/Tide.jsx'
 import TodToggle from '../coastal/TodToggle.jsx'
 import Reveal from '../coastal/Reveal.jsx'
@@ -28,6 +29,8 @@ export default function CoastalHome() {
           side of the background — masked so it recolors with the day↔night flip. */}
       <BridgeWater />
       <div className="bridge" aria-hidden="true" />
+      {/* Twinkling deck lamps, lit only at night. */}
+      <BridgeLights />
 
       <header>
         <div className="wrap">

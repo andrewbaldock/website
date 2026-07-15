@@ -51,11 +51,11 @@ export default function Sky({ hour }) {
           <g id="moon-g" opacity="0.95">
             <defs>
               <mask id={maskId}>
-                <circle cx={bx} cy={by} r="26" fill="#fff" />
-                <circle cx={bx + 20} cy={by - 14} r="26" fill="#000" />
+                <circle cx={bx} cy={by} r="21" fill="#fff" />
+                <circle cx={bx + 16} cy={by - 11} r="21" fill="#000" />
               </mask>
             </defs>
-            <circle cx={bx} cy={by} r="26" fill="currentColor" mask={`url(#${maskId})`} />
+            <circle cx={bx} cy={by} r="21" fill="currentColor" mask={`url(#${maskId})`} />
           </g>
         )}
       </svg>

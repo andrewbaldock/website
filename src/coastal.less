@@ -173,17 +173,20 @@
     .plane .jet{ transform-box:fill-box; transform-origin:center; transform:scale(-0.5,0.5); } // flipped: nose points left
     .plane .body{ fill:var(--accent); stroke:none; }
     .plane .trail{ stroke-width:1.5; stroke-linecap:round; }
-    .plane .flyer{ animation:jet-move 340s linear infinite 60s; }
     .sat{ fill:var(--accent); }
     // wings flap, faster than the glide; origin at the gull's own centre
     .wings{ transform-box:fill-box; transform-origin:center; animation:flap 0.5s ease-in-out infinite; }
     .g2 .wings{ animation-duration:0.62s; }
-    .g1{ animation:gull-a 165s ease-in-out infinite; }
-    .g2{ animation:gull-b 205s ease-in-out infinite 80s; }
-    .dc1{ animation:drift-cross-a 330s ease-in-out infinite 25s; }
-    .dc2{ animation:drift-cross-b 400s ease-in-out infinite 200s; }
-    .plane{ animation:plane-show 340s linear infinite 60s; }
-    .s1{ animation:sat-a 300s linear infinite 140s; }
+    // Passes are one-shot, played one at a time (rarely two) by the SkyLife
+    // scheduler: an element animates only while it carries the `play` class.
+    // Durations here must stay in sync with PASSES in SkyLife.jsx.
+    .g1.play{ animation:gull-pass-a 19s ease-in-out; }
+    .g2.play{ animation:gull-pass-b 22s ease-in-out; }
+    .dc1.play{ animation:drift-pass-a 42s ease-in-out; }
+    .dc2.play{ animation:drift-pass-b 50s ease-in-out; }
+    .plane.play{ animation:plane-show 30s linear; }
+    .plane.play .flyer{ animation:jet-move 30s linear; }
+    .s1.play{ animation:sat-pass 44s linear; }
   }
   @media(max-width:600px){ .skylife{ display:none; } }
 
@@ -374,6 +377,9 @@
   .wrow-word .u{ font-size:0.62em; letter-spacing:0.16em; }
   .wrow-alogo{ color:var(--mint-deep); display:inline-flex; }
   .wrow-aword{ font-family:"Grenze Gotisch",var(--f-display); font-weight:600; font-size:1.75rem; color:var(--ink); line-height:1; }
+  // Magic Sticky card wordmark uses a fixed dark ink in App.less → invisible on the
+  // night card; adopt the adaptive ink token on coastal pages.
+  .ms-card-wm__word{ color:var(--ink); transition:color var(--sky-transition); }
   @media(max-width:760px){ .wrow{ grid-template-columns:1fr; } .wrow-media{ border-right:none; border-bottom:1px solid var(--line); aspect-ratio:16/9; min-height:0; } }
 
   // ---------- FOOTER ----------
@@ -417,7 +423,7 @@
 
   .presence{ position:relative; z-index:2; }
   .coinwrap{ position:relative; width:clamp(120px,20vw,168px); height:clamp(120px,20vw,168px); margin:0 auto clamp(0.4rem,1.5vw,0.9rem); display:grid; place-items:center; }
-  .coinwrap .rays{ position:absolute; left:50%; top:50%; width:280%; height:280%; transform:translate(-50%,-50%); opacity:0.5; z-index:1; pointer-events:none; }
+  .coinwrap .rays{ position:absolute; left:50%; top:50%; width:170%; height:170%; transform:translate(-50%,-50%); opacity:0.25; z-index:1; pointer-events:none; }
   .coinwrap .glow{ position:absolute; inset:-18%; z-index:0; border-radius:50%;
     background:radial-gradient(circle,color-mix(in oklab,var(--gold) 34%,transparent) 0%,transparent 62%); }
   .coinwrap .coin{ position:relative; z-index:2; width:100%; height:100%; object-fit:contain;
@@ -561,39 +567,40 @@
 @keyframes moon-shimmer{ 0%,100%{ opacity:0.5; transform:scaleY(1); } 50%{ opacity:0.85; transform:scaleY(1.04); } }
 @keyframes cloud-drift{ 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(22px); } }
 
-// gulls glide the full width on a gentle arcing (french-curve) path, then park
-// invisible for the rest of the cycle (so they appear now and then)
-@keyframes gull-a{
-  0%{ transform:translate(-160px,96px); opacity:0; } 5%{ opacity:0.55; }
-  14%{ transform:translate(260px,52px); } 28%{ transform:translate(700px,88px); }
-  40%{ transform:translate(1160px,46px); } 46%{ opacity:0.55; }
-  50%,100%{ transform:translate(1580px,74px); opacity:0; }
+// One pass = enter invisible → glide the full width → exit invisible. Each runs
+// once, on demand, when the SkyLife scheduler adds `.play` (no parking tail).
+// gull glides the full width on a gentle arcing (french-curve) path
+@keyframes gull-pass-a{
+  0%{ transform:translate(-160px,96px); opacity:0; } 10%{ opacity:0.55; }
+  28%{ transform:translate(260px,52px); } 56%{ transform:translate(700px,88px); }
+  80%{ transform:translate(1160px,46px); } 92%{ opacity:0.55; }
+  100%{ transform:translate(1580px,74px); opacity:0; }
 }
 // second gull flies the other way (right → left)
-@keyframes gull-b{
-  0%{ transform:translate(1620px,64px); opacity:0; } 5%{ opacity:0.5; }
-  16%{ transform:translate(1120px,106px); } 30%{ transform:translate(660px,56px); }
-  42%{ transform:translate(200px,98px); } 46%{ opacity:0.5; }
-  50%,100%{ transform:translate(-220px,60px); opacity:0; }
+@keyframes gull-pass-b{
+  0%{ transform:translate(1620px,64px); opacity:0; } 10%{ opacity:0.5; }
+  32%{ transform:translate(1120px,106px); } 60%{ transform:translate(660px,56px); }
+  84%{ transform:translate(200px,98px); } 92%{ opacity:0.5; }
+  100%{ transform:translate(-220px,60px); opacity:0; }
 }
-// a line-cloud drifts the full width on a lazy curve, then waits
-@keyframes drift-cross-a{
-  0%{ transform:translate(-180px,64px) scale(1.6); opacity:0; } 8%{ opacity:0.5; }
-  22%{ transform:translate(400px,44px) scale(1.6); } 38%{ transform:translate(1000px,60px) scale(1.6); }
-  42%{ opacity:0.5; } 46%,100%{ transform:translate(1520px,42px) scale(1.6); opacity:0; }
+// a line-cloud drifts the full width on a lazy curve
+@keyframes drift-pass-a{
+  0%{ transform:translate(-180px,64px) scale(1.6); opacity:0; } 17%{ opacity:0.5; }
+  48%{ transform:translate(400px,44px) scale(1.6); } 83%{ transform:translate(1000px,60px) scale(1.6); }
+  91%{ opacity:0.5; } 100%{ transform:translate(1520px,42px) scale(1.6); opacity:0; }
 }
 // the other cloud drifts right → left
-@keyframes drift-cross-b{
-  0%{ transform:translate(1540px,120px) scale(1.15); opacity:0; } 10%{ opacity:0.42; }
-  24%{ transform:translate(1020px,102px) scale(1.15); } 40%{ transform:translate(420px,118px) scale(1.15); }
-  44%{ opacity:0.42; } 48%,100%{ transform:translate(-220px,104px) scale(1.15); opacity:0; }
+@keyframes drift-pass-b{
+  0%{ transform:translate(1540px,120px) scale(1.15); opacity:0; } 21%{ opacity:0.42; }
+  50%{ transform:translate(1020px,102px) scale(1.15); } 83%{ transform:translate(420px,118px) scale(1.15); }
+  92%{ opacity:0.42; } 100%{ transform:translate(-220px,104px) scale(1.15); opacity:0; }
 }
 // plane: crosses right → left at one constant speed; the contrail rides along
 // inside the flyer group. show = group opacity, move = jet + trail together.
-@keyframes plane-show{ 0%{ opacity:0; } 1%{ opacity:0.5; } 30%{ opacity:0.5; } 40%,100%{ opacity:0; } }
-@keyframes jet-move{ 0%{ transform:translate(1600px,50px); } 26%,100%{ transform:translate(-140px,78px); } }
+@keyframes plane-show{ 0%{ opacity:0; } 4%{ opacity:0.5; } 88%{ opacity:0.5; } 100%{ opacity:0; } }
+@keyframes jet-move{ 0%{ transform:translate(1600px,50px); } 100%{ transform:translate(-140px,78px); } }
 // a tiny satellite tracks slowly and steadily straight across the sky
-@keyframes sat-a{ 0%{ transform:translate(-40px,44px); opacity:0; } 4%{ opacity:0.85; } 30%{ opacity:0.85; } 34%,100%{ transform:translate(1500px,150px); opacity:0; } }
+@keyframes sat-pass{ 0%{ transform:translate(-40px,44px); opacity:0; } 12%{ opacity:0.85; } 88%{ opacity:0.85; } 100%{ transform:translate(1500px,150px); opacity:0; } }
 // wingbeat
 @keyframes flap{ 0%,100%{ transform:scaleY(1); } 50%{ transform:scaleY(0.42); } }
 

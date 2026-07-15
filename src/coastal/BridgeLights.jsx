@@ -2,10 +2,11 @@
 // on the exact same box as the bridge engraving (viewBox = the bridge art's
 // 1512×1122) so the lamps sit on the roadway. Each twinkles on its own offset.
 
-// A line of lamps following the deck (tuned against the traced bridge art).
+// A line of lamps following the roadway deck (measured against the bridge art:
+// from ~(345,545) just right of the tower up to ~(1500,215) at the right edge).
 const DECK = Array.from({ length: 16 }, (_, i) => {
   const t = i / 15
-  return [332 + t * 1168, 520 - t * 366] // deck slopes up toward the right
+  return [352 + t * 1141, 610 - t * 432] // deck line, rotated ~2° CCW about its centre
 })
 
 export default function BridgeLights() {

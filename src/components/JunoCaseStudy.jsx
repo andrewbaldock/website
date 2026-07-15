@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { TrendingUp, Database, Columns2, Scale, BookMarked, Component } from 'lucide-react'
+import HomeMark from './HomeMark.jsx'
 import { useTimeOfDay } from '../coastal/useTimeOfDay'
 import Sky from '../coastal/Sky.jsx'
 import Tide from '../coastal/Tide.jsx'
@@ -61,7 +62,7 @@ export default function JunoCaseStudy() {
       <header>
         <div className="wrap">
           <div className="topbar">
-            <Link className="back" to="/">← Back</Link>
+            <HomeMark />
             <TodToggle {...tod} />
           </div>
         </div>

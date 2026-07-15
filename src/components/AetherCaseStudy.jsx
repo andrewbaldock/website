@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import HomeMark from './HomeMark.jsx'
 import {
   Radio,
   Wrench,
@@ -372,7 +373,7 @@ export default function AetherCaseStudy() {
       <ThemeToggle theme={theme} onToggle={toggle} />
       <div className="aether-cs__inner">
         <div className="aether-cs__topbar">
-          <Link to="/" className="aether-cs__back">← Back</Link>
+          <HomeMark />
         </div>
 
         <header className="aether-cs__hero">

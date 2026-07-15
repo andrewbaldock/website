@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import HomeMark from './HomeMark.jsx'
 import {
   Eye,
   Pencil,
@@ -78,7 +79,7 @@ export default function MagicStickyCaseStudy() {
       <ThemeToggle theme={theme} onToggle={toggle} />
       <div className="ms-cs__inner">
         <div className="ms-cs__topbar">
-          <Link to="/" className="ms-cs__back">← Back</Link>
+          <HomeMark />
         </div>
 
         <header className="ms-cs__hero">

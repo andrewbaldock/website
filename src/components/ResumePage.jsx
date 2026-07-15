@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Download } from 'lucide-react'
+import HomeMark from './HomeMark.jsx'
 import { resume } from '../resumeData.js'
 import { useTimeOfDay } from '../coastal/useTimeOfDay'
 import Sky from '../coastal/Sky.jsx'
@@ -43,7 +44,7 @@ export default function ResumePage() {
       <header>
         <div className="r-wrap">
           <div className="topbar">
-            <Link to="/" className="back">← Back</Link>
+            <HomeMark />
             <div className="r-actions">
               <DownloadPdf />
               <TodToggle {...tod} />

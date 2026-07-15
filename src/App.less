@@ -1942,6 +1942,31 @@ a {
   }
 }
 
+// Home link (top-left of case-study / résumé pages) — mirrors the home nav brand.
+.home-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--f-mono, "IBM Plex Mono", ui-monospace, monospace);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft, #5c5e57);
+  text-decoration: none;
+  transition: color 0.25s ease;
+
+  &:hover { color: var(--accent, #148f88); }
+
+  &__dot {
+    flex: none;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--mint, #1fb6ad);
+    box-shadow: 0 0 0 4px rgba(31, 182, 173, 0.16);
+  }
+}
+
 // Hero wordmark — large, centered, for the case-study header.
 .ms-hero-wm {
   display: inline-flex;

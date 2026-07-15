@@ -4,8 +4,8 @@ import { Monitor, Sparkles, Layers } from 'lucide-react'
 // capabilities trio carries the "what I do".
 const CAPS = [
   { Icon: Monitor, title: 'Product UI & design systems', body: 'Polished, production interfaces and the token systems that keep them consistent.' },
-  { Icon: Sparkles, title: 'AI-native / LLM apps', body: 'Agent loops, tool use, and MCP — building applications strategically, with clean seams for front and back ends to share.' },
-  { Icon: Layers, title: 'Front-end architecture', body: 'Real-time, data-intensive apps built to stay fast and maintainable at scale.' },
+  { Icon: Sparkles, title: 'AI-native / LLM apps', body: 'Agent loops, tool use, and MCP — both in the app for the user, and in the code for humans and AIs to reason about immediately.' },
+  { Icon: Layers, title: 'More Strategic', body: 'Real-time, data-intensive apps built strategically to stay performant and evolvable at scale.' },
 ]
 
 export default function Hero() {

@@ -170,20 +170,22 @@
     .gull,.drift-cloud,.plane,.sat{ opacity:0; will-change:transform,opacity; }
     // plane: the flyer (jet + its short contrail) rides across at one constant
     // speed; the contrail is glued just behind the tail so it leaves with the jet.
-    .plane .jet{ transform-box:fill-box; transform-origin:center; transform:scale(-0.5,0.5); } // flipped: nose points left
+    .plane .jet{ transform-box:fill-box; transform-origin:center; transform:scale(-0.4,0.4); } // flipped: nose points left, a touch smaller
     .plane .body{ fill:var(--accent); stroke:none; }
     .plane .trail{ stroke-width:1.5; stroke-linecap:round; }
-    .sat{ fill:var(--accent); }
+    // tiny satellite: thin-stroked body + solar wings, filled core & antenna dot
+    .sat *{ stroke:var(--accent); stroke-width:1; fill:none; vector-effect:non-scaling-stroke; stroke-linecap:round; stroke-linejoin:round; }
+    .sat .satfill{ fill:var(--accent); stroke:none; }
     // wings flap, faster than the glide; origin at the gull's own centre
     .wings{ transform-box:fill-box; transform-origin:center; animation:flap 0.5s ease-in-out infinite; }
     .g2 .wings{ animation-duration:0.62s; }
     // Passes are one-shot, played one at a time (rarely two) by the SkyLife
     // scheduler: an element animates only while it carries the `play` class.
     // Durations here must stay in sync with PASSES in SkyLife.jsx.
-    .g1.play{ animation:gull-pass-a 19s ease-in-out; }
-    .g2.play{ animation:gull-pass-b 22s ease-in-out; }
-    .dc1.play{ animation:drift-pass-a 42s ease-in-out; }
-    .dc2.play{ animation:drift-pass-b 50s ease-in-out; }
+    .g1.play{ animation:gull-pass-a 31s ease-in-out; }
+    .g2.play{ animation:gull-pass-b 35s ease-in-out; }
+    .dc1.play{ animation:drift-pass-a 165s linear; }
+    .dc2.play{ animation:drift-pass-b 195s linear; }
     .plane.play{ animation:plane-show 30s linear; }
     .plane.play .flyer{ animation:jet-move 30s linear; }
     .s1.play{ animation:sat-pass 44s linear; }
@@ -304,7 +306,7 @@
   h1{ font-family:var(--f-display); font-optical-sizing:auto; font-weight:500; font-size:clamp(2rem,4.5vw,3.2rem); line-height:1.02; letter-spacing:-0.01em; margin:0; color:var(--ink); animation:none; opacity:1; text-transform:none; }
   h1 .amp{ font-style:italic; font-weight:500; color:var(--accent); }
   .tagline{ font-family:var(--f-display); font-style:italic; font-weight:400; font-size:clamp(1.3rem,2.4vw,1.9rem); line-height:1.24; letter-spacing:-0.01em; color:var(--ink); max-width:24ch; margin:clamp(1rem,2vw,1.4rem) 0 0; }
-  .positioning{ max-width:52ch; margin:clamp(1.1rem,2.6vw,1.6rem) 0 0; color:var(--ink-soft); font-size:clamp(1rem,0.5vw + 0.9rem,1.12rem); }
+  .positioning{ max-width:52ch; margin:clamp(1.1rem,2.6vw,1.6rem) 0 0; color:var(--ink-soft); font-size:clamp(0.9rem,0.3vw + 0.82rem,1rem); }
   .positioning strong{ color:var(--ink); font-weight:600; }
 
   .caps{ display:grid; grid-template-columns:1fr; gap:clamp(1rem,2.2vw,1.6rem); margin-top:clamp(1.5rem,3vw,2.2rem); max-width:860px; }
@@ -365,7 +367,7 @@
   .wrow-body{ padding:clamp(1.4rem,2.5vw,2rem); display:flex; flex-direction:column; }
   .wrow-mark{ min-height:34px; display:flex; align-items:center; margin-bottom:0.7rem; }
   .wrow .card-num{ color:var(--ac); margin-bottom:0.75rem; }
-  .wrow .desc{ flex:1; }
+  .wrow .desc{ flex:1; font-size:0.85rem; line-height:1.55; }
   .wrow-links{ display:flex; flex-direction:row; flex-wrap:wrap; gap:1.2rem; border-top:1px solid var(--line); padding-top:1.1rem; margin-top:1.2rem; }
   .wrow-links a{ font-family:var(--f-mono); font-size:0.78rem; text-decoration:none; color:var(--ink); display:inline-flex; align-items:center; gap:0.45rem; transition:color 0.2s ease,gap 0.25s ease; }
   .wrow-links a:hover{ color:var(--accent); gap:0.65rem; }
@@ -400,11 +402,12 @@
   .tide-foam{ animation:drift-b 16s linear infinite,foam-breathe 9s ease-in-out infinite; }
   #reflection{ animation:moon-shimmer 6s ease-in-out infinite; transform-origin:center bottom; }
   #water stop,#sand stop{ transition:stop-color var(--sky-transition); }
-  #water .g0{ stop-color:var(--water-a); } #water .g1{ stop-color:var(--water-b); } #water .g2{ stop-color:var(--water-c); }
+  // water surface catches a bit of the sky, strongest near the horizon (top), fading with depth
+  #water .g0{ stop-color:color-mix(in oklab, var(--water-a) 75%, var(--sky-b)); } #water .g1{ stop-color:color-mix(in oklab, var(--water-b) 88%, var(--sky-b)); } #water .g2{ stop-color:var(--water-c); }
   // g0 fades from transparent-SAND (not `transparent`, which is transparent-black
   // and interpolates through grey — the muddy band bug)
   #sand .g0{ stop-color:var(--sand-dry); stop-opacity:0; } #sand .g1{ stop-color:var(--sand-damp); } #sand .g2{ stop-color:var(--sand-wet); }
-  .tide-layer-a > path{ fill:var(--water-a); transition:fill var(--sky-transition); }
+  .tide-layer-a > path{ fill:color-mix(in oklab, var(--water-a) 75%, var(--sky-b)); transition:fill var(--sky-transition); }
   .tide-foam > path{ stroke:var(--foam); transition:stroke var(--sky-transition); }
 
   // =============================================================================

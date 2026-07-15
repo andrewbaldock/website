@@ -126,7 +126,7 @@
     .stroke-soft{ stroke:var(--engrave-soft); fill:none; stroke-width:1.3; stroke-linecap:round; }
     #sun-g{ color:var(--sun); }
     #moon-g{ color:var(--moon); }
-    .star{ animation:twinkle 4s ease-in-out infinite; }
+    .star{ animation:twinkle 7s ease-in-out infinite; }
     .star:nth-child(2n){ animation-duration:5.5s; }
     .star:nth-child(3n){ animation-duration:6.7s; }
   }
@@ -150,7 +150,7 @@
     -webkit-mask:url("/images/cloud-scene.svg") right top / contain no-repeat;
             mask:url("/images/cloud-scene.svg") right top / contain no-repeat;
     transition:background-color var(--sky-transition),opacity var(--sky-transition);
-    animation:cloud-drift 60s ease-in-out infinite;
+    animation:cloud-drift 120s ease-in-out infinite;
   }
   @media(max-width:900px){ .clouds{ opacity:0.45; } }
   @media(max-width:600px){ .clouds{ display:none; } }
@@ -177,18 +177,28 @@
     .sat *{ stroke:var(--accent); stroke-width:1; fill:none; vector-effect:non-scaling-stroke; stroke-linecap:round; stroke-linejoin:round; }
     .sat .satfill{ fill:var(--accent); stroke:none; }
     // wings flap, faster than the glide; origin at the gull's own centre
-    .wings{ transform-box:fill-box; transform-origin:center; animation:flap 0.5s ease-in-out infinite; }
-    .g2 .wings{ animation-duration:0.62s; }
+    .wings{ transform-box:fill-box; transform-origin:center; animation:flap 1.1s ease-in-out infinite; }
+    .g2 .wings{ animation-duration:1.35s; }
     // Passes are one-shot, played one at a time (rarely two) by the SkyLife
     // scheduler: an element animates only while it carries the `play` class.
     // Durations here must stay in sync with PASSES in SkyLife.jsx.
-    .g1.play{ animation:gull-pass-a 31s ease-in-out; }
-    .g2.play{ animation:gull-pass-b 35s ease-in-out; }
-    .dc1.play{ animation:drift-pass-a 165s linear; }
-    .dc2.play{ animation:drift-pass-b 195s linear; }
-    .plane.play{ animation:plane-show 30s linear; }
-    .plane.play .flyer{ animation:jet-move 30s linear; }
-    .s1.play{ animation:sat-pass 44s linear; }
+    .g1.play{ animation:gull-pass-a 95s ease-in-out; }
+    .g2.play{ animation:gull-pass-b 105s ease-in-out; }
+    .dc1.play{ animation:drift-pass-a 240s linear; }
+    .dc2.play{ animation:drift-pass-b 280s linear; }
+    .plane.play{ animation:plane-show 100s linear; }
+    .plane.play .flyer{ animation:jet-move 100s linear; }
+    .s1.play{ animation:sat-pass 200s linear; }
+    // nav lights: only after dark — a red beacon + blue strobe blinking on the jet
+    .plane .navlight{ display:none; stroke:none; }
+    .plane .nav-red{ fill:#ff3b3b; filter:drop-shadow(0 0 3px #ff3b3b); }
+    .plane .nav-blue{ fill:#5ab0ff; filter:drop-shadow(0 0 3px #5ab0ff); }
+    :root[data-tod="predawn"] .plane.play .navlight,
+    :root[data-tod="twilight"] .plane.play .navlight,
+    :root[data-tod="night"] .plane.play .navlight{ display:block; animation:nav-flash 1.5s ease infinite; }
+    :root[data-tod="predawn"] .plane.play .nav-blue,
+    :root[data-tod="twilight"] .plane.play .nav-blue,
+    :root[data-tod="night"] .plane.play .nav-blue{ animation-duration:1s; animation-delay:0.4s; }
   }
   @media(max-width:600px){ .skylife{ display:none; } }
 
@@ -220,7 +230,7 @@
     aspect-ratio:1512/1122; pointer-events:none;
     opacity:0; transition:opacity var(--sky-transition);
     svg{ display:block; width:100%; height:100%; overflow:visible; }
-    .lamp{ fill:#ffe6a3; animation:twinkle-lamp 3s ease-in-out infinite; filter:drop-shadow(0 0 3px #ffd98a); }
+    .lamp{ fill:#ffe6a3; animation:twinkle-lamp 6s ease-in-out infinite; filter:drop-shadow(0 0 3px #ffd98a); }
   }
   @media(max-width:900px){ .bridge-lights{ left:32%; } }
   @media(max-width:600px){ .bridge-lights{ display:none; } }
@@ -396,11 +406,11 @@
   // ---------- TIDE ----------
   .tide{ position:fixed; left:0; right:0; bottom:0; height:var(--tide-h); z-index:4; line-height:0; pointer-events:none; }
   .tide > svg{ display:block; width:100%; height:100%; }
-  .tide-water{ animation:lap 9s ease-in-out infinite; will-change:transform; }
-  .tide-layer-a{ animation:drift-a 22s linear infinite; }
-  .tide-layer-b{ animation:drift-b 16s linear infinite; }
-  .tide-foam{ animation:drift-b 16s linear infinite,foam-breathe 9s ease-in-out infinite; }
-  #reflection{ animation:moon-shimmer 6s ease-in-out infinite; transform-origin:center bottom; }
+  .tide-water{ animation:lap 18s ease-in-out infinite; will-change:transform; }
+  .tide-layer-a{ animation:drift-a 44s linear infinite; }
+  .tide-layer-b{ animation:drift-b 32s linear infinite; }
+  .tide-foam{ animation:drift-b 32s linear infinite,foam-breathe 18s ease-in-out infinite; }
+  #reflection{ animation:moon-shimmer 12s ease-in-out infinite; transform-origin:center bottom; }
   #water stop,#sand stop{ transition:stop-color var(--sky-transition); }
   // water surface catches a bit of the sky, strongest near the horizon (top), fading with depth
   #water .g0{ stop-color:color-mix(in oklab, var(--water-a) 75%, var(--sky-b)); } #water .g1{ stop-color:color-mix(in oklab, var(--water-b) 88%, var(--sky-b)); } #water .g2{ stop-color:var(--water-c); }
@@ -606,6 +616,8 @@
 @keyframes sat-pass{ 0%{ transform:translate(-40px,44px); opacity:0; } 12%{ opacity:0.85; } 88%{ opacity:0.85; } 100%{ transform:translate(1500px,150px); opacity:0; } }
 // wingbeat
 @keyframes flap{ 0%,100%{ transform:scaleY(1); } 50%{ transform:scaleY(0.42); } }
+// jet nav lights: a quick flash then dark, like a real aircraft beacon
+@keyframes nav-flash{ 0%,6%{ opacity:1; } 12%,100%{ opacity:0.06; } }
 
 // the bridge engraving wants a touch more presence on the dark ground
 :root[data-tod="night"] .coastal .bridge,
@@ -619,5 +631,5 @@
 
 @media(prefers-reduced-motion:reduce){
   :root[data-tod]{ --sky-transition:0s; }
-  .coastal .tide-water,.coastal .tide-layer-a,.coastal .tide-layer-b,.coastal .tide-foam,.coastal #reflection,.coastal .star,.coastal .cloud-a,.coastal .cloud-b,.coastal .gull,.coastal .drift-cloud,.coastal .plane,.coastal .plane .flyer,.coastal .plane .trail,.coastal .sat,.coastal .bridge-lights .lamp{ animation:none !important; }
+  .coastal .tide-water,.coastal .tide-layer-a,.coastal .tide-layer-b,.coastal .tide-foam,.coastal #reflection,.coastal .star,.coastal .cloud-a,.coastal .cloud-b,.coastal .gull,.coastal .drift-cloud,.coastal .plane,.coastal .plane .flyer,.coastal .plane .trail,.coastal .plane .navlight,.coastal .sat,.coastal .bridge-lights .lamp{ animation:none !important; }
 }

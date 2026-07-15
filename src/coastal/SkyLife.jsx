@@ -11,12 +11,12 @@ import { useEffect, useRef } from 'react'
 
 // selector → how long that element's one-shot pass runs (must match coastal.less)
 const PASSES = [
-  { sel: '.g1', ms: 19000 },
-  { sel: '.g2', ms: 22000 },
-  { sel: '.dc1', ms: 42000 },
-  { sel: '.dc2', ms: 50000 },
-  { sel: '.plane', ms: 30000 },
-  { sel: '.s1', ms: 44000 },
+  { sel: '.g1', ms: 95000 },
+  { sel: '.g2', ms: 105000 },
+  { sel: '.dc1', ms: 240000 },
+  { sel: '.dc2', ms: 280000 },
+  { sel: '.plane', ms: 100000 },
+  { sel: '.s1', ms: 200000 },
 ]
 const rand = (a, b) => a + Math.random() * (b - a)
 
@@ -30,10 +30,10 @@ function gull(s = 1) {
 // A small rounded line-cloud outline (open-bottom puff row).
 const PUFF = 'M0 22 C2 8 20 6 24 16 C28 2 50 4 52 18 C64 16 66 30 54 32 L6 32 C-4 32 -4 24 0 22 Z'
 
-// A filled top-view airliner silhouette pointing right (nose at +x).
-const PLANE = 'M46 0 C42 -2 38 -2.5 30 -2.6 L22 -2.6 L6 -15 L1 -15 L14 -2.8 L2 -2.8 '
-  + 'L-3 -8 L-7 -8 L-4 -1.4 L-8 0 L-4 1.4 L-7 8 L-3 8 L2 2.8 L14 2.8 L1 15 L6 15 '
-  + 'L22 2.6 L30 2.6 C38 2.5 42 2 46 0 Z'
+// A filled side-view airliner silhouette pointing right (nose at +x): fuselage,
+// a swept tail fin at the rear, and a swept wing below.
+const PLANE = 'M44 0 C41 -2.4 33 -3 20 -3 L-2 -3 L-8 -13 L-12 -13 L-13 -2 '
+  + 'L-14 0 L-13 2 L-2 3 L-6 11 L0 11 L8 3 L20 3 C33 3 41 2.4 44 0 Z'
 
 export default function SkyLife() {
   const rootRef = useRef(null)
@@ -104,10 +104,28 @@ export default function SkyLife() {
         <g className="plane">
           <g className="flyer">
             <line className="trail" x1="5" y1="0" x2="120" y2="0" stroke="url(#contrail)" />
-            <g className="jet"><path className="body" d={PLANE} /></g>
+            <g className="jet">
+              <path className="body" d={PLANE} />
+              {/* nav lights — CSS shows + blinks these only in the dark phases */}
+              <circle className="navlight nav-red" cx="-9" cy="-11" r="3" />
+              <circle className="navlight nav-blue" cx="-3" cy="10" r="3" />
+            </g>
           </g>
         </g>
-        <circle className="sat s1" r="2.4" />
+        {/* a tiny satellite (Skylab-ish: body + two solar wings), tilted */}
+        <g className="sat s1">
+          <g className="saticon" transform="rotate(24) scale(0.62)">
+            <rect className="satfill" x="-2.4" y="-3" width="4.8" height="6" rx="1.2" />
+            <line x1="-2.4" y1="0" x2="-6" y2="0" />
+            <line x1="2.4" y1="0" x2="6" y2="0" />
+            <rect x="-15" y="-3.4" width="9" height="6.8" />
+            <line x1="-10.5" y1="-3.4" x2="-10.5" y2="3.4" />
+            <rect x="6" y="-3.4" width="9" height="6.8" />
+            <line x1="10.5" y1="-3.4" x2="10.5" y2="3.4" />
+            <line x1="0" y1="-3" x2="0" y2="-6.6" />
+            <circle className="satfill" cx="0" cy="-7.4" r="1" />
+          </g>
+        </g>
       </svg>
     </div>
   )

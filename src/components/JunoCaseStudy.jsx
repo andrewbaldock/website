@@ -90,7 +90,7 @@ export default function JunoCaseStudy() {
         <div className="cs-shot">
           <div className="wrap">
             <div className="shot-frame">
-              <Shot placeholder="Juno hero — the three-column workspace (advisor + net worth)" />
+              <Shot src="/images/juno-cs-hero.png" alt="Juno's workspace — the advisor conversation beside net worth, spending, and where the money sits" />
             </div>
           </div>
         </div>
@@ -172,10 +172,10 @@ export default function JunoCaseStudy() {
               <h2 className="h2">Around the app.</h2>
             </div>
             <div className="gallery">
-              <div className="gcell"><Shot placeholder="Advisor conversation — a scenario timeline in the workspace" /></div>
-              <div className="gcell"><Shot placeholder="Net worth over time / accounts overview" /></div>
-              <div className="gcell"><Shot placeholder="A what-if scenario chart with event markers" /></div>
-              <div className="gcell"><Shot placeholder="The design-system page (tokens + components)" /></div>
+              <div className="gcell"><Shot src="/images/juno-cs-advisor.png" alt="An advisor answer with a scenario timeline, live in the workspace" /></div>
+              <div className="gcell"><Shot src="/images/juno-cs-accounts.png" alt="Accounts overview — every asset and debt with balances and rates" /></div>
+              <div className="gcell"><Shot src="/images/juno-cs-scenario.png" alt="A what-if scenario chart — today's path vs. the scenario, with event markers" /></div>
+              <div className="gcell"><Shot src="/images/juno-cs-design.png" alt="The public Juno design system — voice, colour tokens, and components" /></div>
             </div>
           </div>
         </section>

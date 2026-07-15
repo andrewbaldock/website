@@ -243,16 +243,15 @@
   .bridge{
     position:absolute; top:clamp(36px,3.5vw,88px); left:47%; right:0; z-index:1; pointer-events:none;
     aspect-ratio:1512/1122;
-    background-color:var(--accent); opacity:0.42;
+    background-color:var(--accent); opacity:0.43;
     -webkit-mask:url("/images/bay-bridge.svg") right top / contain no-repeat;
             mask:url("/images/bay-bridge.svg") right top / contain no-repeat;
     transition:background-color var(--sky-transition),opacity var(--sky-transition);
   }
   @media(max-width:900px){ .bridge{ left:32%; } }
   // Phones get the bridge as a real band instead (see .bridge-band), so the
-  // backdrop copy steps aside entirely — `display` rather than `opacity`
-  // because the data-tod night overrides at the bottom of this file outrank a
-  // media query on opacity and would light this one back up at 0.4.
+  // backdrop copy steps aside entirely — `display` rather than `opacity` so no
+  // later rule on opacity can light it back up.
   @media(max-width:600px){ .bridge{ display:none; } }
 
   // ---------- BRIDGE LIGHTS (night only) — twinkling lamps along the deck ----
@@ -773,10 +772,8 @@
 // jet nav lights: a quick flash then dark, like a real aircraft beacon
 @keyframes nav-flash{ 0%,6%{ opacity:1; } 12%,100%{ opacity:0.06; } }
 
-// the bridge engraving wants a touch more presence on the dark ground
-:root[data-tod="night"] .coastal .bridge,
-:root[data-tod="twilight"] .coastal .bridge,
-:root[data-tod="predawn"] .coastal .bridge{ opacity:0.4; }
+// The bridge holds one opacity across every phase (see .bridge) — it recolors
+// with --accent, which is already brighter at night, and that carries it.
 // deck lamps only glow once it's dark
 :root[data-tod="night"] .coastal .bridge-lights,
 :root[data-tod="twilight"] .coastal .bridge-lights,

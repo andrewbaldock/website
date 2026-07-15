@@ -7,10 +7,14 @@ import Tide from '../coastal/Tide.jsx'
 import TodToggle from '../coastal/TodToggle.jsx'
 import Reveal from '../coastal/Reveal.jsx'
 import BridgeWater from '../coastal/BridgeWater.jsx'
+import BridgeDevPanel from '../coastal/BridgeDevPanel.jsx'
 import CoinRays from '../coastal/CoinRays.jsx'
 import Hero from './Hero.jsx'
 import { AetherLogo } from './AetherLogo.jsx'
 import MagicStickyCardWordmark from './MagicStickyCardWordmark.jsx'
+
+// ponytail: dev builds only, so ?dev can never expose the panel in production.
+const showBridgeDev = import.meta.env.DEV && new URLSearchParams(window.location.search).has('dev')
 
 export default function CoastalHome() {
   const tod = useTimeOfDay()
@@ -18,6 +22,7 @@ export default function CoastalHome() {
 
   return (
     <div className="coastal">
+      {showBridgeDev && <BridgeDevPanel />}
       <Sky hour={hour} sweeping={tod.sweeping} />
       {/* Line-drawn cloud landscape filling the left of the sky — the mirror
           of the bridge engraving on the right, masked so it recolors with the

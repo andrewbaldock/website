@@ -22,7 +22,7 @@ function sunRays(cx, cy) {
   return d
 }
 
-export default function Sky({ hour }) {
+export default function Sky({ hour, sweeping }) {
   const maskId = 'moon-' + useId().replace(/:/g, '')
   const day = isDayHour(hour)
   const night = isDarkPhase(hour)
@@ -30,7 +30,7 @@ export default function Sky({ hour }) {
   const bx = Math.round(bxF), by = Math.round(byF)
 
   return (
-    <div className="sky" aria-hidden="true">
+    <div className={`sky${sweeping ? ' is-sweeping' : ''}`} aria-hidden="true">
       <svg viewBox="0 0 1440 460" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
         <g style={{ display: night ? '' : 'none' }}>
           {STAR_POS.map((p, k) => {

@@ -126,6 +126,12 @@
     .stroke-soft{ stroke:var(--engrave-soft); fill:none; stroke-width:1.3; stroke-linecap:round; }
     #sun-g{ color:var(--sun); }
     #moon-g{ color:var(--moon); }
+    // The body only shows while the dial is turning: it rides in on the sweep,
+    // crosses, and is gone again once the sky has settled. Out is slower than
+    // in, so it lingers a moment on arrival rather than blinking off.
+    #sun-g,#moon-g{ opacity:0; transition:opacity 0.6s ease 0.15s; }
+    &.is-sweeping #sun-g,
+    &.is-sweeping #moon-g{ opacity:0.95; transition:opacity 0.25s ease; }
     .star{ animation:twinkle 7s ease-in-out infinite; }
     .star:nth-child(2n){ animation-duration:5.5s; }
     .star:nth-child(3n){ animation-duration:6.7s; }
@@ -200,7 +206,28 @@
     :root[data-tod="twilight"] .plane.play .nav-blue,
     :root[data-tod="night"] .plane.play .nav-blue{ animation-duration:1s; animation-delay:0.4s; }
   }
-  @media(max-width:600px){ .skylife{ display:none; } }
+  // Phones keep the sky life, flying it over the bridge band. The passes have to
+  // be re-aimed to get here: the transforms are SVG user units, and with
+  // `slice` on a 1440×300 viewBox the phone's sky floors at scale 1, so only the
+  // middle ~375 units (x≈530→910) are ever on screen — the desktop passes run
+  // -180→1620 and would spend ~80% of their time outside the window. The -m
+  // keyframes travel x≈480→980 and sit at y≈150→280, which is the band rather
+  // than the nav. Overriding animation-name only leaves the durations alone, so
+  // they stay in sync with PASSES in SkyLife.jsx.
+  // Kept nested under .skylife to match the base rules' specificity — at one
+  // level shallower these lose to them and the passes silently keep flying the
+  // desktop curves.
+  @media(max-width:600px){
+    .skylife{
+      z-index:2;   // over the bridge art; the header (z-3) still wins
+      .g1.play{ animation-name:gull-pass-a-m; }
+      .g2.play{ animation-name:gull-pass-b-m; }
+      .dc1.play{ animation-name:drift-pass-a-m; }
+      .dc2.play{ animation-name:drift-pass-b-m; }
+      .plane.play .flyer{ animation-name:jet-move-m; }
+      .s1.play{ animation-name:sat-pass-m; }
+    }
+  }
 
   // ---------- BAY BRIDGE (home right-side background engraving) ----------
   // watercolor water wash — shares the bridge's box, sits behind the line-work
@@ -222,7 +249,11 @@
     transition:background-color var(--sky-transition),opacity var(--sky-transition);
   }
   @media(max-width:900px){ .bridge{ left:32%; } }
-  @media(max-width:600px){ .bridge{ left:6%; opacity:0.06; } }
+  // Phones get the bridge as a real band instead (see .bridge-band), so the
+  // backdrop copy steps aside entirely — `display` rather than `opacity`
+  // because the data-tod night overrides at the bottom of this file outrank a
+  // media query on opacity and would light this one back up at 0.4.
+  @media(max-width:600px){ .bridge{ display:none; } }
 
   // ---------- BRIDGE LIGHTS (night only) — twinkling lamps along the deck ----
   .bridge-lights{
@@ -234,6 +265,68 @@
   }
   @media(max-width:900px){ .bridge-lights{ left:32%; } }
   @media(max-width:600px){ .bridge-lights{ display:none; } }
+
+  // ---------- BRIDGE BAND (phones only) ----------
+  // The desktop bridge is a backdrop: it can only live in the margin the hero
+  // text isn't using, so on a phone it has nowhere to go and fades to nothing.
+  // Here it gets its own strip in the flow instead — full-bleed, cropped to the
+  // towers + deck, sitting between the nav and the eyebrow. Painted with
+  // --accent over --bg like every other engraving, so the day↔night flip and
+  // the mid-day contrast come for free rather than needing a second asset.
+  .bridge-band{ display:none; }
+  @media(max-width:600px){
+    // Height in vw, like --bb-rise, so band and artwork scale together and the
+    // window onto the art stays put (~8%→96%) at every phone width. No bottom
+    // fade: the band ends just past the waterline, where the artwork is empty,
+    // and the watercolor wash is its own soft terminus — a gradient here only
+    // erased the wash, which sits at the very bottom of the frame.
+    .bridge-band{
+      display:block; position:relative; z-index:1;
+      height:64vw;
+      margin-top:clamp(1.1rem,4vw,1.5rem);
+      overflow:hidden; pointer-events:none;
+    }
+    // One box at the artwork's own 1512:1122 holding both the wash and the
+    // line-work, so the two can't drift apart: the band is just a window onto
+    // it. --bb-rise slides the artwork up until the window opens just above the
+    // tower, skipping the empty sky (ink runs svgY 48–900; the wash pools at
+    // 965). It anchors the frame's TOP, in vw: the artwork's height tracks the
+    // viewport, so this keeps the tower in frame at every width, while a
+    // `bottom` offset would drift as soon as the band hit its clamp ceiling.
+    .bridge-band-art{
+      --bb-rise:-5.7vw;
+      position:absolute; left:50%; transform:translateX(-50%);
+      top:var(--bb-rise); width:100%; aspect-ratio:1512/1122;
+    }
+    .bridge-band .bridge-water{
+      display:block; position:absolute; inset:0;
+      width:100%; height:100%; aspect-ratio:auto; opacity:0.62;
+    }
+    // Weighted well above the backdrop bridge's 0.42: the traced strokes are
+    // hairlines, so shrinking 1512px of artwork into a phone thins them to a
+    // fraction of a pixel and anti-aliasing does the rest. One value carries
+    // both phases here — unlike the backdrop, which needs a night override.
+    .bridge-band-lines{
+      position:absolute; inset:0;
+      background-color:var(--accent); opacity:0.85;
+      -webkit-mask:url("/images/bay-bridge.svg") center / contain no-repeat;
+              mask:url("/images/bay-bridge.svg") center / contain no-repeat;
+      transition:background-color var(--sky-transition),opacity var(--sky-transition);
+    }
+    // Deck lamps, on the band's bridge rather than the backdrop's. Their own
+    // viewBox is the artwork's 1512×1122, so filling this box is all the
+    // alignment they need; the night-only opacity is inherited from the
+    // data-tod rule at the bottom of this file, same as the desktop copy.
+    .bridge-band .bridge-lights{
+      display:block; position:absolute; inset:0;
+      width:auto; height:auto; aspect-ratio:auto;
+    }
+    // The lamps are sized in the artwork's 1512-unit space, and the band renders
+    // that box full-bleed — roughly half the width the desktop bridge gives it,
+    // so they'd arrive at half size. Scaled back up to the presence they have on
+    // desktop, glow included.
+    .bridge-band .lamp{ r:10px; filter:drop-shadow(0 0 9px #ffd98a); }
+  }
 
   // ---------- NAV / TOPBAR ----------
   header{ position:relative; z-index:3; }
@@ -248,6 +341,27 @@
   .nav-links a::after{ content:""; position:absolute; left:0; bottom:0; width:100%; height:1px; background:var(--mint); transform:scaleX(0); transform-origin:left; transition:transform 0.3s ease; }
   .nav-links a:hover{ color:var(--ink); }
   .nav-links a:hover::after{ transform:scaleX(1); }
+  // Narrow phones: brand + toggle keep the top row, the links get a full-width
+  // row of their own underneath. `display:contents` dissolves .nav-right so its
+  // two children become direct .nav items and can be ordered across the two rows
+  // — .tod keeps its own position:relative, so the tod-panel still anchors to it.
+  // Without this the links are the only thing able to wrap, so YouTube drops off
+  // alone. Breakpoint is where the single row genuinely stops fitting: it needs
+  // ~427px of content box (brand 111 + links 246 + toggle 38 + gaps), so above
+  // ~520px the original row is left alone rather than stretched by space-between.
+  @media(max-width:520px){
+    .nav{ flex-wrap:wrap; row-gap:0.9rem; }
+    .nav-right{ display:contents; }
+    .nav-links{
+      order:3; flex-basis:100%; flex-wrap:nowrap;
+      justify-content:space-between; gap:0.5rem;
+      padding-top:0.15rem; border-top:1px solid var(--line);
+    }
+    .nav-links li{ display:flex; }
+    .nav-links a{ display:flex; align-items:center; min-height:44px; padding-bottom:0; }
+    .nav-links a::after{ bottom:9px; }
+  }
+
   .topbar{ display:flex; align-items:center; justify-content:space-between; padding-top:clamp(1.25rem,3vw,2rem); gap:1rem; }
   .back{ font-family:var(--f-mono); font-size:0.78rem; letter-spacing:0.06em; text-decoration:none; color:var(--ink-soft); display:inline-flex; align-items:center; gap:0.5rem; transition:gap 0.2s ease,color 0.2s ease; }
   .back:hover{ color:var(--ink); gap:0.75rem; }
@@ -256,7 +370,16 @@
     flex:none; width:38px; height:38px; border-radius:50%; display:grid; place-items:center; cursor:pointer;
     background:transparent; border:1px solid var(--line); color:var(--accent);
     transition:border-color 0.25s ease,transform 0.25s ease,background var(--sky-transition); -webkit-tap-highlight-color:transparent;
+    // the panel's long-press would otherwise raise iOS's callout and select the
+    // button under the finger
+    -webkit-touch-callout:none; user-select:none; -webkit-user-select:none;
     svg{ width:19px; height:19px; display:block; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+    // By day the face wears the sun's own gold rather than the UI accent, so it
+    // reads as the body it moves — disc filled like the one in the sky, and a
+    // touch larger than the moon so the rays have room. The moon keeps the
+    // accent and the icon default.
+    .tod-sun{ color:var(--sun); width:22px; height:22px; }
+    .tod-sun circle{ fill:currentColor; }
   }
   .tod-toggle:hover{ background:var(--surface); border-color:var(--aqua); transform:rotate(-12deg); }
   .tod-toggle[aria-expanded="true"]{ background:var(--surface); border-color:var(--aqua); }
@@ -406,11 +529,15 @@
   // ---------- TIDE ----------
   .tide{ position:fixed; left:0; right:0; bottom:0; height:var(--tide-h); z-index:4; line-height:0; pointer-events:none; }
   .tide > svg{ display:block; width:100%; height:100%; }
-  .tide-water{ animation:lap 18s ease-in-out infinite; will-change:transform; }
+  .tide-water{ animation:lap 18s ease-in-out infinite; will-change:transform; opacity:0.5; }
   .tide-layer-a{ animation:drift-a 44s linear infinite; }
   .tide-layer-b{ animation:drift-b 32s linear infinite; }
   .tide-foam{ animation:drift-b 32s linear infinite,foam-breathe 18s ease-in-out infinite; }
   #reflection{ animation:moon-shimmer 12s ease-in-out infinite; transform-origin:center bottom; }
+  // The glint only while the dial turns, same as the body casting it up in the
+  // sky — the water shouldn't hold a light from a sun that isn't shown.
+  .tide-refl{ opacity:0; transition:opacity 0.6s ease 0.15s; }
+  .tide.is-sweeping .tide-refl{ opacity:1; transition:opacity 0.25s ease; }
   #water stop,#sand stop{ transition:stop-color var(--sky-transition); }
   // water surface catches a bit of the sky, strongest near the horizon (top), fading with depth
   #water .g0{ stop-color:color-mix(in oklab, var(--water-a) 75%, var(--sky-b)); } #water .g1{ stop-color:color-mix(in oklab, var(--water-b) 88%, var(--sky-b)); } #water .g2{ stop-color:var(--water-c); }
@@ -614,6 +741,33 @@
 @keyframes jet-move{ 0%{ transform:translate(1600px,50px); } 100%{ transform:translate(-140px,78px); } }
 // a tiny satellite tracks slowly and steadily straight across the sky
 @keyframes sat-pass{ 0%{ transform:translate(-40px,44px); opacity:0; } 12%{ opacity:0.85; } 88%{ opacity:0.85; } 100%{ transform:translate(1500px,150px); opacity:0; } }
+// ---- the same passes, re-aimed for phones (see the .skylife mobile block) ----
+// Same shapes and durations; only the coordinates change, to the ~480→980 strip
+// of the viewBox a phone can actually see, and down over the bridge band.
+@keyframes gull-pass-a-m{
+  0%{ transform:translate(480px,206px); opacity:0; } 10%{ opacity:0.55; }
+  28%{ transform:translate(600px,172px); } 56%{ transform:translate(730px,224px); }
+  80%{ transform:translate(870px,166px); } 92%{ opacity:0.55; }
+  100%{ transform:translate(980px,196px); opacity:0; }
+}
+@keyframes gull-pass-b-m{
+  0%{ transform:translate(980px,180px); opacity:0; } 10%{ opacity:0.5; }
+  32%{ transform:translate(850px,232px); } 60%{ transform:translate(700px,168px); }
+  84%{ transform:translate(560px,220px); } 92%{ opacity:0.5; }
+  100%{ transform:translate(460px,178px); opacity:0; }
+}
+@keyframes drift-pass-a-m{
+  0%{ transform:translate(450px,190px) scale(1.6); opacity:0; } 17%{ opacity:0.5; }
+  48%{ transform:translate(660px,168px) scale(1.6); } 83%{ transform:translate(880px,186px) scale(1.6); }
+  91%{ opacity:0.5; } 100%{ transform:translate(1000px,164px) scale(1.6); opacity:0; }
+}
+@keyframes drift-pass-b-m{
+  0%{ transform:translate(1000px,258px) scale(1.15); opacity:0; } 21%{ opacity:0.42; }
+  50%{ transform:translate(770px,240px) scale(1.15); } 83%{ transform:translate(560px,256px) scale(1.15); }
+  92%{ opacity:0.42; } 100%{ transform:translate(450px,242px) scale(1.15); opacity:0; }
+}
+@keyframes jet-move-m{ 0%{ transform:translate(1010px,158px); } 100%{ transform:translate(450px,186px); } }
+@keyframes sat-pass-m{ 0%{ transform:translate(460px,152px); opacity:0; } 12%{ opacity:0.85; } 88%{ opacity:0.85; } 100%{ transform:translate(1000px,238px); opacity:0; } }
 // wingbeat
 @keyframes flap{ 0%,100%{ transform:scaleY(1); } 50%{ transform:scaleY(0.42); } }
 // jet nav lights: a quick flash then dark, like a real aircraft beacon
@@ -631,5 +785,10 @@
 
 @media(prefers-reduced-motion:reduce){
   :root[data-tod]{ --sky-transition:0s; }
+  // No sweep here, so the body and its glint would otherwise never get their
+  // moment and the sky would sit empty forever — they stay put instead.
+  .coastal .sky #sun-g,
+  .coastal .sky #moon-g{ opacity:0.95; transition:none; }
+  .coastal .tide-refl{ opacity:1; transition:none; }
   .coastal .tide-water,.coastal .tide-layer-a,.coastal .tide-layer-b,.coastal .tide-foam,.coastal #reflection,.coastal .star,.coastal .cloud-a,.coastal .cloud-b,.coastal .gull,.coastal .drift-cloud,.coastal .plane,.coastal .plane .flyer,.coastal .plane .trail,.coastal .plane .navlight,.coastal .sat,.coastal .bridge-lights .lamp{ animation:none !important; }
 }

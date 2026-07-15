@@ -18,7 +18,7 @@ export default function CoastalHome() {
 
   return (
     <div className="coastal">
-      <Sky hour={hour} />
+      <Sky hour={hour} sweeping={tod.sweeping} />
       {/* Line-drawn cloud landscape filling the left of the sky — the mirror
           of the bridge engraving on the right, masked so it recolors with the
           day↔night flip. */}
@@ -51,6 +51,20 @@ export default function CoastalHome() {
           </nav>
         </div>
       </header>
+
+      {/* Phones only: the background engraving has to keep out of the hero text's
+          way, which under 600px leaves it invisible. So there the bridge stops
+          being a backdrop and becomes a band of its own between nav and hero —
+          same artwork, cropped to the towers and deck, over its own water. */}
+      <div className="bridge-band" aria-hidden="true">
+        <div className="bridge-band-art">
+          <BridgeWater />
+          <div className="bridge-band-lines" />
+          {/* The lamps' viewBox is the bridge art's own 1512×1122, so sharing
+              this box lands them on the deck with no repositioning. */}
+          <BridgeLights />
+        </div>
+      </div>
 
       <main id="top">
         <Hero />
@@ -139,7 +153,7 @@ export default function CoastalHome() {
         </div>
       </footer>
 
-      <Tide hour={hour} />
+      <Tide hour={hour} sweeping={tod.sweeping} />
     </div>
   )
 }

@@ -39,7 +39,7 @@ export default function ResumePage() {
 
   return (
     <div className="coastal">
-      <Sky hour={hour} />
+      <Sky hour={hour} sweeping={tod.sweeping} />
 
       <header>
         <div className="r-wrap">
@@ -132,7 +132,7 @@ export default function ResumePage() {
         </div>
       </main>
 
-      <Tide hour={hour} />
+      <Tide hour={hour} sweeping={tod.sweeping} />
     </div>
   )
 }

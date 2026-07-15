@@ -57,7 +57,7 @@ export default function JunoCaseStudy() {
 
   return (
     <div className="coastal">
-      <Sky hour={hour} />
+      <Sky hour={hour} sweeping={tod.sweeping} />
 
       <header>
         <div className="wrap">
@@ -253,7 +253,7 @@ export default function JunoCaseStudy() {
         <div className="wrap"><Link className="back" to="/">← Back to home</Link></div>
       </div>
 
-      <Tide hour={hour} />
+      <Tide hour={hour} sweeping={tod.sweeping} />
     </div>
   )
 }

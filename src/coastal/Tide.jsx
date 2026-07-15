@@ -19,14 +19,14 @@ function waveTop(x0, count, base, amp) {
 const waveA = waveTop(-480, 6, 110, 30) // ends at 2400
 const waveB = waveTop(-420, 6, 130, 28) // ends at 2460, phase-offset from A
 
-export default function Tide({ hour }) {
+export default function Tide({ hour, sweeping }) {
   const day = isDayHour(hour)
   const bx = Math.max(90, Math.min(1350, Math.round(arcPoint(arcFrac(hour))[0])))
   const refl = day ? '#eec765' : '#c7d6f2' // sun-gold vs moon-silver
   const core = day ? 0.4 : 0.5
 
   return (
-    <div className="tide" role="img" aria-label="A shoreline where the tide meets the sand at the foot of the page">
+    <div className={`tide${sweeping ? ' is-sweeping' : ''}`} role="img" aria-label="A shoreline where the tide meets the sand at the foot of the page">
       <svg viewBox="0 0 1440 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <defs>
           <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
@@ -42,7 +42,13 @@ export default function Tide({ hour }) {
           </radialGradient>
         </defs>
         <rect x="0" y="0" width="1440" height="200" fill="url(#sand)" opacity="0.5" />
-        <ellipse id="reflection" cx={bx} cy="150" rx="66" ry="60" fill="url(#reflbeam)" />
+        {/* The glint comes and goes with the body that casts it (see .tide-refl).
+            It fades on this wrapper rather than the ellipse, because the shimmer
+            animates the ellipse's own opacity and a running animation outranks
+            any opacity we'd set on it. */}
+        <g className="tide-refl">
+          <ellipse id="reflection" cx={bx} cy="150" rx="66" ry="60" fill="url(#reflbeam)" />
+        </g>
         <g className="tide-water">
           <g className="tide-layer-a">
             <path opacity="0.45" d={waveA + ' L2400,220 L-480,220 Z'} />

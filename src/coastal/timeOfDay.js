@@ -76,6 +76,18 @@ export function isDayHour(h) {
   return hm >= sr && hm < ss
 }
 
+// The dial rests on one of two stops — mid-afternoon and the dead of night —
+// and the toggle sweeps the 12 hours between them. Both sit clear of every
+// band edge in phaseFor() at any time of year (SF sunset runs 16:51–20:35, so
+// 15:30 is never past `golden`; sunrise runs 05:48–07:21, so 03:30 is always
+// `night`), which keeps a stop from ever landing on a half-lit sky.
+export const DAY_STOP = 15.5    // 3:30pm
+export const NIGHT_STOP = 3.5   // 3:30am
+export function stopFor(h) {
+  return isDayHour(h) ? DAY_STOP : NIGHT_STOP
+}
+export const normHour = (h) => ((h % 24) + 24) % 24
+
 // Fraction 0..1 across the visible arc: sunrise → solar noon → sunset for the
 // sun; sunset → sunrise for the moon (spanning the real, uneven night length).
 export function arcFrac(h) {

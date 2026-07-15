@@ -438,16 +438,60 @@
   h1{ font-family:var(--f-display); font-optical-sizing:auto; font-weight:500; font-size:clamp(2rem,4.5vw,3.2rem); line-height:1.02; letter-spacing:-0.01em; margin:0; color:var(--ink); animation:none; opacity:1; text-transform:none; }
   h1 .amp{ font-style:italic; font-weight:500; color:var(--accent); }
   .tagline{ font-family:var(--f-display); font-style:italic; font-weight:400; font-size:clamp(1.3rem,2.4vw,1.9rem); line-height:1.24; letter-spacing:-0.01em; color:var(--ink); max-width:24ch; margin:clamp(1rem,2vw,1.4rem) 0 0; }
-  .positioning{ max-width:52ch; margin:clamp(1.1rem,2.6vw,1.6rem) 0 0; color:var(--ink-soft); font-size:clamp(0.9rem,0.3vw + 0.82rem,1rem); }
+  // The engraving passes behind the hero text, and where it lands depends on
+  // the viewport — so rather than hope for no collision, the text that has to
+  // stay readable sits on a wash of the page's own paper. Not a tinted card:
+  // this is --bg thickening under the text, so the bridge still ghosts through
+  // and no new colour surface enters a page built from hairlines and paper.
+  // Retunes with --bg across the day↔night flip, for free.
+  //
+  // Two nested dials, both driven live by the ?dev panel: --wash-tint mixes
+  // --wash-tint-color into the paper to pick the wash's colour, then --wash
+  // decides how much of it lands. Shipped default is tint 0% — pure paper.
+  .paper-wash(){
+    border-radius:12px;
+    background:color-mix(in srgb,
+      color-mix(in srgb, var(--wash-tint-color,var(--mint)) var(--wash-tint,0%), var(--bg))
+      var(--wash,55%), transparent);
+    transition:background var(--sky-transition);
+  }
+
+  .positioning{
+    .paper-wash();
+    max-width:calc(52ch + 2.2rem); color:var(--ink-soft);
+    font-size:clamp(0.9rem,0.3vw + 0.82rem,1rem);
+    // pulled left by its own padding so the text stays optically aligned with
+    // the h1 above it. Safe at every width: --pad never drops below 1.25rem.
+    padding:0.9rem 1.1rem; margin:clamp(1.1rem,2.6vw,1.6rem) 0 0 -1.1rem;
+  }
   .positioning strong{ color:var(--ink); font-weight:600; }
 
   .caps{ display:grid; grid-template-columns:1fr; gap:clamp(1rem,2.2vw,1.6rem); margin-top:clamp(1.5rem,3vw,2.2rem); max-width:860px; }
   @media(min-width:680px){ .caps{ grid-template-columns:repeat(3,1fr); } }
-  .cap{ display:flex; flex-direction:column; gap:0.5rem; padding-top:1rem; border-top:1px solid var(--line); }
-  .cap .ci{ width:22px; height:22px; color:var(--accent); }
+  // The icon box is derived from the heading's own line box, so the two can't
+  // drift apart if the type changes — edit these, not the numbers below.
+  @cap-fs: 0.98rem;
+  @cap-lh-ratio: 1.35;
+  @cap-lh: @cap-fs * @cap-lh-ratio;
+
+  // icon and heading share the top row, body spans beneath both — a grid so the
+  // markup stays as it is and no wrapper div is needed to pair them up.
+  // align-items:start, NOT center: a heading that wraps to two lines makes its
+  // row taller, and centering would drop that card's icon below its neighbours'.
+  // Top-aligned, every icon sits at the same y — you can rule a line through them.
+  .cap{
+    .paper-wash();
+    display:grid; grid-template-columns:auto 1fr; align-items:start;
+    column-gap:0.6rem; row-gap:0.5rem;
+    padding:1rem 1.1rem 1.15rem;
+    border-top:1px solid var(--line);
+  }
+  // the icon box is exactly one heading line tall and centres the glyph inside
+  // it, so the icon reads as centred on the first line whether or not it wraps.
+  .cap .ci{ display:grid; place-items:center; width:22px; height:@cap-lh; color:var(--accent); }
   .cap .ci svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
-  .cap h3{ font-family:var(--f-body); font-weight:600; font-size:0.98rem; letter-spacing:0.01em; margin:0.15rem 0 0; color:var(--ink); }
-  .cap p{ margin:0; font-size:0.9rem; line-height:1.55; color:var(--ink-soft); }
+  .cap h3{ font-family:var(--f-body); font-weight:600; font-size:@cap-fs; line-height:@cap-lh-ratio; letter-spacing:0.01em; margin:0; color:var(--ink); }
+  .cap p{ grid-column:1/-1; margin:0; font-size:0.9rem; line-height:1.55; color:var(--ink-soft); }
 
   // ---------- WORK ----------
   // no distinct panel — blends straight out of the hero so there's no color seam

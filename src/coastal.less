@@ -350,10 +350,11 @@
   // row of their own underneath. `display:contents` dissolves .nav-right so its
   // two children become direct .nav items and can be ordered across the two rows
   // — .tod keeps its own position:relative, so the tod-panel still anchors to it.
-  // Without this the links are the only thing able to wrap, so YouTube drops off
-  // alone. Breakpoint is where the single row genuinely stops fitting: it needs
-  // ~427px of content box (brand 111 + links 246 + toggle 38 + gaps), so above
-  // ~520px the original row is left alone rather than stretched by space-between.
+  // Without this the links are the only thing able to wrap, so the last one
+  // drops off alone. Breakpoint is where the single row genuinely stops fitting;
+  // it was measured against four links and now carries three, so there's a
+  // little more slack than the numbers below imply — left as-is rather than
+  // re-tuned by eye.
   @media(max-width:520px){
     .nav{ flex-wrap:wrap; row-gap:0.9rem; }
     .nav-right{ display:contents; }

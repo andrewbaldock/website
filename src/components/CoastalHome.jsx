@@ -49,7 +49,6 @@ export default function CoastalHome() {
                 <li><Link to="/resume">Résumé</Link></li>
                 <li><a href="https://www.linkedin.com/in/andrewbaldock" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
                 <li><a href="https://github.com/andrewbaldock" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-                <li><a href="https://www.youtube.com/@baldockdigital/videos" target="_blank" rel="noopener noreferrer">YouTube</a></li>
               </ul>
               <TodToggle {...tod} />
             </div>
@@ -151,7 +150,6 @@ export default function CoastalHome() {
             <ul className="foot-links">
               <li><a href="https://www.linkedin.com/in/andrewbaldock" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
               <li><a href="https://github.com/andrewbaldock" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-              <li><a href="https://www.youtube.com/@baldockdigital/videos" target="_blank" rel="noopener noreferrer">YouTube</a></li>
               <li><Link to="/resume">Résumé</Link></li>
             </ul>
           </div>

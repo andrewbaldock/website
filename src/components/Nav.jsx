@@ -1,7 +1,7 @@
 import Tippy from '@tippyjs/react'
 import { FileText } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { GitHubIcon, LinkedInIcon, YouTubeIcon } from './BrandIcons.jsx'
+import { GitHubIcon, LinkedInIcon } from './BrandIcons.jsx'
 import { AetherLogo } from './AetherLogo.jsx'
 import 'tippy.js/dist/tippy.css'
 import 'tippy.js/animations/shift-away.css'
@@ -11,7 +11,6 @@ const links = [
   { icon: FileText,     label: 'Resume',        to: '/resume',                                             internal: true   },
   { icon: LinkedInIcon, label: 'LinkedIn',      href: 'https://www.linkedin.com/in/andrewbaldock/',         external: true   },
   { icon: GitHubIcon,   label: 'GitHub',        href: 'https://github.com/andrewbaldock',                  external: true   },
-  { icon: YouTubeIcon,  label: 'YouTube',       href: 'https://www.youtube.com/@baldockdigital/videos',     external: true   },
 ]
 
 // The coastal pages (home, Juno) bring their own nav + day/night toggle, so the

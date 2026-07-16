@@ -11,7 +11,6 @@ export default function Contact() {
             <li><Link to="/resume">Resume</Link></li>
             <li><a href="https://www.linkedin.com/in/andrewbaldock/" target="_blank" rel="noopener noreferrer">linkedin.com/in/andrewbaldock</a></li>
             <li><a href="https://github.com/andrewbaldock" target="_blank" rel="noopener noreferrer">github.com/andrewbaldock</a></li>
-            <li><a href="https://www.youtube.com/@baldockdigital/videos" target="_blank" rel="noopener noreferrer">youtube.com/@baldockdigital/videos</a></li>
           </ul>
         </div>
       </div>

@@ -14,7 +14,7 @@ export default function Hero() {
       <div className="wrap">
         <span className="eyebrow mono">React · TypeScript · AI-Native Product Engineering</span>
         <h1>Andrew <span className="amp">Baldock</span></h1>
-        <p className="tagline">Frontier-grade product UI.</p>
+        <p className="tagline">Making complex systems feel simple.</p>
         <p className="positioning">
           <strong>Senior React &amp; TypeScript engineer and engineering manager</strong> — ten years
           shipping polished product UI and the design systems beneath it, and years leading the team that

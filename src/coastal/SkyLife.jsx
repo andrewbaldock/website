@@ -75,7 +75,10 @@ export default function SkyLife() {
       after(endMs + rand(7000, 18000), tick)         // rest, then next pass
     }
 
-    after(rand(1500, 4000), tick)
+    // Something is always crossing the sky within the first 10s of arriving —
+    // the passes run for minutes, so a longer wait than this reads as an empty
+    // sky rather than a calm one.
+    after(rand(1500, 10000), tick)
 
     return () => {
       timers.forEach(clearTimeout)

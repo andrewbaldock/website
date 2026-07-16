@@ -31,7 +31,7 @@ const TINTS = [
 // exists. TINT past ~15 stops reading as tinted paper and becomes a coloured
 // card, dragging a new surface onto a page built from hairlines and paper.
 // Widen these if you want to see past the guardrails.
-const BAND = { wash: [55, 100], tint: [0, 15] }
+const BAND = { wash: [55, 100], tint: [0, 15], tide: [60, 150] }
 
 export default function BridgeDevPanel() {
   const [dark, setDark] = useState(DARK_DEFAULT)
@@ -39,7 +39,22 @@ export default function BridgeDevPanel() {
   const [wash, setWash] = useState(WASH_DEFAULT)
   const [tint, setTint] = useState(TINT_DEFAULT)
   const [hue, setHue] = useState(0)
+  const [tide, setTide] = useState(null)
   const [svgText, setSvgText] = useState(null)
+
+  // --tide-h is a clamp(), and a custom prop reads back as its raw token rather
+  // than a resolved length — so measure the strip itself for the true starting
+  // px. Same self-syncing trick as THICK: the slider can't drift from reality.
+  useEffect(() => {
+    const el = document.querySelector('.tide')
+    if (el) setTide(Math.round(el.getBoundingClientRect().height))
+  }, [])
+
+  // page padding-bottom is derived from --tide-h, so it follows on its own.
+  useEffect(() => {
+    if (tide == null) return
+    document.documentElement.style.setProperty('--tide-h', `${tide}px`)
+  }, [tide])
 
   // the trace lives in a file, so THICK can't be a CSS knob — fetch it once,
   // then rewrite stroke-width into a blob URL on every change. The slider
@@ -146,6 +161,16 @@ export default function BridgeDevPanel() {
         <span style={val}>{hue === 0 ? '—' : `${tint}%`}</span>
       </div>
 
+      <div style={{ ...row, marginTop: '0.5rem', paddingTop: '0.5rem', borderTop: '1px solid rgba(232,244,242,0.15)' }}>
+        <label htmlFor="dev-tide">TIDE</label>
+        <input
+          id="dev-tide" type="range" min={BAND.tide[0]} max={BAND.tide[1]} step="1"
+          value={tide ?? 0} onChange={(e) => setTide(+e.target.value)}
+          disabled={tide == null}
+        />
+        <span style={val}>{tide == null ? '…' : `${tide}px`}</span>
+      </div>
+
       {/* one line each, always rendered, never wrapping — so no value change
           can alter the panel's height either. */}
       <div style={{
@@ -156,6 +181,7 @@ export default function BridgeDevPanel() {
         <div>bay-bridge.svg:11 → stroke-width="{thick ?? '…'}"</div>
         <div>.paper-wash() → --wash,{wash}%</div>
         <div>{' '.repeat(15)}--wash-tint,{hue === 0 ? '0%' : `${tint}% of ${TINTS[hue].name}`}</div>
+        <div>coastal.less:36 → --tide-h ceiling {tide == null ? '…' : `${tide}px`}</div>
       </div>
     </div>
   )

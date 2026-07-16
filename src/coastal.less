@@ -14,6 +14,10 @@
 :root {
   --mint:#1fb6ad; --mint-deep:#148f88; --aqua:#7fd8d0; --periwinkle:#8ea2e6;
   --gold:#b98a2e; --sun:#dca43a; --moon:#aebfe8;
+  // the only warm-pink in the page, and it exists for exactly one thing: the
+  // blossom on the water. Kept low-opacity there so it reads as a blush in the
+  // petals rather than a pink drawing.
+  --lotus:#e79ab0;
 
   --bg:#f0ece4; --bg-2:#f6f8fb;
   --ink:#2a2b28; --ink-soft:#5c5e57; --ink-faint:#8b8d84;
@@ -33,7 +37,9 @@
 
   --maxw:1120px; --readw:760px;
   --pad:clamp(1.25rem,5vw,4rem);
-  --tide-h:clamp(96px,12vw,150px);
+  // Shoreline height, and what the page pads its bottom against. No clamp: the
+  // old one scaled a 96–150 range, and the shoreline no longer has a range.
+  --tide-h:80px;
   --sky-transition:1.2s ease;
 }
 // A dusk-to-dark progression rather than one jump. The evening (golden → sunset
@@ -496,7 +502,12 @@
   // ---------- WORK ----------
   // no distinct panel — blends straight out of the hero so there's no color seam
   .work{ background:transparent; position:relative; z-index:2; padding-bottom:clamp(5rem,11vw,8rem); transition:background var(--sky-transition); }
-  .work-head{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem; flex-wrap:wrap; padding-top:clamp(1.25rem,2.5vw,2rem); padding-bottom:clamp(1.5rem,3.5vw,2.4rem); }
+  // mint hairline marking the hero/work boundary — on .work-head's existing
+  // box rather than an <hr>, so it spans the wrap and can't drift out of
+  // alignment with the content edges. The old padding-top is split into
+  // margin + padding: the margin holds the section's overall position while the
+  // smaller padding pulls the rule down close to the heading it belongs to.
+  .work-head{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-top:clamp(0.75rem,1.5vw,1.2rem); padding-top:clamp(0.5rem,1vw,0.8rem); padding-bottom:clamp(1.5rem,3.5vw,2.4rem); border-top:1px solid color-mix(in oklab,var(--mint) 50%,transparent); }
   .work-head h2{ font-family:var(--f-display); font-weight:500; font-size:clamp(1.6rem,4vw,2.5rem); letter-spacing:-0.015em; margin:0; color:var(--ink); }
   .work-head p{ margin:0; max-width:44ch; color:var(--ink-soft); font-size:0.98rem; }
   .work-stack{ display:block; margin-top:0.5rem; font-family:var(--f-mono); font-size:0.74rem; letter-spacing:0.06em; color:var(--accent); }
@@ -572,13 +583,46 @@
   // ---------- TIDE ----------
   .tide{ position:fixed; left:0; right:0; bottom:0; height:var(--tide-h); z-index:4; line-height:0; pointer-events:none; }
   .tide > svg{ display:block; width:100%; height:100%; }
-  .tide-water{ animation:lap 18s ease-in-out infinite; will-change:transform; opacity:0.5; }
+  .tide-water{ animation:lap 18s ease-in-out infinite; will-change:transform; opacity:0.75; }
   .tide-layer-a{ animation:drift-a 44s linear infinite; }
   .tide-layer-b{ animation:drift-b 32s linear infinite; }
   .tide-foam{ animation:drift-b 32s linear infinite,foam-breathe 18s ease-in-out infinite; }
   #reflection{ animation:moon-shimmer 12s ease-in-out infinite; transform-origin:center bottom; }
   // The glint only while the dial turns, same as the body casting it up in the
   // sky — the water shouldn't hold a light from a sun that isn't shown.
+  // ---------- BLOSSOMS ON THE WATER (see Tide.jsx) ----------
+  // Invisible until the scheduler adds .play, so the shoreline is usually just
+  // water. Passes are minutes long on purpose: the strip is fixed to the
+  // viewport, so anything in it is permanently in the corner of the eye.
+  // vector-effect keeps strokes even — the viewBox squashes ~2.5:1 vertically,
+  // which would otherwise render horizontal lines thin and vertical ones fat.
+  .lotus{ opacity:0; transform-box:fill-box; transform-origin:center; }
+  .lotus path,.lotus circle{ vector-effect:non-scaling-stroke; }
+  // SVG defaults to transform-box:view-box (set above), which would pivot the
+  // blossom's rotate() around the centre of the whole 1440×200 strip and fling
+  // it across the page. fill-box pivots it about itself. (Same guard SkyLife
+  // puts on its gull wings — any rotate/scale needs it; translate doesn't.)
+
+  .lotus path{ fill:var(--shade,var(--lotus)); fill-opacity:0.85; stroke:var(--foam); stroke-width:1.4; transition:stroke var(--sky-transition); }
+  .lotus circle{ fill:var(--gold); fill-opacity:0.9; stroke:none; } // seed head
+  // A shade each, mixed from tokens the page already owns rather than three new
+  // pinks: the big one is the blossom proper, the small one washes toward foam
+  // so it reads as further out, the third leans gold and warmer.
+  .l2{ --shade:color-mix(in srgb, var(--lotus) 58%, var(--foam)); }
+  .l3{ --shade:color-mix(in srgb, var(--lotus) 78%, var(--gold)); }
+  // durations must match each pass's ms in Tide.jsx
+  .l1.play{ animation:lotus-pass 300s linear; }
+  .l2.play{ animation:lotus-pass 360s linear; }
+  .l3.play{ animation:lotus-pass 330s linear; }
+  // --enter is set per pass by Tide.jsx: negative on load so the first blossom
+  // arrives already drifting, 0 for every pass after. MUST come after the
+  // shorthands above — `animation:` resets animation-delay back to 0.
+  .l1.play,.l2.play,.l3.play{ animation-delay:var(--enter,0s); }
+  // the bob is offset per blossom so they never rise and fall in unison
+  .l1.play .bob,.l2.play .bob,.l3.play .bob{ animation:lotus-bob 18s ease-in-out infinite; }
+  .l2 .bob{ animation-delay:-6s; }
+  .l3 .bob{ animation-delay:-11s; }
+
   .tide-refl{ opacity:0; transition:opacity 0.6s ease 0.15s; }
   .tide.is-sweeping .tide-refl{ opacity:1; transition:opacity 0.25s ease; }
   #water stop,#sand stop{ transition:stop-color var(--sky-transition); }
@@ -747,6 +791,17 @@
 @keyframes drift-a{ from{ transform:translateX(0); } to{ transform:translateX(-480px); } }
 @keyframes drift-b{ from{ transform:translateX(0); } to{ transform:translateX(-480px); } }
 @keyframes foam-breathe{ 0%,100%{ opacity:0.75; } 50%{ opacity:0.35; } }
+
+// ---- blossoms on the water. --y is set per pass by Tide.jsx, so no two
+// ---- crossings run on the same line. Five minutes to drift the width of the
+// ---- page, turning slowly as it goes.
+@keyframes lotus-pass{
+  0%{ transform:translate(-70px,var(--y)) rotate(0deg); opacity:0; }
+  5%{ opacity:1; }
+  95%{ opacity:1; }
+  100%{ transform:translate(1520px,var(--y)) rotate(148deg); opacity:0; }
+}
+@keyframes lotus-bob{ 0%,100%{ transform:translateY(-2.5px); } 50%{ transform:translateY(2.5px); } }
 @keyframes moon-shimmer{ 0%,100%{ opacity:0.5; transform:scaleY(1); } 50%{ opacity:0.85; transform:scaleY(1.04); } }
 @keyframes cloud-drift{ 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(22px); } }
 
@@ -832,4 +887,8 @@
   .coastal .sky #moon-g{ opacity:0.95; transition:none; }
   .coastal .tide-refl{ opacity:1; transition:none; }
   .coastal .tide-water,.coastal .tide-layer-a,.coastal .tide-layer-b,.coastal .tide-foam,.coastal #reflection,.coastal .star,.coastal .cloud-a,.coastal .cloud-b,.coastal .gull,.coastal .drift-cloud,.coastal .plane,.coastal .plane .flyer,.coastal .plane .trail,.coastal .plane .navlight,.coastal .sat,.coastal .bridge-lights .lamp{ animation:none !important; }
+  // The blossoms never get scheduled at all under reduced motion (Tide.jsx
+  // bails before its first pass), so they stay at their resting opacity:0 —
+  // belt and braces in case .play is ever set some other way.
+  .coastal .lotus,.coastal .lotus .bob{ animation:none !important; opacity:0; }
 }

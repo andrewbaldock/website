@@ -198,6 +198,10 @@
     // instead of gliding in from an off-screen edge many seconds later. Duration
     // must match GREET_MS in SkyLife.jsx. One-shot; see SkyLife.jsx.
     .gull.play.greet{ animation:gull-greet 45s ease-in-out; }
+    // Likewise, the first-of-visit drift-cloud fades in near centre so it too is
+    // on-screen early (within ~10s of load). Duration must match CLOUD_GREET_MS
+    // in SkyLife.jsx. One-shot; see SkyLife.jsx.
+    .drift-cloud.play.greet{ animation:cloud-greet 120s linear; }
     .dc1.play{ animation:drift-pass-a 240s linear; }
     .dc2.play{ animation:drift-pass-b 280s linear; }
     .plane.play{ animation:plane-show 100s linear; }
@@ -776,6 +780,12 @@
   0%{ transform:translate(700px,150px); opacity:0; } 7%{ opacity:0.55; }
   40%{ transform:translate(900px,120px); } 88%{ opacity:0.55; }
   100%{ transform:translate(1200px,92px); opacity:0; }
+}
+// the greeting drift-cloud: same idea, eases in near centre then drifts out slow
+@keyframes cloud-greet{
+  0%{ transform:translate(660px,150px) scale(1.3); opacity:0; } 3%{ opacity:0.5; }
+  55%{ transform:translate(820px,138px) scale(1.3); } 90%{ opacity:0.5; }
+  100%{ transform:translate(1080px,150px) scale(1.3); opacity:0; }
 }
 // gull glides the full width on a gentle arcing (french-curve) path
 @keyframes gull-pass-a{

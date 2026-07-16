@@ -92,6 +92,18 @@ export default function SkyLife() {
       after(GREET_MS + rand(7000, 18000), tick)
     })
 
+    // A drift-cloud also eases in early (within the first ~10s), centred like the
+    // greeting gull so it's on-screen fast. Independent one-shot — it doesn't
+    // drive the scheduler, and may overlap the greeting gull (that's fine).
+    const CLOUD_GREET_MS = 120000                    // must match cloud-greet in coastal.less
+    const firstCloud = Math.random() < 0.5 ? 2 : 3   // .dc1 or .dc2
+    after(rand(500, 3000), () => {
+      const el = root.querySelector(PASSES[firstCloud].sel)
+      if (!el) return
+      el.classList.add('greet', 'play')
+      after(CLOUD_GREET_MS, () => el.classList.remove('play', 'greet'))
+    })
+
     return () => {
       timers.forEach(clearTimeout)
       root.querySelectorAll('.play').forEach((el) => el.classList.remove('play'))

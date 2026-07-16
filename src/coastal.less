@@ -192,6 +192,9 @@
     // Durations here must stay in sync with PASSES in SkyLife.jsx.
     .g1.play{ animation:gull-pass-a 95s ease-in-out; }
     .g2.play{ animation:gull-pass-b 105s ease-in-out; }
+    // The first-of-visit gull starts ~4s into its glide so it's already fading in
+    // and clearly visible within the first few seconds. One-shot; see SkyLife.jsx.
+    .gull.play.greet{ animation-delay:-4s; }
     .dc1.play{ animation:drift-pass-a 240s linear; }
     .dc2.play{ animation:drift-pass-b 280s linear; }
     .plane.play{ animation:plane-show 100s linear; }

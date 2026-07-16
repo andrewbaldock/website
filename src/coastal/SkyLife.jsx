@@ -75,10 +75,20 @@ export default function SkyLife() {
       after(endMs + rand(7000, 18000), tick)         // rest, then next pass
     }
 
-    // Something is always crossing the sky within the first 10s of arriving —
-    // the passes run for minutes, so a longer wait than this reads as an empty
-    // sky rather than a calm one.
-    after(rand(1500, 10000), tick)
+    // A gull always greets you: the first pass is forced to be a seagull, gliding
+    // in within the first couple of seconds (never a minutes-long wait for one).
+    // `.greet` starts it partway into its fade so it's clearly visible well under
+    // 5s; every later pass is the normal random calm scheduler.
+    const firstGull = Math.random() < 0.5 ? 0 : 1   // .g1 or .g2
+    after(rand(500, 1500), () => {
+      last = firstGull
+      const el = root.querySelector(PASSES[firstGull].sel)
+      if (el) {
+        el.classList.add('greet', 'play')
+        after(PASSES[firstGull].ms, () => el.classList.remove('play', 'greet'))
+      }
+      after(PASSES[firstGull].ms + rand(7000, 18000), tick)
+    })
 
     return () => {
       timers.forEach(clearTimeout)

@@ -1,11 +1,11 @@
-import { Monitor, Sparkles, Layers } from 'lucide-react'
+import { Gem, Crown, Ship } from 'lucide-react'
 
 // Coastal hero — the name is dialed down so the sky + tide lead; a quiet
 // capabilities trio carries the "what I do".
 const CAPS = [
-  { Icon: Monitor, title: 'Product UI & design systems', body: 'Polished, production interfaces and the token systems that keep them consistent.' },
-  { Icon: Sparkles, title: 'AI-native / LLM apps', body: 'LLM-agnostic, with streaming agent loops that source real data and return structured JSON — rendered live as charts, tables, 2D/3D.' },
-  { Icon: Layers, title: 'Strategic code design', body: 'Real-time, data-intensive apps built strategically to stay performant and evolvable at scale.' },
+  { Icon: Gem, title: 'Product UI & design systems', body: 'Polished, production interfaces and the token systems that keep them consistent.' },
+  { Icon: Crown, title: 'AI-native / LLM apps', body: 'LLM-agnostic, with streaming agent loops that source real data and return structured JSON — rendered live as charts, tables, 2D/3D.' },
+  { Icon: Ship, title: 'Strategic code design', body: 'Real-time, data-intensive apps built strategically to stay performant and evolvable at scale.' },
 ]
 
 export default function Hero() {

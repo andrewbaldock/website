@@ -192,9 +192,12 @@
     // Durations here must stay in sync with PASSES in SkyLife.jsx.
     .g1.play{ animation:gull-pass-a 95s ease-in-out; }
     .g2.play{ animation:gull-pass-b 105s ease-in-out; }
-    // The first-of-visit gull starts ~4s into its glide so it's already fading in
-    // and clearly visible within the first few seconds. One-shot; see SkyLife.jsx.
-    .gull.play.greet{ animation-delay:-4s; }
+    // The first-of-visit gull uses a dedicated pass that FADES IN near the centre
+    // of the viewBox — always on-screen at any aspect ratio / on phones, since the
+    // sky SVG is centre-sliced — so a bird is clearly visible within ~3s of load
+    // instead of gliding in from an off-screen edge many seconds later. Duration
+    // must match GREET_MS in SkyLife.jsx. One-shot; see SkyLife.jsx.
+    .gull.play.greet{ animation:gull-greet 45s ease-in-out; }
     .dc1.play{ animation:drift-pass-a 240s linear; }
     .dc2.play{ animation:drift-pass-b 280s linear; }
     .plane.play{ animation:plane-show 100s linear; }
@@ -765,6 +768,15 @@
 
 // One pass = enter invisible → glide the full width → exit invisible. Each runs
 // once, on demand, when the SkyLife scheduler adds `.play` (no parking tail).
+// The greeting pass (first of a visit): fades in near the CENTRE of the viewBox
+// so it's on-screen the instant it appears (the sky SVG is centre-sliced, so the
+// edges of the full-width passes above are off-screen on most viewports/phones),
+// then drifts gently out. Runs once; see `.gull.play.greet` and SkyLife.jsx.
+@keyframes gull-greet{
+  0%{ transform:translate(700px,150px); opacity:0; } 7%{ opacity:0.55; }
+  40%{ transform:translate(900px,120px); } 88%{ opacity:0.55; }
+  100%{ transform:translate(1200px,92px); opacity:0; }
+}
 // gull glides the full width on a gentle arcing (french-curve) path
 @keyframes gull-pass-a{
   0%{ transform:translate(-160px,96px); opacity:0; } 10%{ opacity:0.55; }

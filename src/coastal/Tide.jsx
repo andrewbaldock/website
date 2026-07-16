@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { arcFrac, arcPoint, isDayHour } from './timeOfDay'
 import { lotusPetals } from './tideLife'
 
@@ -43,12 +43,42 @@ const PASSES = [
   { sel: '.l3', r: 20, ms: 330000, y: [128, 148] },
 ]
 
+// Must outlive the slowest ring: the third starts 1.1s late and runs 5s (see
+// .ripple in coastal.less), so anything under 6.1s blinks it out mid-spread.
+const RIPPLE_MS = 6400
+
 export default function Tide({ hour, sweeping }) {
   const day = isDayHour(hour)
   const bx = Math.max(90, Math.min(1350, Math.round(arcPoint(arcFrac(hour))[0])))
   const refl = day ? '#eec765' : '#c7d6f2' // sun-gold vs moon-silver
   const core = day ? 0.4 : 0.5
   const rootRef = useRef(null)
+  const svgRef = useRef(null)
+  const idRef = useRef(0)
+  const [ripples, setRipples] = useState([])
+
+  // Touch a blossom and the water answers. The ripple is dropped as a sibling
+  // at the blossom's *current* spot rather than parented to it — water stays
+  // where it was disturbed while the blossom drifts on.
+  //
+  // Position comes from getBoundingClientRect, not getScreenCTM: CTM is defined
+  // over SVG transform *attributes* and browsers disagree about whether a
+  // running CSS animation counts, which would silently land every ripple at
+  // 0,0. Rects always reflect what's actually on screen. preserveAspectRatio is
+  // "none", so mapping the rect back into viewBox units is a plain linear scale
+  // on each axis independently.
+  const splash = (e) => {
+    const svg = svgRef.current
+    if (!svg || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const s = svg.getBoundingClientRect()
+    const b = e.currentTarget.getBoundingClientRect()
+    if (!s.width || !s.height) return
+    const x = ((b.left + b.width / 2) - s.left) / s.width * 1440
+    const y = ((b.top + b.height / 2) - s.top) / s.height * 200
+    const id = ++idRef.current
+    setRipples((rs) => [...rs, { id, x, y }])
+    setTimeout(() => setRipples((rs) => rs.filter((r) => r.id !== id)), RIPPLE_MS)
+  }
 
   // Self-scheduling setTimeout loop: drift one blossom across, rest, repeat.
   // Now and then the second one overlaps the first — "a blossom or two".
@@ -102,19 +132,24 @@ export default function Tide({ hour, sweeping }) {
   }, [])
 
   const blossom = ({ sel, r }) => (
-    <g className={`lotus ${sel.slice(1)}`} key={sel}>
+    <g className={`lotus ${sel.slice(1)}`} key={sel} onMouseEnter={splash} onClick={splash}>
       <g className="bob">
+        {/* Hit area. An ellipse, not a circle, and deliberately huge on y: the
+            viewBox squashes ~2.5:1, so a circle of r here would render about
+            9px tall — a cruel target for something that never stops moving.
+            ry is pre-stretched to come out roughly square on screen. */}
+        <ellipse className="hit" rx={r * 1.2} ry={r * 2.6} />
         {lotusPetals(r).map(({ key, rot, d }) => (
           <path key={key} d={d} transform={`rotate(${rot})`} />
         ))}
-        <circle r={r * 0.19} />
+        <circle className="seed" r={r * 0.19} />
       </g>
     </g>
   )
 
   return (
     <div ref={rootRef} className={`tide${sweeping ? ' is-sweeping' : ''}`} role="img" aria-label="A shoreline where the tide meets the sand at the foot of the page">
-      <svg viewBox="0 0 1440 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <svg ref={svgRef} viewBox="0 0 1440 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <defs>
           <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
             <stop className="g0" offset="0%" /><stop className="g1" offset="45%" /><stop className="g2" offset="100%" />
@@ -147,6 +182,16 @@ export default function Tide({ hour, sweeping }) {
             <path fill="none" strokeWidth="2.5" strokeLinecap="round" opacity="0.7" d={waveB} />
           </g>
         </g>
+
+        {/* Rings spread from wherever a blossom was touched. Drawn under the
+            blossoms so they read as the water's response, not part of the
+            flower. The viewBox squash turns them into ellipses on its own,
+            which is what rings on a pond seen at an angle look like. */}
+        {ripples.map(({ id, x, y }) => (
+          <g className="ripple" key={id} style={{ transform: `translate(${x}px,${y}px)` }}>
+            <circle r="5" /><circle r="5" /><circle r="5" />
+          </g>
+        ))}
 
         {/* The blossoms float ON the surface, so they're drawn last — and in the
             page's own engraved line language, outlines with a blush inside. */}

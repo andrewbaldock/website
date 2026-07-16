@@ -60,15 +60,19 @@ export function useTimeOfDay() {
   // way.
   const sweepRef = useRef(false)
 
-  // set data-tod before paint to avoid a flash of the default palette
+  // set data-tod before paint to avoid a flash of the default palette. The
+  // removal MUST live in this same layout effect (not a passive one): on an SPA
+  // route swap React runs the unmounting page's passive cleanups *after* the
+  // mounting page's layout effects, so a passive removeAttribute would wipe the
+  // data-tod the next page just set — leaving the page de-themed (dark ink on
+  // the global dark body). Co-located here, the unmount's layout cleanup runs
+  // before the next mount's layout setup, so data-tod is always set.
   useLayoutEffect(() => {
     document.documentElement.setAttribute('data-tod', phaseFor(applied))
+    return () => document.documentElement.removeAttribute('data-tod')
   }, [applied])
 
-  useEffect(() => () => {
-    document.documentElement.removeAttribute('data-tod')
-    cancelAnimationFrame(rafRef.current)
-  }, [])
+  useEffect(() => () => cancelAnimationFrame(rafRef.current), [])
 
   // Gentle live tick. In 'live' this drifts the sky; otherwise its only job is
   // to let us notice the sun rise or set.

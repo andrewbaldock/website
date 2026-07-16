@@ -18,7 +18,8 @@
   --bg:#f0ece4; --bg-2:#f6f8fb;
   --ink:#2a2b28; --ink-soft:#5c5e57; --ink-faint:#8b8d84;
   --surface:rgba(255,255,255,0.72); --surface-2:#eef4f2; --line:#d9d3c7;
-  --accent:var(--mint-deep);
+  --accent:#00c3b4;
+  --bridge:#209189; // deep teal by day; the dark tod-blocks brighten it
 
   --sky-a:#dfe7ee; --sky-b:#f0ece4;
   --engrave:rgba(42,43,40,0.55); --engrave-soft:rgba(42,43,40,0.28);
@@ -47,7 +48,7 @@
 // ---- morning ----
 :root[data-tod="predawn"]{ // dark, first cool lightening before sunrise
   --bg:#1e2236; --bg-2:#242a42; --ink:#dbe0f0; --ink-soft:#a9b1c9; --ink-faint:#767f97;
-  --surface:rgba(34,40,62,0.60); --surface-2:#1d2236; --line:#333a54; --accent:#4fd3c8;
+  --surface:rgba(34,40,62,0.60); --surface-2:#1d2236; --line:#333a54; --accent:#4fd3c8; --bridge:#3fbcb2;
   --sky-a:#2c3352; --sky-b:#1a2036;
   --engrave:rgba(215,222,242,0.52); --engrave-soft:rgba(175,186,222,0.26);
   --water-a:#2f5f72; --water-b:#1d4054; --water-c:#122a3e; --foam:#9fbccd;
@@ -67,7 +68,7 @@
 // ---- deep twilight → night (dark theme, arriving in two steps) ----
 :root[data-tod="twilight"]{
   --bg:#24263e; --bg-2:#2b2e48; --ink:#dfe2f0; --ink-soft:#b0b6cc; --ink-faint:#7e8299;
-  --surface:rgba(40,44,68,0.60); --surface-2:#23263c; --line:#3a3f5c; --accent:#57d7cc;
+  --surface:rgba(40,44,68,0.60); --surface-2:#23263c; --line:#3a3f5c; --accent:#57d7cc; --bridge:#45c2b7;
   --sky-a:#6a4f82; --sky-b:#33395e;
   --engrave:rgba(220,225,245,0.55); --engrave-soft:rgba(180,190,225,0.28);
   --water-a:#3a6f80; --water-b:#234a5e; --water-c:#163247; --foam:#a9c6d4;
@@ -76,7 +77,7 @@
 }
 :root[data-tod="night"]{
   --bg:#10141f; --bg-2:#161b2a; --ink:#e7ecf4; --ink-soft:#aeb6c6; --ink-faint:#6f7890;
-  --surface:rgba(30,37,54,0.60); --surface-2:#141a28; --line:#2b3346; --accent:#3fd2c7;
+  --surface:rgba(30,37,54,0.60); --surface-2:#141a28; --line:#2b3346; --accent:#3fd2c7; --bridge:#3ac2b5;
   --sky-a:#171d2e; --sky-b:#10141f;
   --engrave:rgba(220,228,242,0.60); --engrave-soft:rgba(174,191,232,0.30);
   --water-a:#245b6e; --water-b:#17384a; --water-c:#0f2436; --foam:#b9d6df;
@@ -255,7 +256,7 @@
   .bridge{
     position:absolute; top:clamp(36px,3.5vw,88px); left:47%; right:0; z-index:1; pointer-events:none;
     aspect-ratio:1512/1122;
-    background-color:var(--accent); opacity:0.43;
+    background-color:var(--bridge); opacity:0.43;
     -webkit-mask:url("/images/bay-bridge.svg") right top / contain no-repeat;
             mask:url("/images/bay-bridge.svg") right top / contain no-repeat;
     transition:background-color var(--sky-transition),opacity var(--sky-transition);

@@ -12,6 +12,7 @@ import CoinRays from '../coastal/CoinRays.jsx'
 import Hero from './Hero.jsx'
 import { AetherLogo } from './AetherLogo.jsx'
 import MagicStickyCardWordmark from './MagicStickyCardWordmark.jsx'
+import { AETHER_URL, JUNO_URL, LINEOP_URL } from '../config.js'
 
 // ponytail: dev builds only, so ?dev can never expose the panel in production.
 const showBridgeDev = import.meta.env.DEV && new URLSearchParams(window.location.search).has('dev')
@@ -77,32 +78,10 @@ export default function CoastalHome() {
           <div className="wrap">
             <div className="work-head">
               <h2>Selected work</h2>
-              <p>Three fullstack apps for the modern age — AI-agent enabled, design system included.<span className="work-stack">React · TS · Vite · Tailwind · Postgres</span></p>
+              <p>Four fullstack apps for the modern age — AI-agent enabled, design system included.<span className="work-stack">React · TS · Vite · Tailwind · Postgres</span></p>
             </div>
             <div className="work-rows">
               <Reveal>
-                <article className="wrow" style={{ '--ac': 'var(--gold)' }}>
-                  <div className="wrow-media">
-                    <img src="/images/juno.png" alt="Juno — household finance companion" loading="lazy" />
-                  </div>
-                  <div className="wrow-body">
-                    <div className="wrow-mark">
-                      <span className="wrow-brand">
-                        <span className="wrow-coinwrap"><CoinRays /><img className="wrow-coin" src="/images/juno-coin.png" alt="" aria-hidden="true" /></span>
-                        <span className="wrow-word">J<span className="u">UNO</span></span>
-                      </span>
-                    </div>
-                    <span className="card-num">01 — Flagship</span>
-                    <p className="desc">A household-finance companion that models a family's whole money picture and embeds a Claude advisor — one that returns scenario deltas while the app does every calculation. It even maintains its own ledger over MCP, and ships a public design system.</p>
-                    <div className="wrow-links">
-                      <Link className="wrow-cover" to="/juno">Case study <span className="arw" aria-hidden="true">→</span></Link>
-                      <a href="https://juno-demo.andrewbaldock.com" target="_blank" rel="noopener noreferrer">Live demo <span className="arw" aria-hidden="true">↗</span></a>
-                      <a href="https://juno-demo.andrewbaldock.com/design" target="_blank" rel="noopener noreferrer">Design system <span className="arw" aria-hidden="true">↗</span></a>
-                    </div>
-                  </div>
-                </article>
-              </Reveal>
-              <Reveal delay={0.08}>
                 <article className="wrow" style={{ '--ac': 'var(--periwinkle)' }}>
                   <div className="wrow-media">
                     <video src="/images/aether.webm" poster="/images/aether-poster.jpg" autoPlay loop muted playsInline />
@@ -114,23 +93,62 @@ export default function CoastalHome() {
                         <span className="wrow-aword">Aether</span>
                       </span>
                     </div>
-                    <span className="card-num">02 — Product</span>
+                    <span className="card-num">01 — Flagship</span>
                     <p className="desc">A conversational explorer with a knowledge-graph UI — ask a question, watch the answer assemble itself into connected, navigable panels. Built as a platform: capabilities plug into a stable shell.</p>
                     <div className="wrow-links">
-                      <Link className="wrow-cover" to="/aether">Case study <span className="arw" aria-hidden="true">→</span></Link>
-                      <a href="https://aether.andrewbaldock.com" target="_blank" rel="noopener noreferrer">Live demo <span className="arw" aria-hidden="true">↗</span></a>
+                      <a className="wrow-cover" href={AETHER_URL} target="_blank" rel="noopener noreferrer">Open live app <span className="arw" aria-hidden="true">↗</span></a>
+                    </div>
+                  </div>
+                </article>
+              </Reveal>
+              <Reveal delay={0.08}>
+                <article className="wrow" style={{ '--ac': 'var(--gold)' }}>
+                  <div className="wrow-media">
+                    <img src="/images/juno.png" alt="Juno — household finance companion" loading="lazy" />
+                  </div>
+                  <div className="wrow-body">
+                    <div className="wrow-mark">
+                      <span className="wrow-brand">
+                        <span className="wrow-coinwrap"><CoinRays /><img className="wrow-coin" src="/images/juno-coin.png" alt="" aria-hidden="true" /></span>
+                        <span className="wrow-word">J<span className="u">UNO</span></span>
+                      </span>
+                    </div>
+                    <span className="card-num">02 — Product</span>
+                    <p className="desc">A household-finance companion that models a family's whole money picture and embeds a Claude advisor — one that returns scenario deltas while the app does every calculation. It even maintains its own ledger over MCP, and ships a public design system.</p>
+                    <div className="wrow-links">
+                      <a className="wrow-cover" href={JUNO_URL} target="_blank" rel="noopener noreferrer">Open live app <span className="arw" aria-hidden="true">↗</span></a>
+                      <a href={`${JUNO_URL}/design`} target="_blank" rel="noopener noreferrer">Design system <span className="arw" aria-hidden="true">↗</span></a>
                     </div>
                   </div>
                 </article>
               </Reveal>
               <Reveal delay={0.16}>
+                <article className="wrow" style={{ '--ac': 'var(--aqua)' }}>
+                  <div className="wrow-media">
+                    <img src="/images/lineop.png" alt="LineOp — factory-operations OEE console" loading="lazy" />
+                  </div>
+                  <div className="wrow-body">
+                    <div className="wrow-mark">
+                      <span className="wrow-brand">
+                        <span className="wrow-word">LineOp</span>
+                      </span>
+                    </div>
+                    <span className="card-num">03 — Product</span>
+                    <p className="desc">A factory-operations console for a bottling line — live OEE, throughput and quality across every machine, rendered on an interactive 3D floor you can orbit and drill into. Recommendations surface the next bottleneck to fix.</p>
+                    <div className="wrow-links">
+                      <a className="wrow-cover" href={LINEOP_URL} target="_blank" rel="noopener noreferrer">Open live app <span className="arw" aria-hidden="true">↗</span></a>
+                    </div>
+                  </div>
+                </article>
+              </Reveal>
+              <Reveal delay={0.24}>
                 <article className="wrow" style={{ '--ac': 'var(--mint)' }}>
                   <div className="wrow-media">
                     <img src="/images/magicsticky.png" alt="Magic Sticky — MCP sticky-note store" loading="lazy" />
                   </div>
                   <div className="wrow-body">
                     <div className="wrow-mark"><MagicStickyCardWordmark /></div>
-                    <span className="card-num">03 — Product</span>
+                    <span className="card-num">04 — Product</span>
                     <p className="desc">A frictionless MCP sticky-note store — one shared note that every one of your AI agents reads and writes, so context follows you everywhere.</p>
                     <div className="wrow-links">
                       <Link className="wrow-cover" to="/magicsticky">Case study <span className="arw" aria-hidden="true">→</span></Link>

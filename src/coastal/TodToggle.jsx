@@ -53,6 +53,10 @@ export default function TodToggle({ hour, target, track, setHour, trackLocal, to
   useEffect(() => () => clearTimeout(pressRef.current), [])
 
   const onClick = (e) => {
+    // Safari shows :focus-visible on a button after a mouse click, leaving the
+    // ring stuck; drop focus for pointer clicks (e.detail>0) but keep it for
+    // keyboard activation (e.detail===0) so the focus ring stays for a11y.
+    if (e.detail > 0) e.currentTarget.blur()
     // Windows/Linux ctrl-click arrives as a plain click with the flag set; on a
     // Mac it never gets here at all (see onContextMenu).
     if (e.ctrlKey || e.metaKey) { setOpen((o) => !o); return }

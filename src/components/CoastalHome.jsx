@@ -102,7 +102,10 @@ export default function CoastalHome() {
               <Reveal delay={0.08}>
                 <article className="wrow" style={{ '--ac': 'var(--lineop-teal)' }}>
                   <div className="wrow-media">
-                    <img src="/images/lineop.png" alt="LineOp — factory-operations OEE console" loading="lazy" />
+                    <video poster="/images/lineop-poster.jpg" autoPlay loop muted playsInline aria-label="LineOp — zooming into a machine on the 3D factory floor">
+                      <source src="/images/lineop.webm" type="video/webm" />
+                      <source src="/images/lineop.mp4" type="video/mp4" />
+                    </video>
                   </div>
                   <div className="wrow-body">
                     <div className="wrow-mark">

@@ -123,7 +123,7 @@ export default function CoastalHome() {
                 </article>
               </Reveal>
               <Reveal delay={0.16}>
-                <article className="wrow" style={{ '--ac': 'var(--aqua)' }}>
+                <article className="wrow" style={{ '--ac': 'var(--clay)' }}>
                   <div className="wrow-media">
                     <img src="/images/lineop.png" alt="LineOp — factory-operations OEE console" loading="lazy" />
                   </div>

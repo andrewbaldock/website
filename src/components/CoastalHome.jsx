@@ -10,7 +10,8 @@ import BridgeWater from '../coastal/BridgeWater.jsx'
 import BridgeDevPanel from '../coastal/BridgeDevPanel.jsx'
 import CoinRays from '../coastal/CoinRays.jsx'
 import Hero from './Hero.jsx'
-import { AetherLogo } from './AetherLogo.jsx'
+import AetherWordmark from './AetherWordmark.jsx'
+import LineOpLogo from './LineOpLogo.jsx'
 import MagicStickyCardWordmark from './MagicStickyCardWordmark.jsx'
 import { AETHER_URL, JUNO_URL, LINEOP_URL } from '../config.js'
 
@@ -82,18 +83,15 @@ export default function CoastalHome() {
             </div>
             <div className="work-rows">
               <Reveal>
-                <article className="wrow" style={{ '--ac': 'var(--periwinkle)' }}>
+                <article className="wrow" style={{ '--ac': 'var(--aether-pink)', '--bg-ac': '#a89a86', '--bg-a': '6%', '--bg-b': '1.5%' }}>
                   <div className="wrow-media">
                     <video src="/images/aether.webm" poster="/images/aether-poster.jpg" autoPlay loop muted playsInline />
                   </div>
                   <div className="wrow-body">
                     <div className="wrow-mark">
-                      <span className="wrow-brand">
-                        <span className="wrow-alogo"><AetherLogo size={26} /></span>
-                        <span className="wrow-aword">Aether</span>
-                      </span>
+                      <AetherWordmark height={30} />
                     </div>
-                    <span className="card-num">01 — Flagship</span>
+                    <span className="card-num">01 — Flagship | Running App</span>
                     <p className="desc">A conversational explorer with a knowledge-graph UI — ask a question, watch the answer assemble itself into connected, navigable panels. Built as a platform: capabilities plug into a stable shell.</p>
                     <div className="wrow-links">
                       <a className="wrow-cover" href={AETHER_URL} target="_blank" rel="noopener noreferrer">Open live app <span className="arw" aria-hidden="true">↗</span></a>
@@ -102,6 +100,26 @@ export default function CoastalHome() {
                 </article>
               </Reveal>
               <Reveal delay={0.08}>
+                <article className="wrow" style={{ '--ac': 'var(--lineop-teal)' }}>
+                  <div className="wrow-media">
+                    <img src="/images/lineop.png" alt="LineOp — factory-operations OEE console" loading="lazy" />
+                  </div>
+                  <div className="wrow-body">
+                    <div className="wrow-mark">
+                      <span className="wrow-brand">
+                        <LineOpLogo size={26} />
+                        <span className="wrow-lword">Line<span className="op">Op</span></span>
+                      </span>
+                    </div>
+                    <span className="card-num">02 — Product (Clean Room Demo)</span>
+                    <p className="desc">A factory-operations console for a bottling line — live OEE, throughput and quality across every machine, rendered on an interactive 3D floor you can orbit and drill into. Recommendations surface the next bottleneck to fix.</p>
+                    <div className="wrow-links">
+                      <a className="wrow-cover" href={LINEOP_URL} target="_blank" rel="noopener noreferrer">Open live app <span className="arw" aria-hidden="true">↗</span></a>
+                    </div>
+                  </div>
+                </article>
+              </Reveal>
+              <Reveal delay={0.16}>
                 <article className="wrow" style={{ '--ac': 'var(--gold)' }}>
                   <div className="wrow-media">
                     <img src="/images/juno.png" alt="Juno — household finance companion" loading="lazy" />
@@ -113,7 +131,7 @@ export default function CoastalHome() {
                         <span className="wrow-word">J<span className="u">UNO</span></span>
                       </span>
                     </div>
-                    <span className="card-num">02 — Product</span>
+                    <span className="card-num">03 — Product</span>
                     <p className="desc">A household-finance companion that models a family's whole money picture and embeds a Claude advisor — one that returns scenario deltas while the app does every calculation. It even maintains its own ledger over MCP, and ships a public design system.</p>
                     <div className="wrow-links">
                       <a className="wrow-cover" href={JUNO_URL} target="_blank" rel="noopener noreferrer">Open live app <span className="arw" aria-hidden="true">↗</span></a>
@@ -122,33 +140,14 @@ export default function CoastalHome() {
                   </div>
                 </article>
               </Reveal>
-              <Reveal delay={0.16}>
-                <article className="wrow" style={{ '--ac': 'var(--clay)' }}>
-                  <div className="wrow-media">
-                    <img src="/images/lineop.png" alt="LineOp — factory-operations OEE console" loading="lazy" />
-                  </div>
-                  <div className="wrow-body">
-                    <div className="wrow-mark">
-                      <span className="wrow-brand">
-                        <span className="wrow-word">LineOp</span>
-                      </span>
-                    </div>
-                    <span className="card-num">03 — Product</span>
-                    <p className="desc">A factory-operations console for a bottling line — live OEE, throughput and quality across every machine, rendered on an interactive 3D floor you can orbit and drill into. Recommendations surface the next bottleneck to fix.</p>
-                    <div className="wrow-links">
-                      <a className="wrow-cover" href={LINEOP_URL} target="_blank" rel="noopener noreferrer">Open live app <span className="arw" aria-hidden="true">↗</span></a>
-                    </div>
-                  </div>
-                </article>
-              </Reveal>
               <Reveal delay={0.24}>
-                <article className="wrow" style={{ '--ac': 'var(--mint)' }}>
+                <article className="wrow" style={{ '--ac': 'var(--sticky-green)' }}>
                   <div className="wrow-media">
                     <img src="/images/magicsticky.png" alt="Magic Sticky — MCP sticky-note store" loading="lazy" />
                   </div>
                   <div className="wrow-body">
                     <div className="wrow-mark"><MagicStickyCardWordmark /></div>
-                    <span className="card-num">04 — Product</span>
+                    <span className="card-num">04 — Utility</span>
                     <p className="desc">A frictionless MCP sticky-note store — one shared note that every one of your AI agents reads and writes, so context follows you everywhere.</p>
                     <div className="wrow-links">
                       <Link className="wrow-cover" to="/magicsticky">Case study <span className="arw" aria-hidden="true">→</span></Link>
